@@ -145,7 +145,7 @@ contentful headline (claim / question), so the two lines never echo.
 All animations run only while on-screen (IntersectionObserver) and loop.
 
 - **Method overview video** (`#methodVid`): `static/videos/fmrg_overview.mp4`
-  (H.264, 1320×760, 13.6 s) — the animated FMRG-vs-SMC schematic, replaces the
+  (H.264, 1320×760, ~15 s) — the animated FMRG-vs-SMC schematic, replaces the
   old static `fig02_overview.png`. Muted, `playsinline`, no `loop`/`autoplay`;
   a small IIFE autoplays it once on the FIRST scroll into view; if scrolled
   away and back it resumes where it left off (never auto-restarts from 0), and
