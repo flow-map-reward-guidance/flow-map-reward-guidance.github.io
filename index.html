@@ -1,1445 +1,1070 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Guide Your Flow: Steering Flow Maps for Rapid Test-Time Alignment</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        :root {
-            --color-bg: #fafafa;
-            --color-surface: #ffffff;
-            --color-text: #1a1a2e;
-            --color-text-secondary: #4a4a6a;
-            --color-accent: #2d5af0;
-            --color-accent-soft: #e8eeff;
-            --color-accent-dark: #1a3cb8;
-            --color-border: #e2e2ee;
-            --color-highlight: #fff8e6;
-            --color-code-bg: #f4f4f8;
-            --font-serif: 'Source Serif 4', Georgia, serif;
-            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --max-width: 980px;
-            --section-gap: 5rem;
-        }
-
-        body.dark-mode {
-            --color-bg: #111118;
-            --color-surface: #1a1a24;
-            --color-text: #e4e4ed;
-            --color-text-secondary: #a0a0b8;
-            --color-accent: #6b8aff;
-            --color-accent-soft: #1e2540;
-            --color-accent-dark: #8da4ff;
-            --color-border: #2a2a3a;
-            --color-highlight: #1c1a0e;
-            --color-code-bg: #1a1a26;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-sans);
-            color: var(--color-text);
-            background: var(--color-bg);
-            line-height: 1.7;
-            font-size: 16px;
-            -webkit-font-smoothing: antialiased;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        /* ── Sticky hero links ── */
-        .hero-links.sticky {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: transparent;
-            padding: 0.65rem 1.5rem;
-            justify-content: center;
-        }
-
-        body.dark-mode .hero-links.sticky {
-            background: transparent;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1.5rem;
-            z-index: 200;
-            background: none;
-            border: 1.5px solid var(--color-border);
-            border-radius: 8px;
-            padding: 0.35rem 0.65rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--color-text-secondary);
-            transition: all 0.2s;
-        }
-
-        .dark-mode-toggle:hover {
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-        }
-
-        /* ── Hero ── */
-        .hero {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 2.5rem 1.5rem 2rem;
-            text-align: center;
-        }
-
-        .venue-badge {
-            display: inline-block;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: var(--color-accent);
-            background: var(--color-accent-soft);
-            padding: 0.35rem 1rem;
-            border-radius: 99px;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero h1 {
-            font-family: var(--font-serif);
-            font-size: 2.85rem;
-            font-weight: 700;
-            line-height: 1.2;
-            color: var(--color-text);
-            max-width: 820px;
-            margin: 0 auto 0.6rem;
-        }
-
-        .hero .subtitle {
-            font-family: var(--font-serif);
-            font-size: 1.35rem;
-            font-weight: 400;
-            color: var(--color-text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .authors {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.3rem 1.5rem;
-            font-size: 1.05rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .authors span {
-            color: var(--color-text);
-            font-weight: 500;
-        }
-
-        .authors sup {
-            color: var(--color-accent);
-            font-weight: 600;
-        }
-
-        .affiliations {
-            font-size: 0.9rem;
-            color: var(--color-text-secondary);
-            margin-bottom: 2rem;
-        }
-
-        .hero-links {
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .hero-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.65rem 1.3rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background: var(--color-accent);
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: var(--color-accent-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(45, 90, 240, 0.25);
-        }
-
-        .btn-outline {
-            background: var(--color-surface);
-            color: var(--color-text);
-            border: 1.5px solid var(--color-border);
-        }
-
-        .btn-outline:hover {
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        }
-
-        /* ── Sections ── */
-        section {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 1.5rem var(--section-gap);
-        }
-
-        section h2 {
-            font-family: var(--font-serif);
-            font-size: 1.85rem;
-            font-weight: 700;
-            margin-bottom: 1.25rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--color-accent);
-            display: inline-block;
-        }
-
-        section h3 {
-            font-family: var(--font-serif);
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-top: 2rem;
-            margin-bottom: 0.75rem;
-        }
-
-        /* ── Teaser / Overview ── */
-        .teaser {
-            max-width: 1100px;
-            margin: 0 auto 1.5rem;
-            padding: 0 1.5rem;
-        }
-
-        .teaser-hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.12);
-            position: relative;
-        }
-
-        .teaser-side {
-            position: relative;
-        }
-
-        .teaser-side img {
-            width: 100%;
-            aspect-ratio: 1;
-            object-fit: cover;
-            display: block;
-        }
-
-        .teaser-side .side-badge {
-            position: absolute;
-            top: 0.75rem;
-            padding: 0.4rem 0.9rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            border-radius: 6px;
-            text-transform: uppercase;
-        }
-
-        .teaser-side .side-badge.left {
-            left: 0.75rem;
-            background: rgba(0,0,0,0.55);
-            color: rgba(255,255,255,0.9);
-            backdrop-filter: blur(8px);
-        }
-
-        .teaser-side .side-badge.right {
-            right: 0.75rem;
-            background: rgba(45, 90, 240, 0.85);
-            color: #fff;
-            backdrop-filter: blur(8px);
-        }
-
-        .teaser-arrow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--color-accent);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            box-shadow: 0 2px 12px rgba(45, 90, 240, 0.4);
-        }
-
-        .teaser-strip {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2px;
-            margin-top: 0.75rem;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-        }
-
-        .teaser-strip-item {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .teaser-strip-item img {
-            width: 100%;
-            aspect-ratio: 1;
-            object-fit: cover;
-            display: block;
-        }
-
-        .teaser-strip-item .strip-label {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 1.8rem 0.5rem 0.4rem;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
-            color: #fff;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-align: center;
-            letter-spacing: 0.02em;
-        }
-
-        .teaser-strip-item .strip-label.ours {
-            background: linear-gradient(transparent, rgba(20, 60, 180, 0.65));
-        }
-
-        .teaser-task-label {
-            font-family: var(--font-sans);
-            font-size: 0.82rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            color: var(--color-accent);
-            text-align: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .teaser-task-label.small {
-            font-size: 0.72rem;
-            margin-bottom: 0;
-        }
-
-        .teaser-strip-labels {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2px;
-            margin-top: 1.25rem;
-            margin-bottom: 0.4rem;
-        }
-
-        .teaser-caption {
-            text-align: center;
-            padding: 1rem 1.5rem;
-            font-size: 0.9rem;
-            color: var(--color-text-secondary);
-            max-width: 860px;
-            margin: 0 auto;
-        }
-
-        /* ── Abstract ── */
-        .abstract-text {
-            font-family: var(--font-serif);
-            font-size: 1.05rem;
-            line-height: 1.85;
-            color: var(--color-text);
-        }
-
-        /* ── Key Results Banner ── */
-        .results-banner {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
-            margin: 2.5rem 0 0;
-        }
-
-        .result-card {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: 12px;
-            padding: 1.75rem;
-            text-align: center;
-        }
-
-        .result-card .number {
-            font-family: var(--font-serif);
-            font-size: 2.75rem;
-            font-weight: 700;
-            color: var(--color-accent);
-            line-height: 1;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-card .unit {
-            font-size: 1.2rem;
-            font-weight: 400;
-        }
-
-        .result-card .desc {
-            font-size: 0.88rem;
-            color: var(--color-text-secondary);
-            line-height: 1.5;
-        }
-
-        /* ── Figure display ── */
-        .figure-block {
-            margin: 2rem 0;
-        }
-
-        .figure-block img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-        }
-
-        .figure-block.bordered img {
-            border: 1px solid var(--color-border);
-        }
-
-        .figure-caption {
-            margin-top: 0.75rem;
-            font-size: 0.88rem;
-            color: var(--color-text-secondary);
-            line-height: 1.6;
-        }
-
-        .figure-caption strong {
-            color: var(--color-text);
-        }
-
-        /* ── Side-by-side figures ── */
-        .figure-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .figure-row.three-col {
-            grid-template-columns: 1fr 1fr 1fr;
-        }
-
-        .figure-cell img {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 2px 16px rgba(0,0,0,0.06);
-        }
-
-        .figure-cell .figure-caption {
-            text-align: center;
-        }
-
-        .figure-row.equal-height .figure-cell {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .figure-row.equal-height .figure-cell img {
-            width: 100%;
-            flex: 1;
-            object-fit: contain;
-            background: #fff;
-            border: 1px solid var(--color-border);
-        }
-
-        /* ── Method overview diagram ── */
-        .method-overview {
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: 14px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-
-        .hierarchy-box {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .hierarchy-level {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1.25rem;
-            border-radius: 10px;
-            border-left: 4px solid;
-        }
-
-        .hierarchy-level.exact {
-            background: #fef3f3;
-            border-color: #e74c3c;
-        }
-
-        .hierarchy-level.greedy {
-            background: #eef6ff;
-            border-color: var(--color-accent);
-        }
-
-        .hierarchy-level.dps {
-            background: #f0f0f5;
-            border-color: #8888aa;
-        }
-
-        .hierarchy-level .level-tag {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            font-weight: 500;
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-            white-space: nowrap;
-        }
-
-        .hierarchy-level.exact .level-tag {
-            background: #fde2e2;
-            color: #c0392b;
-        }
-
-        .hierarchy-level.greedy .level-tag {
-            background: #dbe8ff;
-            color: #1a3cb8;
-        }
-
-        .hierarchy-level.dps .level-tag {
-            background: #e0e0ea;
-            color: #555577;
-        }
-
-        .hierarchy-level .level-text {
-            font-size: 0.92rem;
-            line-height: 1.6;
-        }
-
-        .hierarchy-level .level-text strong {
-            display: block;
-            margin-bottom: 0.2rem;
-        }
-
-        .hierarchy-arrow {
-            text-align: center;
-            color: var(--color-text-secondary);
-            font-size: 1.2rem;
-            padding: 0.25rem 0;
-        }
-
-        /* ── Algorithm box ── */
-        .algorithm-box {
-            background: var(--color-code-bg);
-            border: 1px solid var(--color-border);
-            border-radius: 10px;
-            padding: 1.5rem 2rem;
-            margin: 2rem 0;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            line-height: 2;
-            overflow-x: auto;
-        }
-
-        .algorithm-box .algo-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.75rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .algorithm-box .algo-title {
-            font-family: var(--font-sans);
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-
-        .algo-tabs {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .algo-tab {
-            font-family: var(--font-sans);
-            font-size: 0.8rem;
-            font-weight: 600;
-            padding: 0.3rem 0.85rem;
-            border: 1.5px solid var(--color-border);
-            border-radius: 6px;
-            background: none;
-            color: var(--color-text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .algo-tab:hover {
-            border-color: var(--color-accent);
-            color: var(--color-accent);
-        }
-
-        .algo-tab.active {
-            background: var(--color-accent);
-            border-color: var(--color-accent);
-            color: #fff;
-        }
-
-        .algo-keyword {
-            color: var(--color-accent);
-            font-weight: 500;
-        }
-
-        .algo-comment {
-            color: #888;
-            font-style: italic;
-        }
-
-        /* ── Tables ── */
-        .table-wrapper {
-            overflow-x: auto;
-            margin: 2rem 0;
-            border-radius: 10px;
-            border: 1px solid var(--color-border);
-            background: var(--color-surface);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }
-
-        table thead {
-            background: var(--color-code-bg);
-        }
-
-        table th {
-            padding: 0.75rem 0.75rem;
-            font-weight: 600;
-            text-align: center;
-            border-bottom: 2px solid var(--color-border);
-            white-space: nowrap;
-        }
-
-        table td {
-            padding: 0.6rem 0.75rem;
-            text-align: center;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        table th:first-child,
-        table td:first-child {
-            text-align: left;
-            font-weight: 500;
-            padding-left: 1rem;
-        }
-
-        table tr.ours {
-            background: var(--color-accent-soft);
-        }
-
-        table tr.ours td {
-            font-weight: 500;
-        }
-
-        table .best {
-            font-weight: 700;
-            color: var(--color-accent);
-        }
-
-        table .second {
-            text-decoration: underline;
-        }
-
-        table .group-header {
-            font-weight: 700;
-            background: var(--color-code-bg);
-        }
-
-        table caption {
-            text-align: left;
-            padding: 1rem 1rem 0.75rem;
-            font-size: 0.88rem;
-            color: var(--color-text-secondary);
-            caption-side: top;
-        }
-
-        /* ── Comparison slider ── */
-        .comparison-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin: 2rem 0;
-        }
-
-        .comparison-pair {
-            display: flex;
-            flex-direction: column;
-            background: var(--color-surface);
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid var(--color-border);
-        }
-
-        .comparison-pair img {
-            width: 100%;
-            display: block;
-        }
-
-        .comparison-pair .pair-labels {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0.75rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--color-text-secondary);
-        }
-
-        /* ── Aesthetic Carousel ── */
-        .carousel-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            border: 1px solid var(--color-border);
-            background: var(--color-surface);
-            margin: 1.5rem 0;
-        }
-
-        .carousel-track {
-            display: flex;
-            transition: transform 0.4s ease;
-        }
-
-        .carousel-slide {
-            min-width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-        }
-
-        .carousel-slide .slide-cell {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .carousel-slide .slide-cell img {
-            width: 100%;
-            display: block;
-        }
-
-        .carousel-slide .slide-label {
-            position: absolute;
-            bottom: 0.5rem;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.6);
-            color: #fff;
-            padding: 0.2rem 0.7rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            white-space: nowrap;
-        }
-
-        .carousel-slide .slide-prompt {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
-            color: var(--color-text-secondary);
-            font-style: italic;
-            border-top: 1px solid var(--color-border);
-        }
-
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-60%);
-            background: rgba(0, 0, 0, 0.45);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 2.2rem;
-            height: 2.2rem;
-            font-size: 0.95rem;
-            cursor: pointer;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-
-        .carousel-btn:hover { background: rgba(0, 0, 0, 0.7); }
-        .carousel-btn.prev { left: 0.5rem; }
-        .carousel-btn.next { right: 0.5rem; }
-
-        .carousel-dots {
-            display: flex;
-            justify-content: center;
-            gap: 0.35rem;
-            padding: 0.6rem 0;
-            background: var(--color-surface);
-        }
-
-        .carousel-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            border: none;
-            background: var(--color-border);
-            cursor: pointer;
-            padding: 0;
-            transition: background 0.2s;
-        }
-
-        .carousel-dot.active {
-            background: var(--color-accent);
-        }
-
-        /* ── BibTeX ── */
-        .bibtex-block {
-            background: var(--color-code-bg);
-            border: 1px solid var(--color-border);
-            border-radius: 10px;
-            padding: 1.5rem;
-            position: relative;
-            margin-top: 1rem;
-        }
-
-        .bibtex-block pre {
-            font-family: var(--font-mono);
-            font-size: 0.82rem;
-            line-height: 1.7;
-            overflow-x: auto;
-            color: var(--color-text);
-        }
-
-        .bibtex-block .copy-btn {
-            position: absolute;
-            top: 0.75rem;
-            right: 0.75rem;
-            background: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: 6px;
-            padding: 0.4rem 0.75rem;
-            font-size: 0.78rem;
-            font-weight: 500;
-            cursor: pointer;
-            color: var(--color-text-secondary);
-            transition: all 0.2s;
-        }
-
-        .bibtex-block .copy-btn:hover {
-            color: var(--color-accent);
-            border-color: var(--color-accent);
-        }
-
-        /* ── Footer ── */
-        footer {
-            border-top: 1px solid var(--color-border);
-            padding: 2rem 1.5rem;
-            text-align: center;
-            font-size: 0.82rem;
-            color: var(--color-text-secondary);
-            margin-top: 2rem;
-        }
-
-        footer a {
-            color: var(--color-accent);
-            text-decoration: none;
-        }
-
-        /* ── Responsive ── */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 1.9rem;
-            }
-
-            .hero .subtitle {
-                font-size: 1.1rem;
-            }
-
-            .teaser-strip {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .results-banner {
-                grid-template-columns: 1fr;
-            }
-
-            .figure-row {
-                grid-template-columns: 1fr;
-            }
-
-            .comparison-grid {
-                grid-template-columns: 1fr;
-            }
-
-            nav .nav-links {
-                gap: 1rem;
-            }
-
-            nav .nav-links a {
-                font-size: 0.8rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 1.5rem;
-            }
-
-            .authors {
-                font-size: 0.9rem;
-            }
-
-            .hero-links {
-                flex-direction: column;
-                align-items: center;
-            }
-
-        }
-    </style>
-</head>
-<body>
-
-<button class="dark-mode-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-    <i class="fa-solid fa-moon"></i>
-</button>
-
-<!-- Hero -->
-<header class="hero">
-    <h1>How to Guide Your Flow</h1>
-    <p class="subtitle">Steering Flow Maps for Rapid Test-Time Alignment</p>
-
-    <div class="authors">
-        <span>Jerry Huang<sup>*1</sup></span>
-        <span>Justin Lin<sup>*1</sup></span>
-        <span>Sheel Shah<sup>1</sup></span>
-        <span>Kartik Nair<sup>1</sup></span>
-        <span>Nicholas M. Boffi<sup>1</sup></span>
-    </div>
-    <p class="affiliations"><sup>1</sup>Carnegie Mellon University &nbsp;&middot;&nbsp; <sup>*</sup>Equal contribution</p>
-
-    <div id="hero-links-sentinel"></div>
-    <div class="hero-links">
-        <a href="https://arxiv.org/abs/" class="btn-primary"><i class="fas fa-file-pdf"></i> Paper</a>
-        <a href="https://github.com/" class="btn-outline"><i class="fab fa-github"></i> Code</a>
-        <a href="blog/" class="btn-outline"><i class="fas fa-book-open"></i> Blog</a>
-        <a href="#citation" class="btn-outline"><i class="fas fa-quote-right"></i> Cite</a>
-    </div>
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Guide Your Flow: Few-Step Alignment via Flow Map Reward Guidance</title>
+<link rel="icon" type="image/png" href="static/images/abstract_human_form/nfe5_final.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+:root{--text:#1c2030;--muted:#5a6076;--link:#5d52bd;--rule:#e6e5ee;--soft:#f5f5f8;--accent:#6e63cc;--tint:#f2f1fb;--max:920px;
+--serif:'Fraunces',Georgia,serif;--sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;--mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--text);background:#fff;background-image:linear-gradient(180deg,#efeef8 0,rgba(239,238,248,0) 640px);background-repeat:no-repeat;line-height:1.72;font-size:1rem;-webkit-font-smoothing:antialiased}
+a{color:var(--link);text-decoration:none}a:hover{text-decoration:underline}
+em{color:inherit}strong{color:var(--text)}
+.bar{position:sticky;top:0;z-index:50;background:rgba(239,238,248,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
+.bar .in{max-width:var(--max);margin:0 auto;padding:.7rem 1.5rem;display:flex;align-items:center;gap:1.4rem;font-size:.9rem}
+.bar .brand{font-family:var(--serif);font-weight:700;font-size:1rem;color:var(--text)}
+.bar nav{display:flex;flex-wrap:wrap;gap:1.2rem;margin-left:auto}
+.bar nav a{color:var(--muted);font-weight:500}.bar nav a:hover{color:var(--link);text-decoration:none}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 1.5rem}
+.head{text-align:center;padding:3.25rem 1.5rem 1.5rem}
+.head h1{font-family:var(--serif);font-size:3.5rem;font-weight:600;line-height:1.04;letter-spacing:-.03em;max-width:800px;margin:0 auto .55rem}
+.head h1 em{font-style:italic;color:var(--accent)}
+.head .subtitle{font-family:var(--serif);font-size:1.32rem;font-weight:400;font-style:italic;color:var(--muted);line-height:1.3;max-width:620px;margin:0 auto 1.5rem}
+.head .authors{font-size:1.08rem;margin-bottom:.35rem}
+.head .authors a{color:var(--text);font-weight:500}
+.head sup{color:var(--link)}
+.head .affil{color:var(--muted);font-size:.98rem;margin-bottom:1.4rem}
+.head .btns{display:flex;justify-content:center;flex-wrap:wrap;gap:.6rem}
+.head .btns a{display:inline-flex;align-items:center;gap:.45rem;background:#1a1a1a;color:#fff;padding:.5rem 1.05rem;border-radius:6px;font-size:.9rem;font-weight:600}
+.head .btns a:hover{background:var(--accent);text-decoration:none}
+section{max-width:var(--max);margin:0 auto;padding:2.5rem 1.5rem;border-top:1px solid var(--rule)}
+section:first-of-type{border-top:none}
+h2{font-family:var(--serif);font-size:1.78rem;font-weight:600;letter-spacing:-.018em;margin-bottom:1rem}
+h3,.minihead{font-family:var(--serif);font-size:1.42rem;font-weight:600;letter-spacing:-.014em;margin:2rem 0 .55rem;color:var(--text)}
+p{margin-bottom:1rem}
+.lead{font-size:1.05rem}
+.kicker{display:block;font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.6rem 0 .3rem}
+.stat{text-align:center;background:var(--tint);border-radius:9px;padding:1.25rem .9rem}
+.stat .snum{font-family:var(--serif);font-size:2.5rem;font-weight:600;color:var(--accent);line-height:1;letter-spacing:-.03em}
+.stat .slabel{font-size:.82rem;color:var(--muted);margin-top:.5rem;line-height:1.4}
+.split{display:grid;gap:1.25rem;align-items:stretch;margin:1.2rem 0}
+.split.eq2{grid-template-columns:1fr 1fr}
+.split.fig-cap{grid-template-columns:1fr 1fr;align-items:center}
+.split > *{margin-top:0;margin-bottom:0}
+.split figure{margin:0}
+@media(max-width:760px){.split.eq2,.split.fig-cap{grid-template-columns:1fr}}
+.split .question-box,.split .panel,.split .takeaway{max-width:none;margin:0;display:flex;flex-direction:column;justify-content:center}
+.figpanel{margin:1.4rem 0}
+.figpanel-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:var(--accent);padding:0 0 .5rem}
+.figpanel img{width:100%;display:block;background:#fff;border:1px solid var(--rule);border-radius:8px}
+.figpanel .figcap{font-size:.85rem;color:var(--muted);font-style:italic;padding:.6rem 0 .1rem;line-height:1.5}
+.figpanel.narrow{max-width:560px;margin-left:auto;margin-right:auto}
+.manifig canvas{width:100%;display:block;background:#fff;border:1px solid var(--rule);border-radius:8px}
+.tldrbox{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:1.25rem 1.5rem;margin:.4rem 0 0}
+.tldrbox .tldr-tag{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.13em;color:var(--accent);margin-bottom:.5rem}
+.tldrbox p{margin:0;font-size:1rem;line-height:1.62}
+ul.contrib{list-style:none;margin:.5rem 0 1rem;padding:0}
+ul.contrib li{position:relative;padding-left:1.1rem;margin-bottom:.9rem;line-height:1.7}
+ul.contrib li::before{content:"\2022";position:absolute;left:0;color:#9a9aa6;font-size:1rem;top:0}
+.eq{text-align:center;margin:1.1rem 0;overflow-x:auto}
+figure{margin:1.6rem 0}
+figure img{width:100%;background:#fff;display:block;border:none}
+figure.narrow img{max-width:540px;margin:0 auto}
+figcaption{margin-top:.6rem;font-size:.88rem;color:var(--muted);font-style:italic;line-height:1.55;text-align:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.grid2 img{width:100%;border:1px solid var(--rule);border-radius:6px;background:#fff;display:block}
+.note{background:var(--soft);border:1px solid var(--rule);border-left:3px solid var(--accent);border-radius:5px;padding:.85rem 1.1rem;margin:1.25rem 0;font-size:1rem}
+.tablew{overflow-x:auto;margin:1.25rem 0;border:1px solid var(--rule);border-radius:6px}
+table{width:100%;border-collapse:collapse;font-size:.83rem}
+caption{text-align:left;padding:.8rem 1rem .6rem;font-size:.85rem;color:var(--muted);font-style:italic;caption-side:top}
+thead{background:var(--soft)}th{padding:.55rem;font-weight:700;text-align:center;border-bottom:2px solid var(--rule);white-space:nowrap}
+td{padding:.48rem .6rem;text-align:center;border-bottom:1px solid var(--rule)}
+th:first-child,td:first-child{text-align:left;padding-left:1rem}
+tr.ours{background:var(--tint)}.best{font-weight:700;color:var(--accent)}.second{text-decoration:underline}.grouph{font-weight:700;background:var(--soft)}
+.algo{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.4rem;margin:1.25rem 0;font-family:var(--mono);font-size:.82rem;line-height:1.95;overflow-x:auto}
+.algo .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;padding-bottom:.4rem;border-bottom:1px solid var(--rule)}
+.algo .tt{font-family:var(--serif);font-weight:700;font-size:.95rem}.algo .tabs{display:flex;gap:.35rem}
+.algo .tab{font-family:var(--sans);font-size:.76rem;font-weight:600;padding:.24rem .7rem;border:1px solid var(--rule);border-radius:5px;background:#fff;color:var(--muted);cursor:pointer}
+.algo .tab.active{background:#1a1a1a;border-color:#1a1a1a;color:#fff}
+.algo .kw{color:#2f2f3a;font-weight:700}.algo .cm{color:#999;font-style:italic}
+.galnote{font-size:.92rem;color:var(--muted);font-style:italic;margin-bottom:.3rem}
+.carousel{position:relative;border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin:.9rem 0 .3rem;background:#fff}
+.ctrack{display:flex;transition:transform .35s ease}
+.cslide{min-width:100%;display:grid;grid-template-columns:1fr 1fr}
+.cslide.single{grid-template-columns:1fr}
+.ccell{position:relative;display:flex}.ccell img{width:100%;display:block;object-fit:contain;background:#fff}
+.cslide.single .ccell img{max-height:560px;margin:0 auto}
+.clab{position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.62);color:#fff;padding:.15rem .6rem;border-radius:4px;font-size:.7rem;font-weight:600}
+.clab.ours{background:rgba(58,110,165,.92)}
+.cprompt{grid-column:1/-1;text-align:center;padding:.5rem 1rem;font-size:.82rem;color:var(--muted);font-style:italic;border-top:1px solid var(--rule)}
+.cbtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.42);color:#fff;border:none;border-radius:50%;width:2rem;height:2rem;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center}
+.cbtn:hover{background:rgba(0,0,0,.72)}.cbtn.prev{left:.5rem}.cbtn.next{right:.5rem}
+.ccount{position:absolute;top:.5rem;right:.6rem;background:rgba(0,0,0,.55);color:#fff;font-size:.7rem;font-weight:600;padding:.12rem .5rem;border-radius:4px;z-index:10}
+.cdots{display:flex;flex-wrap:wrap;justify-content:center;gap:.26rem;padding:.5rem 1rem}
+.cdot{width:6px;height:6px;border-radius:50%;border:none;background:var(--rule);cursor:pointer;padding:0}.cdot.active{background:var(--accent)}
+.bibbox{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:1.1rem;position:relative}
+.bibbox pre{font-family:var(--mono);font-size:.8rem;line-height:1.6;overflow-x:auto}
+.bibbox .copy{position:absolute;top:.6rem;right:.6rem;background:#fff;border:1px solid var(--rule);border-radius:5px;padding:.3rem .65rem;font-size:.75rem;font-weight:600;cursor:pointer;color:var(--muted)}
+footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;font-size:.83rem;color:var(--muted)}
+@media(max-width:760px){.head h1{font-size:1.8rem}.grid2{grid-template-columns:1fr}.cslide{grid-template-columns:1fr}.bar .brand{display:none}}
+/* Hero NFE widget */
+.widget{max-width:1000px;margin:1.5rem auto 0;padding:0 1.5rem}
+.widget .wcard{border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:#fff}
+.widget .whead{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1rem;border-bottom:1px solid var(--rule);background:#fff;flex-wrap:wrap}
+.widget .wtitle{font-size:.78rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent)}
+.widget .nfe-toggle{display:inline-flex;align-items:center;gap:.5rem;font-size:.83rem;color:var(--muted)}
+.widget .nfe-toggle .lbl{font-weight:600;color:var(--muted);font-family:var(--sans)}
+.widget .nfe-toggle .grp{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden;background:#fff}
+.widget .nfe-toggle button{font-family:var(--sans);background:none;border:none;padding:.32rem .85rem;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;border-right:1px solid var(--rule)}
+.widget .nfe-toggle button:last-child{border-right:none}
+.widget .nfe-toggle button.active{background:#1a1a1a;color:#fff}
+.widget .nfe-toggle button:hover:not(.active){color:var(--link)}
+.widget .wpair{display:grid;grid-template-columns:1fr 1fr;gap:0;position:relative}
+.widget .wpane{position:relative;background:#fff}
+.widget .wpane img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.widget .wpane #trajFade{position:absolute;inset:0;opacity:0;pointer-events:none}
+.widget .wbadge{position:absolute;top:.6rem;padding:.3rem .7rem;font-size:.7rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:5px;color:#fff;backdrop-filter:blur(6px);z-index:5}
+.widget .wbadge.l{left:.6rem;background:rgba(0,0,0,.55)}
+.widget .wbadge.r{right:.6rem;background:rgba(58,110,165,.92)}
+.widget .wnfe-tag{position:absolute;bottom:.6rem;right:.6rem;background:rgba(0,0,0,.62);color:#fff;font-family:var(--mono);font-size:.72rem;font-weight:600;padding:.18rem .55rem;border-radius:4px;z-index:5}
+.widget .wcap{text-align:center;font-style:italic;color:var(--muted);font-size:.88rem;padding:.7rem 1rem;border-top:1px solid var(--rule)}
+@media(max-width:600px){.widget .whead{flex-direction:column;align-items:flex-start}}
+.widget .wscrub{display:flex;align-items:center;gap:.7rem;padding:.55rem .9rem;border-top:1px solid var(--rule);background:#fff}
+.widget .wscrub .play{background:#fff;border:1px solid var(--rule);width:1.9rem;height:1.9rem;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);flex-shrink:0;font-size:.7rem;padding:0}
+.widget .wscrub .play:hover{border-color:var(--accent);color:var(--accent)}
+.widget .wscrub .endlbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);flex-shrink:0;font-family:var(--sans)}
+.widget .wscrub .tnow{font-size:.72rem;font-weight:600;color:var(--muted);font-family:var(--mono);min-width:4.4rem;text-align:right;flex-shrink:0}
+.widget .wscrub input[type=range]{flex:1;min-width:0;-webkit-appearance:none;appearance:none;height:4px;background:linear-gradient(to right,var(--accent) 0%,var(--accent) var(--vp,100%),var(--rule) var(--vp,100%),var(--rule) 100%);border-radius:2px;outline:none;cursor:pointer}
+.widget .wscrub input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;background:var(--accent);border-radius:50%;cursor:pointer;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.22)}
+.widget .wscrub input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--accent);border-radius:50%;cursor:pointer;border:2px solid #fff}
+.eqpair{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:.9rem;margin:1.5rem 0}
+.eqpair .eqbox{border:1px solid var(--rule);border-radius:6px;padding:.85rem 1rem;text-align:center;background:#fff}
+.eqpair .eqbox .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--muted);margin-bottom:.45rem}
+.eqpair .eqbox .lbl.ours{color:var(--accent)}
+.eqpair .eqbox .sub{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:.3rem}
+.eqpair .arrow{color:var(--muted);text-align:center;display:flex;flex-direction:column;align-items:center;gap:.25rem;font-size:1.3rem}
+.eqpair .arrow .alabel{font-size:.7rem;font-style:italic;font-weight:500;line-height:1.2;max-width:7rem;color:var(--muted)}
+.eqpair .eqbox.ours{background:var(--tint);border-color:#d8d5ef}
+@media(max-width:760px){.eqpair{grid-template-columns:1fr;gap:.5rem}.eqpair .arrow{transform:rotate(90deg)}}
+.figpair{display:grid;grid-template-columns:1.6fr 1fr;gap:1rem;align-items:center;margin:1.3rem 0}
+.figpair img{width:100%;display:block;background:#fff;border:none}
+.qrow{display:grid;grid-template-columns:1.05fr 1fr;gap:1.1rem;align-items:start;margin:1.1rem 0}
+.qrow img{width:100%;display:block;background:#fff;border:none}
+.reward-picker{display:flex;flex-wrap:wrap;gap:.45rem;margin:1.1rem 0 .9rem}
+.reward-tab{font-family:var(--sans);font-size:.83rem;font-weight:600;padding:.42rem 1rem;border:1px solid var(--rule);border-radius:99px;background:#fff;color:var(--muted);cursor:pointer;transition:.15s}
+.reward-tab:hover{color:var(--accent);border-color:var(--accent)}
+.reward-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.qual{position:relative;border:1px solid var(--rule);border-radius:8px;background:#fff;overflow:hidden;margin:0}
+.qual-viewport{position:relative;overflow:hidden}
+.qual-track{display:none;width:100%}
+.qual-track.on{display:flex;flex-direction:column}
+.qual-track .qcarousel{display:flex;transition:transform .35s ease;width:100%}
+.qslide{flex:0 0 100%;min-width:0;position:relative;background:#fff}
+.qslide.pair{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--rule)}
+.qslide.pair > .side{position:relative;background:#fff}
+.qslide.pair img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.qslide.trip{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--rule)}
+.qslide.trip > .col{position:relative;background:#fff}
+.qslide.trip img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.qslide.single img{width:100%;display:block;background:#fff;max-height:560px;object-fit:contain;margin:0 auto}
+.qslide .qtag{position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.62);color:#fff;font-size:.7rem;font-weight:600;padding:.16rem .6rem;border-radius:4px;white-space:nowrap}
+.qslide .qtag.ours{background:rgba(58,110,165,.92)}
+.qslide .qprompt{grid-column:1/-1;text-align:center;padding:.55rem 1rem;font-size:.82rem;color:var(--muted);font-style:italic;background:#fff;border-top:1px solid var(--rule)}
+.qual-nav{position:absolute;top:38%;transform:translateY(-50%);background:rgba(0,0,0,.42);color:#fff;border:none;border-radius:50%;width:2.1rem;height:2.1rem;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center}
+.qual-nav:hover{background:rgba(0,0,0,.72)}
+.qual-nav.prev{left:.5rem}.qual-nav.next{right:.5rem}
+.qual-nav svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;fill:none}
+.qual-counter{position:absolute;top:.5rem;right:.6rem;background:rgba(0,0,0,.55);color:#fff;font-size:.72rem;font-weight:600;padding:.15rem .55rem;border-radius:4px;z-index:10;font-family:var(--mono)}
+.qual-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:.3rem;padding:.55rem 1rem;background:#fff;border-top:1px solid var(--rule)}
+.qual-dot{width:6px;height:6px;border-radius:50%;border:none;background:var(--rule);cursor:pointer;padding:0;transition:.15s}
+.qual-dot.on{background:var(--accent);width:1.2rem;border-radius:99px}
+@media(max-width:680px){.figpair,.qrow{grid-template-columns:1fr}.qslide.pair,.qslide.trip{grid-template-columns:1fr}}
+.hierarchy-box{display:flex;flex-direction:column;gap:.55rem;max-width:680px;margin:1.5rem auto}
+.hierarchy-level{display:grid;grid-template-columns:9rem 1fr;gap:1rem;align-items:center;padding:.75rem 1.1rem;border-radius:8px;border:1px solid var(--rule);border-left:4px solid;background:#fff}
+.hierarchy-level .hl-tag{font-weight:700;font-size:1.05rem;line-height:1.15}
+.hierarchy-level .hl-tag .sub{display:block;font-weight:400;font-size:.82rem;color:var(--muted);margin-top:.1rem;font-style:italic}
+.hierarchy-level .hl-eq{font-size:1.1rem;line-height:1.25;min-width:0;overflow-x:auto}
+.hierarchy-level.exact{border-color:var(--rule);border-left-color:#b9b9c2}
+.hierarchy-level.exact .hl-tag{color:#3a3a44}
+.hierarchy-level.fmrg{background:var(--tint);border-color:var(--rule);border-left-color:var(--accent)}
+.hierarchy-level.fmrg .hl-tag{color:var(--accent)}
+.hierarchy-level.dps{border-color:var(--rule);border-left-color:#b9b9c2}
+.hierarchy-level.dps .hl-tag{color:#3a3a44}
+.hierarchy-arrow{display:flex;align-items:center;justify-content:center;gap:.7rem;color:var(--text);font-size:.98rem;font-style:italic;padding:.1rem 0;font-weight:500}
+.hierarchy-arrow .arr-icon{font-size:1.55rem;line-height:1;font-style:normal;color:var(--muted);font-weight:400}
+@media(max-width:560px){.hierarchy-level{grid-template-columns:1fr;gap:.4rem;padding:.7rem .9rem}.hierarchy-level .hl-tag{font-size:.95rem}}
+.question-box{max-width:720px;margin:1.6rem auto .4rem;border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:1.1rem 1.5rem;background:#fff;text-align:center}
+.qb-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.45rem}
+.qb-text{font-family:var(--serif);font-size:1.16rem;line-height:1.45;color:var(--text);margin:0;font-style:italic}
+.lede{font-size:1rem;line-height:1.72;color:var(--text);font-weight:500;margin:.1rem 0 1.15rem}
+.pillrow{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.2rem}
+.pill{font-size:.82rem;font-weight:600;color:var(--accent);background:#fff;border:1px solid var(--rule);border-radius:99px;padding:.34rem .85rem}
+.panel{background:var(--soft);border:1px solid var(--rule);border-radius:8px;padding:1.15rem 1.3rem;margin:1.15rem 0;text-align:center}
+.panel-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:.45rem}
+.panel-eq{font-size:1.2rem;margin:.3rem 0}
+.eqlbl{font-family:var(--sans);font-size:.74rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;margin-left:.7rem;vertical-align:middle}
+.panel-note{font-size:.85rem;color:var(--muted);font-style:italic;margin-top:.5rem}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin:1.1rem 0}
+.card{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:1.05rem 1.2rem}
+.card .cnum{font-family:var(--mono);font-size:.76rem;font-weight:700;color:var(--accent)}
+.card .ctitle{font-size:1.05rem;font-weight:700;margin:.18rem 0 .32rem;line-height:1.25}
+.card .cdesc{font-size:1rem;color:var(--text);line-height:1.6}
+.keyline{text-align:center;font-family:var(--serif);font-size:1.2rem;font-style:italic;line-height:1.5;color:var(--text);max-width:660px;margin:1.5rem auto .3rem}
+.keyline strong{font-style:normal;font-weight:600;color:var(--accent)}
+/* .minihead: unified with h3 (subsection header) */
+.es-note{font-size:1rem;color:var(--muted);margin:.2rem 0 0}
+/* keypoint = top-tier callout: white + accent bar = "this is the result" */
+.keypoint{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:1.1rem 1.4rem;margin:1.5rem 0}
+.keypoint .kp-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.4rem}
+.keypoint .kp-eq{text-align:center;font-size:1.16rem;margin:.5rem 0 .6rem}
+.keypoint p{margin:0;font-size:1rem;line-height:1.62}
+.keypoint .fm{color:var(--accent);font-weight:600}
+/* problems = labeled prose, no box — distinct from enumerated contribution cards */
+.problemgrid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin:1.5rem 0}
+.problem{border-top:2px solid var(--rule);padding-top:.65rem}
+.problem .plabel{font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.03em;color:var(--accent);margin-bottom:.18rem}
+.problem .ptitle{font-size:1.06rem;font-weight:700;margin-bottom:.35rem;line-height:1.25}
+.problem .pdesc{font-size:1rem;color:var(--text);line-height:1.6}
+@media(max-width:680px){.cards,.problemgrid{grid-template-columns:1fr}}
+.gw{border:1px solid var(--rule);border-radius:8px;background:#fff;padding:.65rem .8rem}
+.gw .figpanel-label{padding:.1rem .1rem .35rem}
+.gw canvas{width:100%;display:block}
+.gw-legend{display:flex;flex-wrap:wrap;gap:.4rem .9rem;font-size:.71rem;color:var(--muted);padding:.35rem .1rem .15rem}
+.gw-legend span{display:inline-flex;align-items:center;gap:.34rem}
+.gw-legend i{width:15px;height:3px;border-radius:2px;display:inline-block}
+/* Quantitative results carousel */
+.quant{position:relative;border:1px solid var(--rule);border-radius:8px;background:#fff;overflow:hidden;margin:1rem 0 .3rem}
+.quant-viewport{position:relative;overflow:hidden}
+.quant-track{display:flex;transition:transform .35s ease}
+.qslideQ{flex:0 0 100%;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.05rem;padding:1.8rem 1.7rem 1.5rem}
+.qslideQ .qfig{width:100%;display:flex;justify-content:center}
+.qslideQ .qfig img{max-width:100%;max-height:330px;display:block}
+.qslideQ .qtbl{width:100%;overflow-x:auto}
+.qslideQ .qtbl table{width:100%;border-collapse:collapse;font-size:.8rem;white-space:nowrap}
+.qslideQ .qtbl.wide table{font-size:.72rem}
+.qslideQ .qtbl.wide td,.qslideQ .qtbl.wide th{padding:.3rem .4rem}
+.qslideQ .qtbl td.rgrp{font-weight:700;color:var(--accent);background:var(--soft);writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;letter-spacing:.04em}
+.qcapQ{text-align:center;max-width:690px;font-size:.92rem;line-height:1.55;color:var(--muted)}
+.qcapQ .lbl{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);margin-bottom:.32rem}
+.qcapQ strong{color:var(--text);font-weight:600}
+.quant-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.42);color:#fff;border:none;border-radius:50%;width:2.1rem;height:2.1rem;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center}
+.quant-nav:hover{background:rgba(0,0,0,.72)}
+.quant-nav.prev{left:.5rem}.quant-nav.next{right:.5rem}
+.quant-nav svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;fill:none}
+.quant-counter{position:absolute;top:.5rem;right:.6rem;background:rgba(0,0,0,.55);color:#fff;font-size:.72rem;font-weight:600;padding:.15rem .55rem;border-radius:4px;z-index:10;font-family:var(--mono)}
+.quant-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:.3rem;padding:.55rem 1rem;background:#fff;border-top:1px solid var(--rule)}
+.quant-dot{width:6px;height:6px;border-radius:50%;border:none;background:var(--rule);cursor:pointer;padding:0;transition:.15s}
+.quant-dot.on{background:var(--accent);width:1.2rem;border-radius:99px}
+</style></head><body>
+
+<div class="bar"><div class="in"><span class="brand">How to Guide Your Flow</span><nav>
+<a href="#abstract">TL;DR</a><a href="#motivation">Motivation</a><a href="#contributions">Contributions</a><a href="#idea">Key idea</a><a href="#method">Method</a><a href="#results">Results</a><a href="blog/">Blog &rarr;</a><a href="#bibtex">BibTeX</a>
+</nav></div></div>
+
+<header class="head">
+<h1>How to <em>Guide</em> Your Flow</h1>
+<p class="subtitle">Few-Step Alignment via Flow Map Reward Guidance</p>
+<div class="authors">
+<a href="#">Jerry Y. Huang</a><sup>*</sup>, <a href="#">Justin Lin</a><sup>*</sup>, <a href="#">Sheel Shah</a>, <a href="#">Kartik Nair</a>, <a href="#">Nicholas M. Boffi</a>
+</div>
+<div class="affil">Carnegie Mellon University &nbsp;&middot;&nbsp; <sup>*</sup>Equal contribution</div>
+<div class="btns">
+<a href="https://arxiv.org/abs/"><i class="fas fa-file-lines"></i> Paper</a>
+<a href="https://github.com/"><i class="fab fa-github"></i> Code</a>
+<a href="#bibtex"><i class="fas fa-quote-right"></i> BibTeX</a>
+</div>
 </header>
 
-<!-- Teaser -->
-<div class="teaser">
-    <!-- Task label for hero -->
-    <div class="teaser-task-label">Human Preference Reward Guidance</div>
-
-    <!-- Big hero: before → after -->
-    <div class="teaser-hero">
-        <div class="teaser-side">
-            <img src="static/images/aesthetic_abstract_unguided_flipped.png" alt="FLUX.1-dev unguided">
-            <span class="side-badge left">FLUX.1-dev</span>
-        </div>
-        <div class="teaser-side">
-            <img src="static/images/aesthetic_abstract_fmtg.png" alt="FMTG guided">
-            <span class="side-badge right">+ FMTG (Ours)</span>
-        </div>
-        <div class="teaser-arrow"><i class="fas fa-arrow-right"></i></div>
-    </div>
-
-    <!-- Task labels for strip -->
-    <div class="teaser-strip-labels">
-        <div class="teaser-task-label small">Text-to-Image Alignment &mdash; &ldquo;a red zebra&rdquo;</div>
-        <div class="teaser-task-label small">Inverse Problem &mdash; Super-Resolution</div>
-    </div>
-
-    <!-- Strip: more examples across tasks -->
-    <div class="teaser-strip">
-        <div class="teaser-strip-item">
-            <img src="static/images/comp_zebra_base.png" alt="FLUX.1-dev: a red zebra">
-            <div class="strip-label">FLUX.1-dev</div>
-        </div>
-        <div class="teaser-strip-item">
-            <img src="static/images/comp_zebra_fmtg.png" alt="FMTG: a red zebra">
-            <div class="strip-label ours">FMTG (Ours)</div>
-        </div>
-        <div class="teaser-strip-item">
-            <img src="static/images/inv_measurement.png" alt="Degraded measurement">
-            <div class="strip-label">Measurement</div>
-        </div>
-        <div class="teaser-strip-item">
-            <img src="static/images/inv_fmtg_nfe12.png" alt="FMTG reconstruction">
-            <div class="strip-label ours">FMTG (Ours)</div>
-        </div>
-    </div>
-
-    <p class="teaser-caption">
-        <strong>FMTG</strong> uses pre-trained flow maps to guide generation at test time &mdash; achieving state-of-the-art results across human preference alignment, compositional text-to-image generation, and inverse problems with up to <strong>70&times; fewer</strong> network evaluations.
-    </p>
+<div class="widget" id="nfeWidget">
+<div class="wcard">
+<div class="whead">
+<span class="wtitle">Flow Map Reward Guidance</span>
+<div class="nfe-toggle"><span class="lbl">Steps:</span>
+<span class="grp" role="tablist" aria-label="Number of sampling steps">
+<button type="button" data-nfe="4">4</button>
+<button type="button" data-nfe="8" class="active">8</button>
+<button type="button" data-nfe="12">12</button>
+</span></div>
+</div>
+<div class="wpair">
+<div class="wpane">
+<img src="static/images/aesthetic_abstract_unguided.png" alt="FLUX.1-dev unguided">
+<span class="wbadge l">FLUX.1-dev</span>
+</div>
+<div class="wpane">
+<img id="trajImg" src="static/images/abstract_human_form/traj/s8/08.png" alt="FMRG trajectory">
+<img id="trajFade" alt="" aria-hidden="true">
+<span class="wbadge r">+ FMRG</span>
+<span class="wnfe-tag" id="nfeTag">8 steps</span>
+</div>
+</div>
+<div class="wscrub">
+<button type="button" class="play" id="playBtn" aria-label="Play trajectory"><i class="fas fa-play"></i></button>
+<span class="endlbl">unguided</span>
+<input type="range" id="trajRange" min="0" max="1" step="0.001" value="1">
+<span class="endlbl">guided</span>
+<span class="tnow" id="tNow">t = 1.00</span>
+</div>
+<div class="wcap">An unguided FLUX.1-dev sample (left) and the same trajectory guided by FMRG (right) toward a human-preference aesthetic reward. Drag the slider to morph between them, or change the step budget above.</div>
+</div>
 </div>
 
-<!-- Abstract -->
 <section id="abstract">
-
-    <div class="abstract-text">
-        <p>
-            In generative modeling, we often wish to produce samples that satisfy a user-specified reward such as measurement consistency, aesthetic quality, or alignment with human intent, a problem known as inference-time guidance. While flow-based models enable high-quality generation, existing guidance methods either require expensive multi-particle, many-step schemes to sample from a reward-tilted distribution or rely on heuristic approximations. To design efficient algorithms, we reformulate guidance as a <em>deterministic optimal control</em> problem. We find that the <em>flow map</em> arises naturally in the optimal solution, and that many existing flow-based guidance methods are best understood as coarse approximations that replace it with a single Euler step. Rather than relying on these approximations, we propose <strong>Flow Map Trajectory Guidance (FMTG)</strong>: a principled framework that uses the flow map to both integrate and guide flow, enabling training-free alignment in just a few network evaluations. We demonstrate FMTG at text-to-image scale using a FLUX.1-distilled flow map, showing that it matches or surpasses baselines across inverse problems and reward-guided image generation with up to 10&times; and 70&times; fewer function evaluations, respectively.
-        </p>
-    </div>
-
-    <div class="results-banner">
-        <div class="result-card">
-            <div class="number">3 <span class="unit">NFEs</span></div>
-            <div class="desc">Compelling image reconstructions with just 3 network function evaluations</div>
-        </div>
-        <div class="result-card">
-            <div class="number">10<span class="unit">&times;</span></div>
-            <div class="desc">Fewer NFEs than baselines on inverse problems (super-resolution, inpainting, deblurring)</div>
-        </div>
-        <div class="result-card">
-            <div class="number">70<span class="unit">&times;</span></div>
-            <div class="desc">Fewer NFEs than baselines on reward-guided generation (GenEval 0.80)</div>
-        </div>
-    </div>
+<div class="tldrbox">
+<div class="tldr-tag">TL;DR</div>
+<p>Guidance is usually framed as sampling a reward-tilted distribution $\tilde\rho(x)\propto e^{r(x)}\rho(x)$, which requires stochastic, multi-particle dynamics that are expensive even for simple rewards. We instead pose guidance as a <strong>deterministic optimal control problem</strong>, yielding a hierarchy of algorithms in which the flow map emerges naturally and popular single-trajectory methods like DPS are recovered as the coarsest approximation. The result is <strong>Flow Map Reward Guidance (FMRG)</strong>: highly efficient, training-free alignment that uses the flow map to both integrate and guide the flow along a single trajectory &mdash; matching or beating baselines with <strong>as few as 3 NFEs</strong>, up to a 70&times; speedup.</p>
+</div>
 </section>
 
-<!-- Method -->
+<section id="motivation">
+<span class="kicker">01 &mdash; Motivation</span>
+<h2>Samplers got fast. Guidance didn't.</h2>
+<p>In generative modeling, we rarely want just any sample &mdash; we want to tailor it to a user-specified reward $r$ that captures what we actually care about.</p>
+<p>That reward might score, for example, <em>aesthetic quality</em>, agreement with a <em>measurement</em>, <em>physical plausibility</em>, or alignment with <em>human intent</em>. <strong>Guidance</strong> steers a pre-trained model toward high reward at inference time, with no extra training.</p>
+<div class="panel">
+<div class="panel-tag">The standard framing &mdash; reward tilting</div>
+<div class="panel-eq">$\tilde\rho(x) \;\propto\; e^{r(x)}\,\rho(x)$</div>
+<div class="panel-note">easy to write down &mdash; but a hard problem to solve</div>
+</div>
+<div class="problemgrid">
+<div class="problem"><div class="plabel">Problem 01</div><div class="ptitle">Hard to solve</div><div class="pdesc">Sampling $\tilde\rho$ is computationally expensive even for simple rewards. Multi-particle schemes like SMC need a high number of particles and steps; single-particle shortcuts like DPS rely on heuristic approximations, leaving their output poorly characterized.</div></div>
+<div class="problem"><div class="plabel">Problem 02</div><div class="ptitle">A poor fit for modern samplers</div><div class="pdesc">Reward tilting is rooted in stochastic processes. But modern flow models &mdash; FLUX, Stable Diffusion&nbsp;3 &mdash; are deterministic, and flow maps push them to just a few steps. Porting tilt-based alignment here means simulating stochasticity inside an ODE sampler.</div></div>
+</div>
+<div class="question-box">
+<div class="qb-tag">The central question</div>
+<p class="qb-text">Is there a principled framework for guiding flow-based generative models with very few function evaluations?</p>
+</div>
+</section>
+
+<section id="contributions">
+<span class="kicker">02 &mdash; Contributions</span>
+<h2>From a new perspective to few-step alignment</h2>
+<div class="cards">
+<div class="card"><span class="cnum">01</span><div class="ctitle">Guidance as optimal control</div><div class="cdesc">We reframe guidance from reward-tilt sampling to a deterministic optimal control problem &mdash; and the flow map emerges in its closed-form solution.</div></div>
+<div class="card"><span class="cnum">02</span><div class="ctitle">A unifying hierarchy</div><div class="cdesc">FMRG approximates the exact optimum; DPS and other denoiser-based methods are coarse approximations of FMRG &mdash; not of the reward tilt.</div></div>
+<div class="card"><span class="cnum">03</span><div class="ctitle">Theory that guides practice</div><div class="cdesc">The Jacobian keeps trajectories on-manifold; early stopping curbs over-optimization &mdash; both characterized in an analytically tractable setting.</div></div>
+<div class="card"><span class="cnum">04</span><div class="ctitle">Few-step alignment</div><div class="cdesc">On FLUX-scale text-to-image models, FMRG matches or surpasses baselines across inverse problems and reward-guided generation with as few as 3 NFEs &mdash; at least an order-of-magnitude speedup, up to 70&times;.</div></div>
+</div>
+</section>
+
+<section id="idea">
+<span class="kicker">03 &mdash; Key idea</span>
+<h2>So do we need the reward tilt?</h2>
+<p class="lede"><strong>Not necessarily.</strong> Rather than sample the reward tilt, we pose guidance directly as <strong>deterministic optimal control</strong>: steer a single trajectory to maximize reward while staying close to the base flow.</p>
+<div class="eqpair">
+<div class="eqbox">
+<div class="lbl">Standard framing</div>
+<div>$\tilde\rho(x)\propto e^{r(x)}\rho(x)$</div>
+<div class="sub">sample the reward tilt &mdash; stochastic, many particles</div>
+</div>
+<div class="arrow"><span>&rarr;</span><span class="alabel">reframe</span></div>
+<div class="eqbox ours">
+<div class="lbl ours">Our perspective</div>
+<div>$\displaystyle\min_u \int_0^1 \tfrac{\lVert u_t\rVert^2}{2\lambda}\,dt - r(x_1^u)$</div>
+<div class="sub">steer one trajectory, $\dot x_t^u = b_t(x_t^u)+u_t$</div>
+</div>
+</div>
+<div class="keypoint">
+<div class="kp-tag">Exact optimal control</div>
+<div class="kp-eq">$u_t^* = \lambda\,\nabla X_{t,1}^{u^*}(x_t^*)^\top \nabla r\!\big(X_{t,1}^{u^*}(x_t^*)\big)$</div>
+<p>The optimal control is characterized in closed form, and the <span class="fm">flow map</span> appears explicitly &mdash; the same flow map that integrates the flow also guides it.</p>
+</div>
+<h3>A hierarchy of approximations</h3>
+<p>The exact optimum is circular &mdash; computing it needs the optimally-controlled flow map it is trying to produce. <strong>FMRG</strong> breaks the loop by swapping in the uncontrolled flow map &mdash; the solution in the small-$\lambda$ limit, equivalently the greedy optimal control. <strong>DPS</strong>, in turn, arises from approximating this solution with the denoiser estimate.</p>
+<div class="hierarchy-box">
+<div class="hierarchy-level exact"><div class="hl-tag">Exact-optimal<span class="sub">intractable</span></div><div class="hl-eq">$u_t^* = \lambda\,\nabla X_{t,1}^{u^*}(x_t^*)^\top \nabla r\!\big(X_{t,1}^{u^*}(x_t^*)\big)$</div></div>
+<div class="hierarchy-arrow"><span class="arr-icon">&darr;</span>uncontrolled flow map &nbsp;<span style="font-style:normal">(small-$\lambda$ / greedy)</span></div>
+<div class="hierarchy-level fmrg"><div class="hl-tag">FMRG<span class="sub">ours</span></div><div class="hl-eq">$u_t(x) = \lambda\,\nabla X_{t,1}(x)^\top \nabla r\!\big(X_{t,1}(x)\big)$</div></div>
+<div class="hierarchy-arrow"><span class="arr-icon">&darr;</span>substitute one-step denoiser estimate</div>
+<div class="hierarchy-level dps"><div class="hl-tag">DPS<span class="sub">prior work</span></div><div class="hl-eq">$u_t^{\mathrm{DPS}}(x) = \lambda\,\nabla_x r\!\big(\hat x_1(x)\big),\;\;\hat x_1 = \mathbb{E}[x_1\mid x_t]$</div></div>
+</div>
+<p class="keyline">DPS and many of its related derivatives (e.g., MPGD, FlowDPS, FlowChef) are best understood as <strong>coarse approximations of optimal control</strong> &mdash; not of the reward tilt.</p>
+</section>
+
 <section id="method">
-    <h2>Method</h2>
-    <p>
-        FMTG formulates inference-time guidance as deterministic optimal control. Instead of approximating sampling from a reward-tilted distribution, we directly optimize a trajectory to maximize reward while staying close to the learned generative process. The key insight is that the <em>flow map</em>&mdash;the solution operator of the probability flow&mdash;naturally appears in the optimal guidance signal.
-    </p>
+<span class="kicker">04 &mdash; Method</span>
+<h2>Flow Map Reward Guidance</h2>
+<p class="lede">FMRG integrates the greedy controlled dynamics with <strong>operator splitting</strong>: each step alternates an exact flow-map step with a guidance step.</p>
+<div class="figpanel">
+<div class="figpanel-label">FMRG &mdash; one trajectory, vs. multi-particle reward tilt</div>
+<img src="paper_assets/figures/fig02_overview.png" alt="FMRG overview &mdash; single deterministic trajectory vs SMC multi-particle reward tilt">
+<div class="figcap">FMRG alternates exact flow-map steps with reward-gradient steps along a single trajectory (top), in contrast to reward-tilt sampling (e.g. SMC), which needs many particles, resampling, and many steps (bottom).</div>
+</div>
+<div class="panel">
+<div class="panel-tag">Operator splitting &mdash; one step of FMRG</div>
+<div class="panel-eq">$\tilde x_{t_{k+1}} = X_{t_k,\,t_{k+1}}(x_{t_k})$<span class="eqlbl">flow-map step</span></div>
+<div class="panel-eq">$x_{t_{k+1}} = \tilde x_{t_{k+1}} + \Delta t_k\,\lambda\, u(\tilde x_{t_{k+1}})$<span class="eqlbl">guidance step</span></div>
+<div class="panel-note">the flow map integrates the base dynamics exactly; the guidance step then steers toward reward</div>
+</div>
 
-    <!-- Hierarchy of approximations -->
-    <h3>A Hierarchy of Approximations</h3>
-    <p>
-        Our theoretical analysis reveals that existing guidance methods form a hierarchy, with FMTG's greedy guidance occupying a principled middle ground between exact optimal control and heuristic single-step methods like DPS.
-    </p>
+<div class="minihead">We arrive at two design decisions</div>
 
-    <div class="method-overview">
-        <div class="hierarchy-box">
-            <div class="hierarchy-level exact">
-                <span class="level-tag">Exact-Optimal</span>
-                <div class="level-text">
-                    <strong>Intractable optimal control</strong>
-                    Requires access to the <em>controlled</em> flow map, creating a circular dependency. Theoretically ideal but infeasible to compute directly.
-                </div>
-            </div>
-            <div class="hierarchy-arrow"><i class="fas fa-arrow-down"></i> substitute uncontrolled flow map</div>
-            <div class="hierarchy-level greedy">
-                <span class="level-tag">FMTG (Ours)</span>
-                <div class="level-text">
-                    <strong>Greedy-optimal guidance</strong>
-                    Replaces the controlled flow map with the uncontrolled one. Globally optimal in the small-&lambda; limit and the optimal greedy correction for any &lambda;. Accurate to O(&lambda;&sup2;).
-                </div>
-            </div>
-            <div class="hierarchy-arrow"><i class="fas fa-arrow-down"></i> substitute denoiser estimate</div>
-            <div class="hierarchy-level dps">
-                <span class="level-tag">DPS / FlowDPS</span>
-                <div class="level-text">
-                    <strong>Single-step heuristic</strong>
-                    Further approximates the flow map with a single Euler step (the denoiser). Widely used but heuristic&mdash;no principled sense in which it approximates the reward-tilted distribution.
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="split fig-cap">
+<div class="figpanel">
+<div class="figpanel-label">Decision 1 &mdash; project the reward gradient?</div>
+<div class="manifig"><svg id='maniSvg' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' style='width:100%;height:auto;display:block;border:1px solid #e6e5ee;border-radius:8px;background:#fff' viewBox='-50.281476 -70.007474 218.272136 128.503252'>
+<defs>
+<path id='g0-97' d='M4.339726-2.67198C4.339726-3.461021 3.694147-4.061768 2.313325-4.061768C1.802242-4.061768 .654545-4.043836 .654545-3.218929C.654545-2.815442 .959402-2.627148 1.23736-2.627148C1.542217-2.627148 1.820174-2.842341 1.820174-3.209963C1.820174-3.469988 1.667746-3.622416 1.640847-3.649315C1.730511-3.667248 1.945704-3.703113 2.27746-3.703113C2.923039-3.703113 3.29066-3.380324 3.29066-2.67198V-2.385056C1.802242-2.385056 .29589-1.999502 .29589-1.004234C.29589-.116563 1.416687 .053798 2.062267 .053798C2.743711 .053798 3.209963-.242092 3.452055-.663512C3.452055-.430386 3.452055 0 4.411457 0H4.850809C5.021171 0 5.1467 0 5.1467-.224159C5.1467-.439352 5.003238-.439352 4.913574-.439352C4.339726-.448319 4.339726-.537983 4.339726-.753176V-2.67198ZM3.29066-1.246326C3.29066-.304857 2.25056-.304857 2.214695-.304857C1.75741-.304857 1.380822-.600747 1.380822-1.004234C1.380822-1.300125 1.542217-1.999502 3.29066-2.080199V-1.246326Z'/>
+<path id='g0-99' d='M4.411457-1.0401C4.411457-1.183562 4.276961-1.183562 4.178331-1.183562C3.999004-1.183562 3.999004-1.174595 3.927273-1.0132C3.747945-.582814 3.344458-.331756 2.815442-.331756C1.542217-.331756 1.542217-1.622914 1.542217-2.026401C1.542217-2.564384 1.551183-3.676214 2.725778-3.676214C2.788543-3.676214 3.272727-3.667248 3.272727-3.622416C3.272727-3.61345 3.254795-3.58655 3.245828-3.577584C3.165131-3.478954 3.129265-3.335492 3.129265-3.209963C3.129265-2.842341 3.407223-2.627148 3.71208-2.627148C3.990037-2.627148 4.294894-2.815442 4.294894-3.218929C4.294894-4.061768 3.039601-4.061768 2.689913-4.061768C.968369-4.061768 .349689-2.96787 .349689-1.990535C.349689-.860772 1.156663 .053798 2.645081 .053798C2.976837 .053798 3.416189 0 3.792777-.233126C4.303861-.546949 4.411457-1.0132 4.411457-1.0401Z'/>
+<path id='g0-100' d='M3.299626-6.150934V-5.711582C3.837609-5.711582 3.90934-5.711582 3.90934-5.361893V-3.631382C3.514819-3.918306 3.0934-4.034869 2.663014-4.034869C1.201494-4.034869 .349689-3.147198 .349689-1.990535C.349689-.798007 1.192528 .053798 2.555417 .053798C3.120299 .053798 3.568618-.161395 3.855542-.394521V.053798L5.514321 0V-.439352C4.976339-.439352 4.904608-.439352 4.904608-.789041V-6.222665L3.299626-6.150934ZM3.855542-.977335C3.658281-.663512 3.227895-.304857 2.654047-.304857C1.542217-.304857 1.542217-1.380822 1.542217-1.972603C1.542217-2.492653 1.551183-2.878207 1.784309-3.209963C2.017435-3.568618 2.447821-3.676214 2.761644-3.676214C3.209963-3.676214 3.577584-3.478954 3.855542-3.129265V-.977335Z'/>
+<path id='g0-101' d='M4.267995-1.927771C4.456289-1.927771 4.563885-1.927771 4.563885-2.178829C4.563885-2.37609 4.545953-3.165131 3.963138-3.649315C3.559651-3.981071 3.021669-4.061768 2.582316-4.061768C1.049066-4.061768 .29589-3.0934 .29589-2.017435C.29589-.842839 1.183562 .053798 2.707846 .053798C4.187298 .053798 4.563885-.896638 4.563885-1.0401C4.563885-1.219427 4.384558-1.219427 4.33076-1.219427C4.169365-1.219427 4.151432-1.165629 4.097634-1.0401C3.891407-.573848 3.344458-.331756 2.779577-.331756C1.506351-.331756 1.488418-1.488418 1.488418-1.927771H4.267995ZM1.488418-2.25056C1.506351-2.663014 1.551183-3.703113 2.582316-3.703113C3.631382-3.703113 3.667248-2.609215 3.685181-2.25056H1.488418Z'/>
+<path id='g0-105' d='M2.15193-5.523288C2.15193-5.989539 1.775342-6.231631 1.452553-6.231631C1.0401-6.231631 .744209-5.881943 .744209-5.532254C.744209-5.155666 1.049066-4.82391 1.452553-4.82391C1.793275-4.82391 2.15193-5.092902 2.15193-5.523288ZM.493151-3.963138V-3.523786C1.0132-3.523786 1.075965-3.523786 1.075965-3.174097V-.439352H.466252V0C1.066999-.017933 1.183562-.026899 1.560149-.026899C1.999502-.026899 2.116065-.017933 2.618182 0V-.439352H2.071233V-4.034869L.493151-3.963138Z'/>
+<path id='g0-110' d='M5.039103-2.734745C5.039103-3.801743 4.393524-4.034869 3.61345-4.034869C2.510585-4.034869 2.071233-3.227895 2.008468-3.0934H1.999502V-4.034869L.448319-3.963138V-3.523786C.986301-3.523786 1.058032-3.523786 1.058032-3.174097V-.439352H.448319V0C1.111831-.026899 1.219427-.026899 1.578082-.026899C1.945704-.026899 2.035367-.026899 2.716812 0V-.439352H2.107098V-2.27746C2.107098-3.281694 2.932005-3.676214 3.469988-3.676214C3.81071-3.676214 3.990037-3.48792 3.990037-2.815442V-.439352H3.380324V0C4.043836-.026899 4.151432-.026899 4.510087-.026899C4.877709-.026899 4.967372-.026899 5.648817 0V-.439352H5.039103V-2.734745Z'/>
+<path id='g0-114' d='M1.972603-1.95467C1.972603-2.609215 2.214695-3.649315 3.084433-3.676214C2.985803-3.577584 2.940971-3.425156 2.940971-3.281694C2.940971-2.887173 3.254795-2.707846 3.505853-2.707846C3.792777-2.707846 4.079701-2.905106 4.079701-3.281694C4.079701-3.738979 3.61345-4.034869 3.084433-4.034869C2.456787-4.034869 2.071233-3.577584 1.873973-3.057534H1.865006V-4.034869L.367621-3.963138V-3.523786C.905604-3.523786 .977335-3.523786 .977335-3.174097V-.439352H.367621V0C1.031133-.026899 1.084932-.026899 1.515318-.026899C1.739477-.026899 2.259527-.026899 2.734745 0V-.439352H1.972603V-1.95467Z'/>
+<path id='g0-115' d='M3.559651-3.801743C3.559651-3.963138 3.559651-4.061768 3.380324-4.061768C3.29066-4.061768 3.147198-3.990037 2.985803-3.900374C2.698879-4.025903 2.349191-4.061768 2.0533-4.061768C1.775342-4.061768 .349689-4.061768 .349689-2.878207C.349689-1.936737 1.524284-1.739477 1.838107-1.685679C2.57335-1.560149 3.165131-1.461519 3.165131-.950436C3.165131-.304857 2.322291-.304857 2.125031-.304857C1.667746-.304857 1.084932-.42142 .824907-1.246326C.780075-1.398755 .771108-1.425654 .582814-1.425654C.349689-1.425654 .349689-1.371856 .349689-1.156663V-.206227C.349689-.044832 .349689 .053798 .529016 .053798C.591781 .053798 .609714 .053798 .806974-.071731L1.049066-.224159C1.470486 .053798 1.945704 .053798 2.125031 .053798C2.394022 .053798 3.828643 .053798 3.828643-1.255293C3.828643-1.712578 3.568618-1.999502 3.407223-2.133998C3.003736-2.47472 2.716812-2.519552 2.008468-2.636115C1.578082-2.707846 1.0132-2.797509 1.0132-3.200996C1.0132-3.738979 1.847073-3.738979 2.044334-3.738979C3.048568-3.738979 3.084433-3.209963 3.102366-2.96787C3.111333-2.842341 3.236862-2.842341 3.326526-2.842341C3.550685-2.842341 3.559651-2.887173 3.559651-3.102366V-3.801743Z'/>
+<path id='g0-119' d='M6.823412-3.344458C6.886177-3.48792 6.90411-3.541719 7.424159-3.541719V-3.981071C7.173101-3.954172 6.948941-3.954172 6.706849-3.954172C6.419925-3.954172 6.141968-3.963138 5.855044-3.981071V-3.541719C5.971606-3.541719 6.177833-3.541719 6.357161-3.461021C6.339228-3.38929 6.339228-3.380324 6.312329-3.317559L5.361893-1.0401L4.321793-3.541719H4.805978V-3.981071C4.375592-3.963138 4.187298-3.954172 3.801743-3.954172C3.71208-3.954172 3.272727-3.954172 2.887173-3.981071V-3.541719H3.407223C3.523786-3.281694 3.523786-3.263761 3.577584-3.129265L2.797509-1.246326L1.838107-3.541719H2.322291V-3.981071C1.721544-3.963138 1.551183-3.954172 1.228394-3.954172C1.022167-3.954172 .690411-3.954172 .233126-3.981071V-3.541719H.753176L2.15193-.188294C2.25056 .044832 2.394022 .044832 2.501619 .044832C2.743711 .044832 2.788543-.053798 2.851308-.206227L3.828643-2.537484L4.805978-.188294C4.904608 .044832 5.039103 .044832 5.155666 .044832C5.263263 .044832 5.406725 .044832 5.505355-.188294L6.823412-3.344458Z'/>
+<path id='g5-97' d='M3.066501-.645579C3.111333-.268991 3.371357 .053798 3.756912 .053798C3.981071 .053798 4.545953-.080697 4.545953-.798007V-1.300125H4.294894V-.806974C4.294894-.708344 4.294894-.260025 3.972105-.260025S3.649315-.690411 3.649315-.833873V-2.402989C3.649315-2.914072 3.649315-3.218929 3.245828-3.58655C2.914072-3.882441 2.483686-4.016936 2.035367-4.016936C1.282192-4.016936 .654545-3.640349 .654545-3.066501C.654545-2.788543 .842839-2.636115 1.075965-2.636115C1.318057-2.636115 1.488418-2.815442 1.488418-3.048568C1.488418-3.434122 1.093898-3.478954 1.084932-3.478954C1.327024-3.71208 1.75741-3.792777 2.017435-3.792777C2.47472-3.792777 2.985803-3.452055 2.985803-2.663014V-2.367123C2.501619-2.349191 1.829141-2.304359 1.228394-2.017435C.582814-1.703611 .385554-1.23736 .385554-.878705C.385554-.143462 1.255293 .09863 1.85604 .09863C2.600249 .09863 2.940971-.394521 3.066501-.645579ZM2.985803-1.264259C2.985803-.394521 2.313325-.125529 1.918804-.125529C1.497385-.125529 1.102864-.430386 1.102864-.878705C1.102864-1.470486 1.613948-2.098132 2.985803-2.15193V-1.264259Z'/>
+<path id='g5-103' d='M1.120797-1.604981C1.344956-1.461519 1.622914-1.327024 2.035367-1.327024C2.887173-1.327024 3.532752-1.936737 3.532752-2.645081C3.532752-3.084433 3.281694-3.38929 3.165131-3.514819C3.523786-3.837609 3.945205-3.837609 4.052802-3.837609C4.00797-3.81071 3.936239-3.765878 3.936239-3.604483C3.936239-3.505853 3.999004-3.335492 4.20523-3.335492C4.33076-3.335492 4.474222-3.425156 4.474222-3.61345C4.474222-3.783811 4.348692-4.061768 3.990037-4.061768C3.730012-4.061768 3.326526-3.963138 3.012702-3.640349C2.77061-3.837609 2.420922-3.963138 2.044334-3.963138C1.192528-3.963138 .546949-3.353425 .546949-2.645081C.546949-2.187796 .81594-1.865006 .959402-1.730511C.941469-1.712578 .690411-1.398755 .690411-.986301C.690411-.681445 .833873-.358655 1.075965-.19726C.61868-.053798 .260025 .277958 .260025 .699377C.260025 1.33599 1.147696 1.847073 2.295392 1.847073C3.398257 1.847073 4.339726 1.371856 4.339726 .681445C4.339726 .313823 4.169365-.080697 3.837609-.29589C3.335492-.609714 2.815442-.609714 1.963636-.609714C1.784309-.609714 1.497385-.609714 1.425654-.627646C1.165629-.681445 .995268-.923537 .995268-1.210461C.995268-1.353923 1.0401-1.488418 1.120797-1.604981ZM2.035367-1.569116C1.23736-1.569116 1.23736-2.447821 1.23736-2.645081C1.23736-2.887173 1.255293-3.19203 1.407721-3.407223C1.542217-3.58655 1.784309-3.721046 2.035367-3.721046C2.842341-3.721046 2.842341-2.851308 2.842341-2.645081S2.842341-1.569116 2.035367-1.569116ZM2.447821-.044832C2.734745-.044832 3.837609-.035866 3.837609 .690411C3.837609 1.201494 3.147198 1.604981 2.304359 1.604981C1.425654 1.604981 .762142 1.183562 .762142 .690411C.762142 .546949 .851806-.044832 1.622914-.044832H2.447821Z'/>
+<path id='g5-109' d='M1.667746-2.322291C1.667746-3.29066 2.367123-3.738979 2.905106-3.738979C3.398257-3.738979 3.559651-3.38929 3.559651-2.761644V-.690411C3.559651-.277958 3.461021-.277958 2.86924-.277958V0C3.29066-.017933 3.461021-.026899 3.891407-.026899S4.438356-.017933 4.913574 0V-.277958C4.321793-.277958 4.223163-.277958 4.223163-.690411V-2.322291C4.223163-3.29066 4.92254-3.738979 5.460523-3.738979C5.953674-3.738979 6.115068-3.38929 6.115068-2.761644V-.690411C6.115068-.277958 6.016438-.277958 5.424658-.277958V0C5.846077-.017933 6.016438-.026899 6.446824-.026899S6.993773-.017933 7.468991 0V-.277958C7.011706-.277958 6.787547-.277958 6.77858-.555915V-2.27746C6.77858-3.057534 6.77858-3.308593 6.48269-3.640349C6.294396-3.855542 5.935741-3.963138 5.523288-3.963138C4.877709-3.963138 4.438356-3.58655 4.187298-3.111333C4.079701-3.640349 3.721046-3.963138 2.96787-3.963138C2.25056-3.963138 1.811208-3.496887 1.622914-3.084433H1.613948V-3.963138L.313823-3.864508V-3.58655C.923537-3.58655 1.004234-3.523786 1.004234-3.084433V-.690411C1.004234-.277958 .905604-.277958 .313823-.277958V0C.735243-.017933 .905604-.026899 1.33599-.026899S1.882939-.017933 2.358157 0V-.277958C1.766376-.277958 1.667746-.277958 1.667746-.690411V-2.322291Z'/>
+<path id='g5-114' d='M1.596015-2.0533C1.596015-2.420922 1.694645-3.738979 2.716812-3.738979V-3.730012C2.698879-3.721046 2.555417-3.61345 2.555417-3.398257C2.555417-3.156164 2.743711-3.003736 2.949938-3.003736C3.138232-3.003736 3.344458-3.138232 3.344458-3.407223C3.344458-3.694147 3.075467-3.963138 2.67198-3.963138C2.133998-3.963138 1.75741-3.58655 1.551183-3.030635H1.542217V-3.963138L.268991-3.864508V-3.58655C.878705-3.58655 .959402-3.523786 .959402-3.084433V-.690411C.959402-.277958 .860772-.277958 .268991-.277958V0C.744209-.017933 .860772-.026899 1.318057-.026899C1.676712-.026899 1.891905-.017933 2.456787 0V-.277958H2.27746C1.622914-.277958 1.596015-.376588 1.596015-.708344V-2.0533Z'/>
+<path id='g5-120' d='M2.734745-2.017435C2.67198-2.098132 2.67198-2.107098 2.67198-2.116065C2.67198-2.133998 3.371357-2.985803 3.443088-3.057534C3.721046-3.362391 4.025903-3.577584 4.572852-3.58655V-3.864508C4.312827-3.837609 4.070735-3.837609 3.81071-3.837609C3.469988-3.837609 3.308593-3.837609 2.949938-3.864508V-3.58655C3.084433-3.568618 3.200996-3.496887 3.200996-3.317559C3.200996-3.174097 3.120299-3.075467 3.075467-3.021669L2.501619-2.313325L1.802242-3.200996C1.739477-3.281694 1.721544-3.299626 1.721544-3.362391C1.721544-3.469988 1.820174-3.577584 2.026401-3.58655V-3.864508C1.685679-3.846575 1.452553-3.837609 1.049066-3.837609C1.031133-3.837609 .52005-3.837609 .170361-3.864508V-3.58655C.789041-3.58655 .806974-3.568618 1.219427-3.039601L2.142964-1.882939C1.945704-1.649813 1.470486-1.058032 1.273225-.833873C.824907-.29589 .313823-.277958 .125529-.277958V0C.385554-.026899 .627646-.026899 .887671-.026899C1.174595-.026899 1.461519-.017933 1.748443 0V-.277958C1.524284-.304857 1.497385-.457285 1.497385-.546949C1.497385-.573848 1.497385-.699377 1.63188-.860772C1.847073-1.13873 2.080199-1.407721 2.304359-1.676712L3.012702-.771108C3.183064-.573848 3.183064-.555915 3.183064-.502117C3.183064-.403487 3.0934-.286924 2.878207-.277958V0C3.254795-.017933 3.469988-.026899 3.855542-.026899C3.873474-.026899 4.384558-.026899 4.734247 0V-.277958C4.375592-.277958 4.1066-.277958 3.90934-.529016L2.734745-2.017435Z'/>
+<path id='g7-107' d='M1.436613-4.96538C1.436613-5.069988 1.436613-5.230386 1.26924-5.230386C1.094894-5.230386 1.094894-5.05604 1.094894-4.930511V1.436613C1.094894 1.562142 1.094894 1.736488 1.26924 1.736488C1.436613 1.736488 1.436613 1.57609 1.436613 1.471482V-4.96538ZM2.977833-4.930511C2.977833-5.05604 2.977833-5.230386 2.803487-5.230386C2.636115-5.230386 2.636115-5.069988 2.636115-4.96538V1.471482C2.636115 1.57609 2.636115 1.736488 2.803487 1.736488C2.977833 1.736488 2.977833 1.562142 2.977833 1.436613V-4.930511Z'/>
+<path id='g10-40' d='M3.297634 2.391034C3.297634 2.361146 3.297634 2.34122 3.128269 2.171856C1.882939 .916563 1.564134-.966376 1.564134-2.49066C1.564134-4.224159 1.942715-5.957659 3.16812-7.202989C3.297634-7.32254 3.297634-7.342466 3.297634-7.372354C3.297634-7.442092 3.257783-7.47198 3.198007-7.47198C3.098381-7.47198 2.201743-6.794521 1.613948-5.529265C1.105853-4.433375 .986301-3.327522 .986301-2.49066C.986301-1.713574 1.09589-.508095 1.643836 .617684C2.241594 1.843088 3.098381 2.49066 3.198007 2.49066C3.257783 2.49066 3.297634 2.460772 3.297634 2.391034Z'/>
+<path id='g10-41' d='M2.879203-2.49066C2.879203-3.267746 2.769614-4.473225 2.221669-5.599004C1.62391-6.824408 .767123-7.47198 .667497-7.47198C.607721-7.47198 .56787-7.43213 .56787-7.372354C.56787-7.342466 .56787-7.32254 .757161-7.143213C1.733499-6.156912 2.30137-4.572852 2.30137-2.49066C2.30137-.787049 1.932752 .966376 .697385 2.221669C.56787 2.34122 .56787 2.361146 .56787 2.391034C.56787 2.450809 .607721 2.49066 .667497 2.49066C.767123 2.49066 1.663761 1.8132 2.251557 .547945C2.759651-.547945 2.879203-1.653798 2.879203-2.49066Z'/>
+<path id='g11-49' d='M2.336239-4.435367C2.336239-4.623661 2.322291-4.630635 2.127024-4.630635C1.680697-4.191283 1.046077-4.184309 .760149-4.184309V-3.93325C.927522-3.93325 1.387796-3.93325 1.771357-4.128518V-.571856C1.771357-.341719 1.771357-.251059 1.073973-.251059H.808966V0C.934496-.006974 1.792279-.027895 2.050311-.027895C2.266501-.027895 3.145205-.006974 3.29863 0V-.251059H3.033624C2.336239-.251059 2.336239-.341719 2.336239-.571856V-4.435367Z'/>
+<path id='g9-59' d='M1.471482-.111582C1.471482 .27198 1.401743 .718306 .927522 1.164633C.899626 1.192528 .878705 1.21345 .878705 1.248319C.878705 1.297136 .934496 1.345953 .976339 1.345953C1.073973 1.345953 1.66675 .788045 1.66675-.041843C1.66675-.474222 1.499377-.801993 1.17858-.801993C.948443-.801993 .781071-.620672 .781071-.404483C.781071-.18132 .941469 0 1.185554 0C1.352927 0 1.464508-.111582 1.471482-.111582Z'/>
+<path id='g9-69' d='M5.523288-1.610959C5.565131-1.701619 5.565131-1.729514 5.565131-1.736488C5.565131-1.778331 5.537235-1.834122 5.446575-1.834122C5.432628-1.834122 5.397758-1.834122 5.369863-1.806227C5.355915-1.792279 5.348941-1.785305 5.265255-1.603985C4.811955-.599751 4.456289-.251059 3.319552-.251059H2.133998C1.917808-.251059 1.910834-.258032 1.910834-.320797C1.910834-.327771 1.910834-.36264 1.93873-.467248L2.405978-2.336239H3.187049C3.737983-2.336239 3.821669-2.245579 3.821669-2.015442C3.821669-1.93873 3.800747-1.820174 3.772852-1.701619C3.75193-1.638854 3.75193-1.63188 3.75193-1.617933S3.758904-1.520299 3.870486-1.520299C3.96812-1.520299 3.975093-1.555168 4.002989-1.673724L4.38655-3.200996C4.407472-3.284682 4.407472-3.29863 4.407472-3.305604C4.407472-3.375342 4.351681-3.403238 4.288917-3.403238C4.198257-3.403238 4.191283-3.368369 4.14944-3.221918C4.002989-2.677958 3.793773-2.587298 3.200996-2.587298H2.468742L2.887173-4.247073C2.942964-4.463263 2.949938-4.484184 3.242839-4.484184H4.379577C5.293151-4.484184 5.523288-4.29589 5.523288-3.675218C5.523288-3.493898 5.495392-3.284682 5.495392-3.249813C5.495392-3.194022 5.516314-3.131258 5.613948-3.131258C5.718555-3.131258 5.725529-3.194022 5.739477-3.312578L5.865006-4.526027C5.885928-4.735243 5.837111-4.735243 5.662765-4.735243H1.827148C1.687671-4.735243 1.603985-4.735243 1.603985-4.581818C1.603985-4.484184 1.680697-4.484184 1.834122-4.484184C1.945704-4.484184 1.973599-4.484184 2.099128-4.470237C2.238605-4.456289 2.252553-4.442341 2.252553-4.372603C2.252553-4.323786 2.231631-4.254047 2.224658-4.219178L1.311083-.571856C1.241345-.299875 1.234371-.251059 .690411-.251059C.564882-.251059 .481196-.251059 .481196-.097634C.481196 0 .564882 0 .690411 0H4.630635C4.804981 0 4.811955 0 4.867746-.125529L5.523288-1.610959Z'/>
+<path id='g9-74' d='M4.163387-4.226152C4.226152-4.470237 4.233126-4.51208 4.623661-4.51208C4.707347-4.51208 4.804981-4.51208 4.804981-4.658531C4.804981-4.735243 4.749191-4.763138 4.700374-4.763138C4.533001-4.763138 4.11457-4.735243 3.947198-4.735243C3.800747-4.735243 3.563636-4.742217 3.410212-4.742217C3.235866-4.749191 3.033624-4.763138 2.859278-4.763138C2.810461-4.763138 2.705853-4.763138 2.705853-4.616687C2.705853-4.51208 2.768618-4.51208 2.977833-4.51208C3.138232-4.51208 3.166127-4.51208 3.340473-4.498132C3.542715-4.47721 3.563636-4.456289 3.563636-4.372603C3.563636-4.323786 3.563636-4.309838 3.535741-4.212204L2.733748-1.018182C2.601245-.495143 2.154919-.055791 1.701619-.055791C1.603985-.055791 1.164633-.076712 1.004234-.418431C1.408717-.418431 1.499377-.746202 1.499377-.871731C1.499377-1.066999 1.332005-1.171606 1.17858-1.171606C.990286-1.171606 .711333-1.018182 .711333-.627646C.711333-.174346 1.136737 .139477 1.72254 .139477C2.405978 .139477 3.180075-.299875 3.354421-.99726L4.163387-4.226152Z'/>
+<path id='g9-116' d='M1.715567-2.75467H2.426899C2.559402-2.75467 2.650062-2.75467 2.650062-2.908095C2.650062-3.005729 2.559402-3.005729 2.440847-3.005729H1.778331L2.036364-4.037858C2.043337-4.072727 2.057285-4.107597 2.057285-4.135492C2.057285-4.261021 1.959651-4.358655 1.820174-4.358655C1.645828-4.358655 1.54122-4.2401 1.492403-4.05878C1.443587-3.884433 1.534247-4.219178 1.227397-3.005729H.516065C.383562-3.005729 .292902-3.005729 .292902-2.852304C.292902-2.75467 .376588-2.75467 .502117-2.75467H1.164633L.753176-1.108842C.711333-.934496 .648568-.683437 .648568-.592777C.648568-.18132 .99726 .069738 1.39477 .069738C2.168867 .069738 2.608219-.9066 2.608219-.99726S2.517559-1.08792 2.496638-1.08792C2.412951-1.08792 2.405978-1.073973 2.350187-.955417C2.154919-.516065 1.799253-.125529 1.415691-.125529C1.26924-.125529 1.171606-.216189 1.171606-.467248C1.171606-.536986 1.199502-.683437 1.21345-.753176L1.715567-2.75467Z'/>
+<path id='g8-88' d='M4.83188-4.094645L3.995019-6.07721C3.965131-6.156912 3.945205-6.196762 3.945205-6.206725C3.945205-6.266501 4.11457-6.455791 4.533001-6.495641C4.632628-6.505604 4.732254-6.515567 4.732254-6.684932C4.732254-6.804483 4.612702-6.804483 4.582814-6.804483C4.174346-6.804483 3.745953-6.774595 3.327522-6.774595C3.078456-6.774595 2.460772-6.804483 2.211706-6.804483C2.15193-6.804483 2.032379-6.804483 2.032379-6.60523C2.032379-6.495641 2.132005-6.495641 2.261519-6.495641C2.859278-6.495641 2.919054-6.396015 3.008717-6.176837L4.184309-3.39726L2.082192-1.135741L1.952677-1.026152C1.464508-.498132 .996264-.33873 .488169-.308842C.358655-.298879 .268991-.298879 .268991-.109589C.268991-.099626 .268991 0 .398506 0C.697385 0 1.026152-.029888 1.334994-.029888C1.703611-.029888 2.092154 0 2.450809 0C2.510585 0 2.630137 0 2.630137-.199253C2.630137-.298879 2.530511-.308842 2.510585-.308842C2.420922-.318804 2.11208-.33873 2.11208-.617684C2.11208-.777086 2.261519-.936488 2.381071-1.066002L3.39726-2.141968L4.293898-3.118306L5.300125-.737235C5.339975-.627646 5.349938-.617684 5.349938-.597758C5.349938-.518057 5.160648-.348692 4.772105-.308842C4.662516-.298879 4.572852-.288917 4.572852-.119552C4.572852 0 4.682441 0 4.722291 0C5.001245 0 5.69863-.029888 5.977584-.029888C6.22665-.029888 6.834371 0 7.083437 0C7.153176 0 7.272727 0 7.272727-.18929C7.272727-.308842 7.173101-.308842 7.0934-.308842C6.425903-.318804 6.405978-.348692 6.236613-.747198C5.84807-1.673724 5.180573-3.227895 4.951432-3.825654C5.628892-4.523039 6.674969-5.708593 6.993773-5.987547C7.28269-6.22665 7.66127-6.465753 8.259029-6.495641C8.388543-6.505604 8.478207-6.505604 8.478207-6.694894C8.478207-6.704857 8.478207-6.804483 8.348692-6.804483C8.049813-6.804483 7.721046-6.774595 7.412204-6.774595C7.043587-6.774595 6.665006-6.804483 6.306351-6.804483C6.246575-6.804483 6.117061-6.804483 6.117061-6.60523C6.117061-6.535492 6.166874-6.505604 6.236613-6.495641C6.326276-6.485679 6.635118-6.465753 6.635118-6.1868C6.635118-6.047323 6.525529-5.917808 6.445828-5.828144L4.83188-4.094645Z'/>
+<path id='g8-114' d='M.876712-.587796C.846824-.438356 .787049-.209215 .787049-.159402C.787049 .019925 .926526 .109589 1.075965 .109589C1.195517 .109589 1.374844 .029888 1.444583-.169365C1.464508-.209215 1.803238-1.564134 1.843088-1.743462C1.92279-2.072229 2.102117-2.769614 2.161893-3.038605C2.201743-3.16812 2.480697-3.636364 2.719801-3.855542C2.799502-3.92528 3.088418-4.184309 3.516812-4.184309C3.775841-4.184309 3.92528-4.064757 3.935243-4.064757C3.636364-4.014944 3.417186-3.775841 3.417186-3.516812C3.417186-3.35741 3.526775-3.16812 3.795766-3.16812S4.343711-3.39726 4.343711-3.755915C4.343711-4.104608 4.024907-4.403487 3.516812-4.403487C2.86924-4.403487 2.430884-3.915318 2.241594-3.636364C2.161893-4.084682 1.803238-4.403487 1.334994-4.403487C.876712-4.403487 .687422-4.014944 .597758-3.835616C.418431-3.496887 .288917-2.899128 .288917-2.86924C.288917-2.769614 .388543-2.769614 .408468-2.769614C.508095-2.769614 .518057-2.779577 .577833-2.998755C.747198-3.706102 .946451-4.184309 1.305106-4.184309C1.474471-4.184309 1.613948-4.104608 1.613948-3.726027C1.613948-3.516812 1.58406-3.407223 1.454545-2.889166L.876712-.587796Z'/>
+<path id='g8-118' d='M4.662516-3.706102C4.662516-4.244085 4.403487-4.403487 4.224159-4.403487C3.975093-4.403487 3.73599-4.144458 3.73599-3.92528C3.73599-3.795766 3.785803-3.73599 3.895392-3.626401C4.104608-3.427148 4.234122-3.16812 4.234122-2.809465C4.234122-2.391034 3.626401-.109589 2.460772-.109589C1.952677-.109589 1.723537-.458281 1.723537-.976339C1.723537-1.534247 1.992528-2.261519 2.30137-3.088418C2.371108-3.257783 2.420922-3.39726 2.420922-3.58655C2.420922-4.034869 2.102117-4.403487 1.603985-4.403487C.667497-4.403487 .288917-2.958904 .288917-2.86924C.288917-2.769614 .388543-2.769614 .408468-2.769614C.508095-2.769614 .518057-2.789539 .56787-2.948941C.856787-3.955168 1.285181-4.184309 1.574097-4.184309C1.653798-4.184309 1.823163-4.184309 1.823163-3.865504C1.823163-3.616438 1.723537-3.347447 1.653798-3.16812C1.215442-2.012453 1.085928-1.554172 1.085928-1.125778C1.085928-.049813 1.96264 .109589 2.420922 .109589C4.094645 .109589 4.662516-3.188045 4.662516-3.706102Z'/>
+<path id='g8-120' d='M3.327522-3.008717C3.387298-3.267746 3.616438-4.184309 4.313823-4.184309C4.363636-4.184309 4.60274-4.184309 4.811955-4.054795C4.533001-4.004981 4.333748-3.755915 4.333748-3.516812C4.333748-3.35741 4.443337-3.16812 4.712329-3.16812C4.931507-3.16812 5.250311-3.347447 5.250311-3.745953C5.250311-4.26401 4.662516-4.403487 4.323786-4.403487C3.745953-4.403487 3.39726-3.875467 3.277709-3.646326C3.028643-4.303861 2.49066-4.403487 2.201743-4.403487C1.165629-4.403487 .597758-3.118306 .597758-2.86924C.597758-2.769614 .697385-2.769614 .71731-2.769614C.797011-2.769614 .826899-2.789539 .846824-2.879203C1.185554-3.935243 1.843088-4.184309 2.181818-4.184309C2.371108-4.184309 2.719801-4.094645 2.719801-3.516812C2.719801-3.20797 2.550436-2.540473 2.181818-1.145704C2.022416-.52802 1.673724-.109589 1.235367-.109589C1.175592-.109589 .946451-.109589 .737235-.239103C.986301-.288917 1.205479-.498132 1.205479-.777086C1.205479-1.046077 .986301-1.125778 .836862-1.125778C.537983-1.125778 .288917-.86675 .288917-.547945C.288917-.089664 .787049 .109589 1.225405 .109589C1.882939 .109589 2.241594-.587796 2.271482-.647572C2.391034-.278954 2.749689 .109589 3.347447 .109589C4.373599 .109589 4.941469-1.175592 4.941469-1.424658C4.941469-1.524284 4.851806-1.524284 4.821918-1.524284C4.732254-1.524284 4.712329-1.484433 4.692403-1.414695C4.363636-.348692 3.686177-.109589 3.367372-.109589C2.978829-.109589 2.819427-.428394 2.819427-.767123C2.819427-.986301 2.879203-1.205479 2.988792-1.643836L3.327522-3.008717Z'/>
+<path id='g2-77' d='M3.514819-5.030137C4.151432-2.196762 4.384558-1.425654 4.958406-.457285C5.030137-.340722 5.057036-.304857 5.119801-.304857C5.164633-.304857 5.173599-.313823 5.334994-.466252C5.872976-.977335 6.670984-1.730511 9.15467-4.635616C8.993275-3.649315 8.939477-3.245828 8.83188-2.27746C8.724284-1.344956 8.724284-1.0132 8.724284-.869738C8.724284-.780075 8.724284-.457285 8.769116-.107597C8.778082-.026899 8.813948 .260025 9.199502 .260025S10.275467-.143462 10.275467-.313823C10.275467-.340722 10.275467-.385554 10.19477-.385554C10.087173-.385554 9.907846-.29589 9.809215-.242092C9.567123-.260025 9.558157-.42142 9.531258-.636613C9.504359-.941469 9.504359-1.255293 9.504359-1.264259C9.504359-2.438854 9.979577-5.397758 10.096139-5.899875C10.158904-6.106102 10.158904-6.124035 10.158904-6.1868C10.158904-6.195766 10.158904-6.312329 10.087173-6.312329C10.042341-6.312329 9.997509-6.258531 9.952677-6.213699L7.729016-3.622416C7.164134-2.985803 6.007472-1.685679 5.433624-1.201494C5.128767-1.829141 4.976339-2.223661 4.644583-3.505853C4.393524-4.465255 4.214197-5.299128 4.052802-6.204732C4.043836-6.276463 4.025903-6.321295 3.936239-6.321295C3.792777-6.321295 3.380324-6.133001 3.344458-5.899875C3.218929-5.04807 3.021669-3.703113 2.15193-1.596015C1.945704-1.075965 1.65878-.385554 1.33599-.385554C1.219427-.385554 .833873-.448319 .591781-.699377C.304857-.537983 .251059-.062765 .251059 0C.251059 .071731 .251059 .179328 .546949 .32279C.806974 .457285 1.031133 .457285 1.049066 .457285C1.640847 .457285 2.214695-.995268 2.429888-1.515318C2.779577-2.402989 3.254795-3.703113 3.514819-5.030137Z'/>
+<path id='g12-49' d='M1.982565-3.16812C1.982565-3.317559 1.967621-3.317559 1.803238-3.317559C1.449564-2.998755 .896638-2.998755 .797011-2.998755H.712329V-2.779577H.797011C.911582-2.779577 1.235367-2.794521 1.524284-2.919054V-.428394C1.524284-.273973 1.524284-.219178 .996264-.219178H.747198V0C1.021171-.019925 1.464508-.019925 1.753425-.019925S2.485679-.019925 2.759651 0V-.219178H2.510585C1.982565-.219178 1.982565-.273973 1.982565-.428394V-3.16812Z'/>
+<path id='g1-70' d='M10.532503-4.411457C10.675965-4.531009 10.68792-4.542964 10.68792-4.590785C10.68792-4.722291 10.580324-4.722291 10.353176-4.722291H6.898132L5.810212-8.069738C5.750436-8.237111 5.738481-8.284932 5.642839-8.284932S5.511333-8.201245 5.463512-8.045828L4.387547-4.722291H.932503C.705355-4.722291 .597758-4.722291 .597758-4.590785C.597758-4.519054 .633624-4.495143 .74122-4.411457L3.610461-2.331258L2.52254 1.028144C2.52254 1.0401 2.47472 1.183562 2.47472 1.195517S2.47472 1.327024 2.606227 1.327024C2.630137 1.327024 2.654047 1.327024 2.785554 1.219427L5.642839-.848817L8.500125 1.219427C8.53599 1.267248 8.619676 1.327024 8.679452 1.327024C8.810959 1.327024 8.810959 1.207472 8.810959 1.195517C8.810959 1.147696 8.787049 1.06401 8.775093 1.028144L7.675218-2.331258L10.532503-4.411457Z'/>
+<path id='g3-120' d='M3.36538-2.349191C3.156164-2.289415 3.108344-2.116065 3.108344-2.026401C3.108344-1.835118 3.263761-1.793275 3.347447-1.793275C3.520797-1.793275 3.694147-1.936737 3.694147-2.169863C3.694147-2.492653 3.341469-2.636115 3.036613-2.636115C2.642092-2.636115 2.402989-2.331258 2.337235-2.217684C2.259527-2.367123 2.032379-2.636115 1.58406-2.636115C.896638-2.636115 .490162-1.924782 .490162-1.715567C.490162-1.685679 .514072-1.63188 .597758-1.63188S.699377-1.667746 .71731-1.721544C.86675-2.205729 1.273225-2.438854 1.566127-2.438854S1.948692-2.247572 1.948692-2.050311C1.948692-1.97858 1.948692-1.924782 1.900872-1.739477C1.763387-1.183562 1.63188-.639601 1.601993-.56787C1.512329-.340722 1.297136-.137484 1.046077-.137484C1.010212-.137484 .842839-.137484 .705355-.227148C.938481-.304857 .962391-.502117 .962391-.549938C.962391-.705355 .842839-.783064 .723288-.783064C.555915-.783064 .376588-.651557 .376588-.406476C.376588-.065753 .753176 .059776 1.034122 .059776C1.374844 .059776 1.619925-.17335 1.733499-.358655C1.853051-.107597 2.139975 .059776 2.480697 .059776C3.186052 .059776 3.580573-.663512 3.580573-.860772C3.580573-.872727 3.574595-.944458 3.466999-.944458C3.383313-.944458 3.371357-.902615 3.353425-.848817C3.180075-.328767 2.755666-.137484 2.504608-.137484C2.27746-.137484 2.116065-.268991 2.116065-.52005C2.116065-.633624 2.145953-.765131 2.199751-.974346L2.391034-1.751432C2.450809-1.984558 2.480697-2.092154 2.606227-2.235616C2.689913-2.32528 2.833375-2.438854 3.024658-2.438854C3.054545-2.438854 3.233873-2.438854 3.36538-2.349191Z'/>
+<path id='g6-114' d='M7.770859-6.585305C7.790785-6.615193 7.820672-6.684932 7.820672-6.724782C7.820672-6.794521 7.81071-6.804483 7.581569-6.804483H.707347C.478207-6.804483 .468244-6.794521 .468244-6.724782C.468244-6.684932 .498132-6.615193 .518057-6.585305L3.875467 .139477C3.945205 .268991 3.975093 .328767 4.144458 .328767S4.343711 .268991 4.41345 .139477L7.770859-6.585305ZM1.703611-6.087173H7.173101L4.443337-.607721L1.703611-6.087173Z'/>
+<path id='g4-84' d='M3.936239-5.460523C3.990037-5.657783 4.00797-5.747447 4.160399-5.774346C4.23213-5.792279 4.519054-5.792279 4.707347-5.792279C5.738481-5.792279 6.043337-5.729514 6.043337-5.030137C6.043337-4.913574 6.043337-4.779078 5.96264-4.250062L5.953674-4.178331C5.953674-4.115567 5.989539-4.052802 6.079203-4.052802C6.1868-4.052802 6.204732-4.133499 6.222665-4.267995L6.455791-5.819178C6.464757-5.86401 6.473724-5.917808 6.473724-5.944707C6.473724-6.070237 6.38406-6.070237 6.213699-6.070237H1.111831C.896638-6.070237 .887671-6.06127 .824907-5.890909L.268991-4.312827C.233126-4.196264 .233126-4.178331 .233126-4.169365C.233126-4.124533 .260025-4.052802 .349689-4.052802C.448319-4.052802 .466252-4.1066 .52005-4.267995C1.0132-5.66675 1.291158-5.792279 2.591283-5.792279H2.940971C3.19203-5.792279 3.19203-5.76538 3.19203-5.693649C3.19203-5.639851 3.174097-5.577086 3.156164-5.505355L1.95467-.708344C1.873973-.385554 1.847073-.277958 .896638-.277958C.609714-.277958 .529016-.277958 .529016-.116563C.529016 0 .645579 0 .681445 0C.91457 0 1.174595-.017933 1.416687-.017933C1.667746-.017933 1.927771-.026899 2.178829-.026899C2.57335-.026899 2.591283-.026899 2.923039-.017933C3.039601-.017933 3.631382 0 3.703113 0C3.783811 0 3.891407 0 3.891407-.161395C3.891407-.277958 3.81071-.277958 3.58655-.277958S3.254795-.277958 3.012702-.29589C2.806476-.32279 2.698879-.331756 2.698879-.484184C2.698879-.529016 2.716812-.600747 2.734745-.663512L3.936239-5.460523Z'/>
+<path id='g4-114' d='M3.622416-3.631382C3.326526-3.577584 3.174097-3.326526 3.174097-3.138232C3.174097-2.96787 3.299626-2.815442 3.523786-2.815442C3.765878-2.815442 4.016936-3.021669 4.016936-3.353425C4.016936-3.703113 3.694147-3.963138 3.254795-3.963138C2.582316-3.963138 2.205729-3.461021 2.080199-3.29066C1.972603-3.783811 1.569116-3.963138 1.228394-3.963138C.905604-3.963138 .699377-3.765878 .546949-3.452055C.376588-3.129265 .260025-2.618182 .260025-2.582316C.260025-2.501619 .32279-2.47472 .385554-2.47472C.484184-2.47472 .502117-2.519552 .546949-2.698879C.71731-3.407223 .905604-3.738979 1.210461-3.738979C1.479452-3.738979 1.479452-3.452055 1.479452-3.317559C1.479452-3.129265 1.407721-2.851308 1.353923-2.618182C1.291158-2.385056 1.201494-1.999502 1.165629-1.891905L.806974-.42142C.744209-.206227 .744209-.188294 .744209-.161395C.744209-.044832 .824907 .09863 1.022167 .09863C1.309091 .09863 1.371856-.143462 1.43462-.403487C1.542217-.789041 1.542217-.806974 1.63188-1.174595C1.963636-2.519552 2.017435-2.734745 2.035367-2.779577C2.089166-2.887173 2.501619-3.738979 3.245828-3.738979C3.452055-3.738979 3.577584-3.667248 3.622416-3.631382Z'/>
+</defs>
+<g id='page1'>
+<g stroke-miterlimit='10' transform='translate(-50.281476,54.960463)scale(0.996264,-0.996264)'>
+<g fill='#000' stroke='#000'>
+<g stroke-width='0.4'>
+<g transform='translate(0.2,0.2)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#000'>
+<g stroke='none'>
+<g transform='translate(-50.281476,-52.73439)'>
+<svg height='107.69485' overflow='visible' viewBox='0 0 842 457' width='198.4247'>
+<image height='457' width='842' xlink:href='static/images/manifold_blue.png'/>
+</svg>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill='#ebf8eb' stroke='#ebf8eb'>
+<g stroke-opacity='0.5'>
+<g fill-opacity='0.5'>
+<g stroke='#3c823c'>
+<g stroke-width='0.4'>
+<path d='M31.29819 42.39474L122.34686 62.31157L133.7278 82.2284L42.67911 62.31157Z'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill='#3c823c' stroke='#3c823c'>
+<g fill='#3c823c' stroke='#3c823c'>
+</g>
+<g transform='translate(35.19324,66.00482)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#3c823c'>
+<g stroke='none'>
+<g fill='#3c823c'>
+<use x='-50.281476' y='54.960463' xlink:href='#g4-84'/>
+<use x='-44.905487' y='55.956712' xlink:href='#g3-120'/>
+<use x='-40.733646' y='57.107958' xlink:href='#g12-49'/>
+<use x='-37.88316' y='54.960463' xlink:href='#g2-77'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill='#000' stroke='#000'>
+<path d='M73.63185 59.75093C73.63185 61.13165 72.51257 62.25093 71.13185 62.25093S68.63185 61.13165 68.63185 59.75093S69.75113 57.25093 71.13185 57.25093S73.63185 58.37021 73.63185 59.75093ZM71.13185 59.75093' stroke='none'/>
+</g>
+<g transform='translate(53.54155,44.71796)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#000'>
+<g stroke='none'>
+<use x='-50.281476' y='54.960463' xlink:href='#g8-88'/>
+<use x='-42.027687' y='56.454844' xlink:href='#g9-116'/>
+<use x='-39.018116' y='56.454844' xlink:href='#g9-59'/>
+<use x='-36.651975' y='56.454844' xlink:href='#g11-49'/>
+<use x='-32.182633' y='54.960463' xlink:href='#g10-40'/>
+<use x='-28.308259' y='54.960463' xlink:href='#g8-120'/>
+<use x='-22.614327' y='56.454844' xlink:href='#g9-116'/>
+<use x='-19.106638' y='54.960463' xlink:href='#g10-41'/>
+</g>
+</g>
+</g>
+</g>
+<g class='a-grad'>
+<g stroke-width='1.7'>
+<g fill='#dc8c1e' stroke='#dc8c1e'>
+<path d='M71.13185 59.75093L95.57045 90.78798' fill='none'/>
+<g transform='matrix(0.6186,0.78564,-0.78564,0.6186,92.99646,87.51894)'>
+<g stroke-dasharray='none' stroke-dashoffset='0.0'>
+ <g stroke-linejoin='miter'>
+ <path d='M8.22922 0L2.74501 2.08447L4.58595 0L2.74501-2.08447Z'/>
+ </g>
+ </g>
+</g>
+<g fill='#dc8c1e' stroke='#dc8c1e'>
+<g fill='#dc8c1e' stroke='#dc8c1e'>
+</g>
+<g transform='translate(82.27892,100.069)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#dc8c1e'>
+<g stroke='none'>
+<g fill='#dc8c1e'>
+<use x='-50.281476' y='54.960463' xlink:href='#g6-114'/>
+<use x='-41.979251' y='54.960463' xlink:href='#g8-114'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g class='a-euc'>
+<g stroke-width='1.8'>
+<g fill='#8c3cb4' stroke='#8c3cb4'>
+<path d='M71.13185 59.75093L131.47855 112.2262' fill='none'/>
+<g transform='matrix(0.7546,0.65617,-0.65617,0.7546,128.19727,109.3729)'>
+<g stroke-dasharray='none' stroke-dashoffset='0.0'>
+ <g stroke-linejoin='miter'>
+ <path d='M8.53687 0L2.90657 2.14082L4.7984 0L2.90657-2.14082Z'/>
+ </g>
+ </g>
+</g>
+</g>
+</g>
+<g fill='#8c3cb4' stroke='#8c3cb4'>
+<path d='M139.07324 116.65642C139.07324 118.03714 137.95396 119.15642 136.57324 119.15642S134.07324 118.03714 134.07324 116.65642S135.19252 114.15642 136.57324 114.15642S139.07324 115.2757 139.07324 116.65642ZM136.57324 116.65642' stroke='none'/>
+</g>
+<g fill='#8c3cb4' stroke='#8c3cb4'>
+<g fill='#8c3cb4' stroke='#8c3cb4'>
+</g>
+<g transform='translate(142.10622,113.69133)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#8c3cb4'>
+<g stroke='none'>
+<g fill='#8c3cb4'>
+<use x='-50.281476' y='54.960463' xlink:href='#g8-120'/>
+<use x='-44.587544' y='51.345099' xlink:href='#g9-69'/>
+<use x='-44.587544' y='57.433292' xlink:href='#g11-49'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g class='a-vpar'>
+<g stroke-width='1.6'>
+<g fill='#3264b4' stroke='#3264b4'>
+<path d='M71.13185 59.75093L99.20084 66.0666' fill='none'/>
+<g transform='matrix(0.97556,0.2195,-0.2195,0.97556,95.32437,65.19441)'>
+<g stroke-dasharray='none' stroke-dashoffset='0.0'>
+ <g stroke-linejoin='miter'>
+ <path d='M7.92165 0L2.5833 2.02818L4.3736 0L2.5833-2.02818Z'/>
+ </g>
+ </g>
+</g>
+<g fill='#3264b4' stroke='#3264b4'>
+<g fill='#3264b4' stroke='#3264b4'>
+</g>
+<g transform='translate(100.55283,56.99477)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#3264b4'>
+<g stroke='none'>
+<g fill='#3264b4'>
+<use x='-50.281476' y='54.960463' xlink:href='#g8-118'/>
+<use x='-45.452345' y='56.75929' xlink:href='#g7-107'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g class='a-dash'>
+<g stroke-dasharray='3.0,2.0' stroke-dashoffset='0.0'>
+<g stroke-width='0.4'>
+<g fill='#646464' stroke='#646464'>
+<path d='M105.27505 67.43329L99.5846 95.88603' fill='none'/>
+</g>
+</g>
+</g>
+</g>
+<g class='a-jac'>
+<g stroke-width='1.8'>
+<g fill='#3264b4' stroke='#3264b4'>
+<path d='M71.13185 59.75093C71.13185 59.75093 90.11049 66.86731 99.5846 69.70956C109.0587 72.55182 119.51064 75.16483 128.03734 76.82274S150.7996 79.66776 144.0717 79.10681' fill='none'/>
+<g transform='matrix(0.99649,0.08308,-0.08308,0.99649,139.73857,78.74553)'>
+<g stroke-dasharray='none' stroke-dashoffset='0.0'>
+ <g stroke-linejoin='miter'>
+ <path d='M8.53687 0L2.90657 2.14082L4.7984 0L2.90657-2.14082Z'/>
+ </g>
+ </g>
+</g>
+</g>
+</g>
+<g fill='#3264b4' stroke='#3264b4'>
+<path d='M153.2996 79.66776C153.2996 81.04848 152.18033 82.16776 150.7996 82.16776C149.41888 82.16776 148.2996 81.04848 148.2996 79.66776C148.2996 78.28703 149.41888 77.16776 150.7996 77.16776C152.18033 77.16776 153.2996 78.28703 153.2996 79.66776ZM150.7996 79.66776' stroke='none'/>
+</g>
+<g fill='#3264b4' stroke='#3264b4'>
+<g fill='#3264b4' stroke='#3264b4'>
+</g>
+<g transform='translate(156.33258,76.70267)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#3264b4'>
+<g stroke='none'>
+<g fill='#3264b4'>
+<use x='-50.281476' y='54.960463' xlink:href='#g8-120'/>
+<use x='-44.587544' y='51.345099' xlink:href='#g9-74'/>
+<use x='-44.587544' y='57.433292' xlink:href='#g11-49'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill='#dc8c1e' stroke='#dc8c1e'>
+<g fill='#dc8c1e' stroke='#dc8c1e'>
+</g>
+<g transform='translate(156.51387,113.66963)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#dc8c1e'>
+<g stroke='none'>
+<g fill='#dc8c1e'>
+<use x='-50.281476' y='54.960463' xlink:href='#g1-70'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g fill='#dc8c1e' stroke='#dc8c1e'>
+<g fill='#dc8c1e' stroke='#dc8c1e'>
+</g>
+<g transform='translate(174.24942,115.59393)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#dc8c1e'>
+<g stroke='none'>
+<g fill='#dc8c1e'>
+<use x='-50.281476' y='54.960463' xlink:href='#g5-97'/>
+<use x='-45.673786' y='54.960463' xlink:href='#g5-114'/>
+<use x='-42.069264' y='54.960463' xlink:href='#g5-103'/>
+<use x='-35.797689' y='54.960463' xlink:href='#g5-109'/>
+<use x='-28.118205' y='54.960463' xlink:href='#g5-97'/>
+<use x='-23.510514' y='54.960463' xlink:href='#g5-120'/>
+<use x='-15.575047' y='54.960463' xlink:href='#g4-114'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g stroke-width='0.8'>
+<g fill='#333' stroke='#333'>
+<path d='M150.79962 22.76227L178.13034 46.51674' fill='none'/>
+<g transform='matrix(0.75476,0.65598,-0.65598,0.75476,176.26285,44.89366)'>
+<g stroke-dasharray='none' stroke-dashoffset='0.0'>
+ <g stroke-linejoin='miter'>
+ <path d='M5.4608 0L1.29181 1.57648L2.67429 0L1.29181-1.57648Z'/>
+ </g>
+ </g>
+</g>
+</g>
+</g>
+<g fill='#333' stroke='#333'>
+<g fill='#333' stroke='#333'>
+</g>
+<g transform='translate(174.4044,14.13727)'>
+<g stroke='none' transform='scale(-1.00375,1.00375)translate(-50.281476,54.960463)scale(-1,-1)'>
+<g fill='#333'>
+<g stroke='none'>
+<g fill='#333'>
+<use x='-50.281476' y='44.001559' xlink:href='#g0-114'/>
+<use x='-45.904851' y='44.001559' xlink:href='#g0-101'/>
+<use x='-41.036346' y='44.001559' xlink:href='#g0-119'/>
+<use x='-33.668258' y='44.001559' xlink:href='#g0-97'/>
+<use x='-28.510584' y='44.001559' xlink:href='#g0-114'/>
+<use x='-24.133958' y='44.001559' xlink:href='#g0-100'/>
+<use x='-50.281476' y='54.960463' xlink:href='#g0-105'/>
+<use x='-47.334228' y='54.960463' xlink:href='#g0-110'/>
+<use x='-41.43974' y='54.960463' xlink:href='#g0-99'/>
+<use x='-36.724144' y='54.960463' xlink:href='#g0-114'/>
+<use x='-32.347518' y='54.960463' xlink:href='#g0-101'/>
+<use x='-27.479014' y='54.960463' xlink:href='#g0-97'/>
+<use x='-22.32134' y='54.960463' xlink:href='#g0-115'/>
+<use x='-18.136239' y='54.960463' xlink:href='#g0-101'/>
+<use x='-13.267735' y='54.960463' xlink:href='#g0-115'/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg></div>
+</div>
+<div>
+<p>Keeping the flow-map <strong>Jacobian</strong> (<strong>FMRG-J</strong>): we prove that it projects the reward gradient onto the data manifold, so a guided step stays on-manifold by construction.</p>
+<p>Dropping the Jacobian (<strong>FMRG-E</strong>) saves memory and optimizes the reward directly, but the trajectory can drift off-manifold.</p>
+</div>
+</div>
 
-    <!-- Algorithm -->
-    <h3>Algorithm</h3>
-    <div class="algorithm-box">
-        <div class="algo-header">
-            <div class="algo-title">Algorithm 1: Flow Map Trajectory Guidance (FMTG)</div>
-            <div class="algo-tabs">
-                <button class="algo-tab active" data-variant="j">FMTG-J</button>
-                <button class="algo-tab" data-variant="e">FMTG-E</button>
-            </div>
-        </div>
-        <span class="algo-keyword">Require:</span> Flow map <em>X</em>, reward <em>r</em>, time grid {t<sub>k</sub>}, guidance strength &lambda;<sub>t</sub>(x), gradient steps n<sub>opt</sub><br>
-        1: &nbsp;Sample x<sub>0</sub> ~ &rho;<sub>0</sub><br>
-        2: &nbsp;<span class="algo-keyword">for</span> k = 0, ..., N-1 <span class="algo-keyword">do</span><br>
-        3: &nbsp;&nbsp;&nbsp;x &larr; X<sub>t<sub>k</sub>, t<sub>k+1</sub></sub>(x<sub>t<sub>k</sub></sub>) <span class="algo-comment">&nbsp;{Flow map step}</span><br>
-        4: &nbsp;&nbsp;&nbsp;<span class="algo-keyword">for</span> j = 0, ..., n<sub>opt</sub> - 1 <span class="algo-keyword">do</span><br>
-        <span id="algo-line-j">5: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u &larr; &nabla;X<sub>t<sub>k+1</sub>,1</sub>(x)<sup>T</sup>&nabla;r(X<sub>t<sub>k+1</sub>,1</sub>(x)) <span class="algo-comment">&nbsp;{Jacobian gradient}</span></span><span id="algo-line-e" style="display:none">5: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u &larr; &nabla;r(X<sub>t<sub>k+1</sub>,1</sub>(x)) <span class="algo-comment">&nbsp;{Euclidean gradient}</span></span><br>
-        6: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x &larr; x + (&Delta;t<sub>k</sub> / n<sub>opt</sub>) &lambda;<sub>t<sub>k+1</sub></sub>(x) &middot; u <span class="algo-comment">&nbsp;{Gradient step}</span><br>
-        7: &nbsp;&nbsp;&nbsp;<span class="algo-keyword">end for</span><br>
-        8: &nbsp;<span class="algo-keyword">end for</span><br>
-        9: &nbsp;<span class="algo-keyword">return</span> x<sub>1</sub>
-    </div>
-
-    <!-- Gradient options figure -->
-    <h3>Gradient Options: Jacobian vs. Euclidean</h3>
-    <div class="figure-block">
-        <img src="static/images/manifold_jvse.svg" alt="Comparison of gradient options" style="background: #fff; margin-bottom: 0.5rem;">
-        <img src="static/images/bear_qualitative.png" alt="Jacobian vs Euclidean qualitative">
-        <p class="figure-caption"><strong>Comparison of gradient options.</strong> (Top) The flow map Jacobian (blue, FMTG-J) keeps the guided trajectory on the data manifold, while the Euclidean gradient (red, FMTG-E) may leave the manifold. (Bottom) Qualitative comparison on a whitening reward: FMTG-E achieves higher raw reward (r++) but produces off-manifold artifacts, while FMTG-J stays on-manifold with natural image quality (r+).</p>
-    </div>
+<div class="split fig-cap">
+<div class="figpanel">
+<div class="figpanel-label">Decision 2 &mdash; how much to guide?</div>
+<div class="gw">
+<canvas id="gwCanvas" height="232"></canvas>
+<div class="gw-legend">
+<span><i style="background:#8fc4c9"></i>Reward $r(x)$</span>
+<span><i style="background:#cdbfe6"></i>Base $\rho_1$</span>
+<span><i style="background:#a78fce"></i>Reward tilt</span>
+<span><i style="background:#534a7d"></i>Greedy</span>
+<span><i style="background:#2c2647"></i>Greedy + early stopping</span>
+</div>
+</div>
+</div>
+<div>
+<p>Greedy guidance can <strong>over-optimize</strong> the reward, collapsing sample diversity.</p>
+<p><strong>Early stopping</strong> &mdash; guiding only on an initial window, then running the uncontrolled flow &mdash; provably keeps it in check.</p>
+</div>
+</div>
 </section>
 
-<!-- Results -->
 <section id="results">
-    <h2>Results</h2>
-    <p>
-        We evaluate FMTG on reward functions of varying complexity: L<sub>2</sub> reconstruction losses for linear inverse problems, VGG-based style losses, neural-network human preference rewards, and vision-language model rewards for text-to-image generation.
-    </p>
+<span class="kicker">05 &mdash; Results</span>
+<h2>Matches or surpasses baselines with as few as 3 NFEs</h2>
+<p class="lede">A single FLUX.1-dev flow map, evaluated across four reward families &mdash; from simple $\ell_2$ reconstruction to a 7B vision-language model.</p>
+<div class="cards" style="margin-bottom:1.6rem">
+<div class="card"><div class="ctitle">Inverse problems</div><div class="cdesc">FMRG outperforms DPS, FlowChef, and FlowDPS on super-resolution, deblurring, and inpainting &mdash; across both AFHQ and FFHQ. FMRG-E matches baselines that use 2&ndash;10&times; more NFEs.</div></div>
+<div class="card"><div class="ctitle">Reward-guided generation</div><div class="cdesc">On GenEval, FMRG-J scores <strong>0.80</strong> &mdash; the best of any method &mdash; and matches FMTT's quality at NFE 20, a <strong>70&times;</strong> compute reduction.</div></div>
+<div class="card"><div class="ctitle">Style transfer</div><div class="cdesc">FMRG-J transfers the reference style while preserving content; DPS misses the style and FlowChef shows artifacts &mdash; exactly as the approximation hierarchy predicts.</div></div>
+<div class="card"><div class="ctitle">VLM rewards</div><div class="cdesc">With a 7B vision-language reward, FMRG follows complex compositional prompts &mdash; object attributes, spatial relations, text &mdash; that unguided FLUX consistently misses.</div></div>
+</div>
+<div class="minihead">Qualitative results &mdash; browse by reward family</div>
+<div class="reward-picker" id="rewardPicker">
+<button type="button" class="reward-tab active" data-reward="human">Human preference</button>
+<button type="button" class="reward-tab" data-reward="style">Style transfer</button>
+<button type="button" class="reward-tab" data-reward="inverse">Inverse problems</button>
+<button type="button" class="reward-tab" data-reward="vlm">VLM</button>
+</div>
+<div class="qual" id="qual">
+<div class="qual-viewport">
+<button class="qual-nav prev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+<button class="qual-nav next" type="button" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+<div class="qual-track on" data-reward="human" id="qualTrack-human"><div class="qcarousel">
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/abstracthuman_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/abstracthuman_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 8 steps</span></div><div class="qprompt">&ldquo;Abstract human form, impressionist strokes, pastel colors, dreamy texture, soft focus.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/distantsilhouette_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/distantsilhouette_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 6 steps</span></div><div class="qprompt">&ldquo;Distant silhouette in misty mountains, atmospheric perspective, quiet.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/elderly_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/elderly_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;Close-up portrait of an elderly man, softbox lighting, shallow depth of field, every wrinkle tells a story.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/girlfloating_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/girlfloating_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 10 steps</span></div><div class="qprompt">&ldquo;Girl under floating lanterns, warm gold light, nostalgic haze, cinematic softness.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/infinitelibrary_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/infinitelibrary_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;Infinite library stretching beyond horizon.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/moonsiren_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/moonsiren_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 10 steps</span></div><div class="qprompt">&ldquo;Bathing moon siren, silver-blue glow, drifting water reflections, ethereal, soft haze.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/oceanbio_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/oceanbio_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 6 steps</span></div><div class="qprompt">&ldquo;Ocean at night, glowing bioluminescence.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/oceansky_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/oceansky_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 10 steps</span></div><div class="qprompt">&ldquo;Ocean suspended in the sky, clouds below.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/snowsilence_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/snowsilence_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 10 steps</span></div><div class="qprompt">&ldquo;Snow falling in silence, monochrome tones, stillness.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/ancienttemple_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/ancienttemple_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 10 steps</span></div><div class="qprompt">&ldquo;An ancient temple overgrown with vines, gouache matte illustration, warm amber light, mystical.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/lonelyfog_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/lonelyfog_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;Lonely figure in a vast foggy landscape, muted earth tones, melancholic atmosphere, oil painting.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/diner_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/diner_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;Man sitting alone in diner, late night, moody lighting, cinematic frame.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/pastoral_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/pastoral_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;Pastoral countryside, oil painting, warm golden light.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/redcar_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/redcar_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;A red vintage car on a rain-soaked street at night, neon signs reflecting in puddles, moody atmosphere.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/forestwatercolor_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/forestwatercolor_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;Forest landscape, watercolor wash, soft edges, light bleeding into paper, autumn colors.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/jazz_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/jazz_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;A jazz musician playing saxophone, smoky bar, low key lighting, warm amber tones, candid moment.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/lastnightsummer_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/lastnightsummer_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 14 steps</span></div><div class="qprompt">&ldquo;The last night of summer, warm air, nostalgic glow.&rdquo;</div></div>
+<div class="qslide pair"><div class="side"><img loading="lazy" src="static/images/carousel/celestial_unguided.png" alt=""><span class="qtag">FLUX.1-dev</span></div><div class="side"><img loading="lazy" src="static/images/carousel/celestial_fmrg.png" alt=""><span class="qtag ours">+ FMRG &middot; 21 steps</span></div><div class="qprompt">&ldquo;Celestial woman, starlight woven into hair, cool tones, glowing softly.&rdquo;</div></div>
+</div></div>
+<div class="qual-track" data-reward="style" id="qualTrack-style"><div class="qcarousel">
+<div class="qslide single"><img loading="lazy" src="static/images/style/candidate_hierarchy_of_approximations.png" alt="Style hierarchy"><div class="qprompt">Reference &rarr; FLUX.1-dev &rarr; DPS &rarr; FlowChef &rarr; FMRG-E &rarr; FMRG-J. FMRG-J captures the target style most faithfully.</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/style/hierarchy_variant3.png" alt="Style hierarchy variant 3"><div class="qprompt">Style hierarchy &mdash; second reference.</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/style/hierarchy_variant4.png" alt="Style hierarchy variant 4"><div class="qprompt">Style hierarchy &mdash; third reference.</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/style/hierarchy_variant5.png" alt="Style hierarchy variant 5"><div class="qprompt">Style hierarchy &mdash; fourth reference.</div></div>
+</div></div>
+<div class="qual-track" data-reward="inverse" id="qualTrack-inverse"><div class="qcarousel">
+<div class="qslide trip"><div class="col"><img loading="lazy" src="static/images/inverse_main/sr_measurement.png" alt="Super-resolution measurement"><span class="qtag">Measurement</span></div><div class="col"><img loading="lazy" src="static/images/inverse_main/sr_nfe3.png" alt="Super-resolution, FMRG at 3 NFEs"><span class="qtag ours">FMRG &middot; 3 NFEs</span></div><div class="col"><img loading="lazy" src="static/images/inverse_main/sr_nfe12.png" alt="Super-resolution, FMRG at 12 NFEs"><span class="qtag ours">FMRG &middot; 12 NFEs</span></div><div class="qprompt">4&times; super-resolution (AFHQ) &mdash; FMRG recovers sharp detail from just 3 NFEs.</div></div>
+<div class="qslide trip"><div class="col"><img loading="lazy" src="static/images/inverse_main/motion_measurement.png" alt="Motion deblur measurement"><span class="qtag">Measurement</span></div><div class="col"><img loading="lazy" src="static/images/inverse_main/motion_nfe3.png" alt="Motion deblur, FMRG at 3 NFEs"><span class="qtag ours">FMRG &middot; 3 NFEs</span></div><div class="col"><img loading="lazy" src="static/images/inverse_main/motion_nfe12.png" alt="Motion deblur, FMRG at 12 NFEs"><span class="qtag ours">FMRG &middot; 12 NFEs</span></div><div class="qprompt">Motion deblurring (AFHQ) &mdash; FMRG removes the blur from just 3 NFEs.</div></div>
+<div class="qslide trip"><div class="col"><img loading="lazy" src="static/images/inverse_main/inpaint_measurement.png" alt="Inpainting measurement"><span class="qtag">Measurement</span></div><div class="col"><img loading="lazy" src="static/images/inverse_main/inpaint_nfe3.png" alt="Inpainting, FMRG at 3 NFEs"><span class="qtag ours">FMRG &middot; 3 NFEs</span></div><div class="col"><img loading="lazy" src="static/images/inverse_main/inpaint_nfe12.png" alt="Inpainting, FMRG at 12 NFEs"><span class="qtag ours">FMRG &middot; 12 NFEs</span></div><div class="qprompt">Box inpainting (FFHQ) &mdash; FMRG fills the masked region from just 3 NFEs.</div></div>
+</div></div>
+<div class="qual-track" data-reward="vlm" id="qualTrack-vlm"><div class="qcarousel">
+<div class="qslide single"><img loading="lazy" src="static/images/vlm/raccoon.png" alt="VLM raccoon"><div class="qprompt">&ldquo;A cool raccoon in mirrored sunglasses, with a neon pizza sign reflected in the lenses.&rdquo;</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/vlm/stopsign.png" alt="VLM stop sign"><div class="qprompt">&ldquo;A stop sign that says FMRG!&rdquo;</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/vlm/brass.png" alt="VLM candles in brass holders"><div class="qprompt">&ldquo;Two tall white candles in matching brass candlestick holders, the left has a bright flame, the right is extinguished.&rdquo;</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/vlm/box_books.png" alt="VLM box books"><div class="qprompt">&ldquo;A cardboard moving box labeled books in thick black marker.&rdquo;</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/vlm/clocktv.png" alt="VLM clock TV"><div class="qprompt">&ldquo;A photo of an analog clock below a TV.&rdquo;</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/vlm/tilegrid.png" alt="VLM tile grid"><div class="qprompt">&ldquo;A 3&times;3 grid of square ceramic tiles on a clean wall, exactly one tile missing in the center.&rdquo;</div></div>
+</div></div>
+<div class="qual-counter"><span id="qIdx">1</span> / <span id="qTot">18</span></div>
+</div>
+<div class="qual-dots" id="qualDots"></div>
+</div>
+<div class="minihead">Quantitative results &mdash; tables &amp; plots</div>
+<div class="quant" id="quant">
+<div class="quant-viewport">
+<button class="quant-nav prev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+<button class="quant-nav next" type="button" aria-label="Next"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+<div class="quant-track" id="quantTrack">
 
-    <!-- Inverse Problems & Human Preference Rewards -->
-    <h3>Inverse Problems & Human Preference Reward Guidance</h3>
-    <p>
-        FMTG solves latent inverse problems at remarkably low NFEs and steers generation toward higher aesthetic quality with increasing NFE, producing visually compelling results at NFE 6 and 10.
-    </p>
+<div class="qslideQ">
+<div class="qtbl wide"><table>
+<thead>
+<tr><th rowspan="2"></th><th rowspan="2">Method</th><th colspan="4">Super-Resolution</th><th colspan="4">Motion Deblur</th><th colspan="4">Inpainting</th></tr>
+<tr><th>PSNR&uarr;</th><th>SSIM&uarr;</th><th>LPIPS&darr;</th><th>FID&darr;</th><th>PSNR&uarr;</th><th>SSIM&uarr;</th><th>LPIPS&darr;</th><th>FID&darr;</th><th>PSNR&uarr;</th><th>SSIM&uarr;</th><th>LPIPS&darr;</th><th>FID&darr;</th></tr>
+</thead><tbody>
+<tr><td rowspan="5" class="rgrp">AFHQ</td><td>DPS</td><td>18.06</td><td>.443</td><td>.503</td><td>59.99</td><td>16.68</td><td>.407</td><td>.547</td><td>58.59</td><td>17.15</td><td>.512</td><td>.540</td><td>95.30</td></tr>
+<tr><td>FlowChef</td><td>26.87</td><td>.767</td><td>.243</td><td>43.29</td><td>26.75</td><td>.749</td><td>.250</td><td>38.58</td><td>24.12</td><td>.828</td><td>.160</td><td>35.10</td></tr>
+<tr><td>FlowDPS</td><td>27.02</td><td class="second">.778</td><td>.250</td><td>34.58</td><td>26.07</td><td>.739</td><td>.279</td><td>36.77</td><td>26.11</td><td>.798</td><td>.239</td><td>44.10</td></tr>
+<tr class="ours"><td>FMRG-E</td><td class="second">27.12</td><td>.772</td><td class="best">.180</td><td class="best">25.48</td><td class="second">27.26</td><td class="second">.771</td><td class="best">.177</td><td class="best">23.12</td><td class="second">26.12</td><td class="best">.851</td><td class="best">.126</td><td class="best">24.73</td></tr>
+<tr class="ours"><td>FMRG-J</td><td class="best">27.39</td><td class="best">.795</td><td class="second">.193</td><td class="second">29.51</td><td class="best">27.36</td><td class="best">.788</td><td class="second">.204</td><td class="second">24.43</td><td class="best">26.71</td><td class="second">.842</td><td class="second">.158</td><td class="second">31.20</td></tr>
+<tr><td rowspan="5" class="rgrp">FFHQ</td><td>DPS</td><td>18.74</td><td>.570</td><td>.530</td><td>119.30</td><td>20.20</td><td>.618</td><td>.483</td><td>127.91</td><td>18.93</td><td>.623</td><td>.486</td><td>137.36</td></tr>
+<tr><td>FlowChef</td><td>26.71</td><td>.782</td><td>.237</td><td>117.04</td><td>24.53</td><td>.713</td><td>.296</td><td>109.30</td><td>25.41</td><td>.830</td><td>.164</td><td>76.52</td></tr>
+<tr><td>FlowDPS</td><td class="second">27.70</td><td class="second">.818</td><td>.205</td><td class="second">61.85</td><td>26.85</td><td>.789</td><td>.233</td><td>64.55</td><td>27.90</td><td>.844</td><td>.195</td><td>73.30</td></tr>
+<tr class="ours"><td>FMRG-E</td><td>27.53</td><td>.799</td><td class="second">.171</td><td>62.63</td><td class="second">28.10</td><td class="second">.807</td><td class="best">.153</td><td class="best">38.52</td><td class="second">28.66</td><td class="second">.883</td><td class="best">.103</td><td class="best">35.15</td></tr>
+<tr class="ours"><td>FMRG-J</td><td class="best">28.23</td><td class="best">.832</td><td class="best">.154</td><td class="best">55.99</td><td class="best">28.62</td><td class="best">.834</td><td class="second">.155</td><td class="second">41.33</td><td class="best">29.48</td><td class="best">.893</td><td class="second">.112</td><td class="second">43.99</td></tr>
+</tbody></table></div>
+<div class="qcapQ"><span class="lbl">Latent-space inverse problems</span>Tuned to each method's best hyperparameters, <strong>FMRG outperforms DPS, FlowChef, and FlowDPS across the board</strong> &mdash; super-resolution, motion deblur, and inpainting, on both AFHQ and FFHQ. <strong>Bold</strong> is best, <span class="second">underline</span> second.</div>
+</div>
 
-    <div class="figure-row equal-height">
-        <div class="figure-cell">
-            <img src="static/images/selling_v2_left.png" alt="Latent inverse problems">
-            <p class="figure-caption"><strong>(a) Latent inverse problems.</strong> FMTG reconstructs super-resolution (4&times;), motion deblur, and box inpainting from degraded measurements at NFE 3 and 12.</p>
-        </div>
-        <div class="figure-cell">
-            <img src="static/images/aesthetic_nfe_sweep.png" alt="Human preference reward guidance">
-            <p class="figure-caption"><strong>(b) Human preference reward guidance.</strong> FMTG steers generation toward higher aesthetic quality with increasing NFE, producing visually compelling results at NFE 6 and 10.</p>
-        </div>
-    </div>
+<div class="qslideQ">
+<div class="qfig"><img loading="lazy" src="paper_assets/figures/fig06b_inverse_lpips_fid.png" alt="LPIPS and FID vs NFE on AFHQ inverse problems"></div>
+<div class="qcapQ"><span class="lbl">NFE&ndash;performance trade-off (AFHQ)</span>Among Euclidean-gradient methods, <strong>FMRG-E matches or beats baselines that use 2&ndash;10&times; more NFEs</strong>, with the largest margin in the very-low-NFE regime.</div>
+</div>
 
-    <!-- Aesthetic Enhancement Carousel -->
-    <div class="carousel-container" id="aestheticCarousel">
-        <button class="carousel-btn prev" onclick="carouselPrev()"><i class="fas fa-chevron-left"></i></button>
-        <button class="carousel-btn next" onclick="carouselNext()"><i class="fas fa-chevron-right"></i></button>
-        <div class="carousel-track" id="carouselTrack">
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_000_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_000_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">A woman dissolving into cherry blossom petals, soft pastel tones, ethereal glow</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_006_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_006_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">A Japanese garden at dawn, ink illustration, minimal lines, sumi-e style</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_007_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_007_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">Forest landscape, watercolor wash, soft edges, light bleeding into paper, autumn colors</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_009_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_009_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">An ancient temple overgrown with vines, gouache matte illustration, warm amber light</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_014_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v1_014_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">A curious orange fox and a fluffy white rabbit in a lush meadow, golden hour</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_004_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_004_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">Dramatic biblical scene, baroque style, intense lighting, rich colors</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_005_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_005_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">Impressionist garden, loose brushstrokes, vibrant light, soft forms</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_012_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_012_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">Giant moon resting on the ocean, glowing softly, dreamlike</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_016_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_016_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">Crashing waves in slow motion, soft mist, cinematic</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_017_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_017_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">Moss-covered ruins, soft light filtering through trees</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_022_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_022_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">The last night of summer, warm air, nostalgic glow</div>
-            </div>
-            <div class="carousel-slide">
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_023_unguided.png" alt="Unguided"><span class="slide-label">FLUX.1-dev</span></div>
-                <div class="slide-cell"><img src="static/images/aesthetic/v2_023_fmtg.png" alt="FMTG"><span class="slide-label">+ FMTG</span></div>
-                <div class="slide-prompt">A dream half-forgotten, pastel haze, quiet emotion</div>
-            </div>
-        </div>
-        <div class="carousel-dots" id="carouselDots"></div>
-    </div>
-    <p class="figure-caption"><strong>Aesthetic enhancement.</strong> FMTG steers FLUX.1-dev toward higher human preference reward (NFE = 21). Use arrows to browse examples.</p>
+<div class="qslideQ">
+<div class="qtbl"><table>
+<thead><tr><th>Method</th><th>Overall&uarr;</th><th>Single</th><th>Two</th><th>Count</th><th>Colors</th><th>Position</th><th>Color Attr.</th><th>NFE&darr;</th></tr></thead><tbody>
+<tr><td>FLUX.1-dev</td><td>0.662</td><td>.991</td><td>.795</td><td>.697</td><td>.801</td><td>.212</td><td>.475</td><td>50</td></tr>
+<tr><td>Flow Map</td><td>0.668</td><td>.975</td><td>.848</td><td>.637</td><td>.777</td><td>.210</td><td>.560</td><td>8</td></tr>
+<tr><td>Flow Map + Best-of-<i>N</i></td><td>0.758</td><td>1.00</td><td>.909</td><td>.838</td><td>.872</td><td>.260</td><td>.670</td><td>128</td></tr>
+<tr><td>ReNO</td><td>0.716</td><td>1.00</td><td>.881</td><td>.769</td><td>.875</td><td>.172</td><td>.608</td><td>58</td></tr>
+<tr><td>FMTT</td><td>0.771</td><td>.988</td><td>.929</td><td>.850</td><td>.862</td><td>.310</td><td>.690</td><td>1400</td></tr>
+<tr class="ours"><td>FMRG-E</td><td>0.766</td><td>1.00</td><td>.927</td><td>.828</td><td>.856</td><td>.297</td><td>.685</td><td>100</td></tr>
+<tr class="ours"><td>FMRG-J</td><td>0.770</td><td>.997</td><td>.922</td><td>.863</td><td>.854</td><td>.295</td><td>.690</td><td>20</td></tr>
+<tr class="ours"><td>FMRG-J</td><td class="best">0.800</td><td>1.00</td><td>.947</td><td>.884</td><td>.902</td><td>.292</td><td>.772</td><td>100</td></tr>
+</tbody></table></div>
+<div class="qcapQ"><span class="lbl">GenEval accuracy</span>On a shared FLUX.1-dev flow-map backbone, <strong>FMRG attains the best GenEval score overall (0.80)</strong> &mdash; and the best score at every fixed NFE budget.</div>
+</div>
 
-    <!-- Quantitative table -->
-    <div class="table-wrapper">
-        <table>
-            <caption><strong>Quantitative comparison on linear inverse problems.</strong> PSNR, SSIM, LPIPS, FID, and KID across super-resolution (4&times;), motion deblurring, and inpainting. <strong>Bold</strong> = best, <u>underline</u> = second best. Results averaged over 1000 images.</caption>
-            <thead>
-                <tr>
-                    <th></th>
-                    <th colspan="3">Super-Resolution</th>
-                    <th colspan="3">Motion Deblur</th>
-                    <th colspan="3">Inpainting</th>
-                </tr>
-                <tr>
-                    <th>Method</th>
-                    <th>PSNR&uarr;</th><th>LPIPS&darr;</th><th>FID&darr;</th>
-                    <th>PSNR&uarr;</th><th>LPIPS&darr;</th><th>FID&darr;</th>
-                    <th>PSNR&uarr;</th><th>LPIPS&darr;</th><th>FID&darr;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="group-header"><td colspan="10">AFHQ-Dog</td></tr>
-                <tr><td>DPS</td><td>18.06</td><td>.503</td><td>59.99</td><td>16.68</td><td>.547</td><td>58.59</td><td>17.15</td><td>.540</td><td>95.30</td></tr>
-                <tr><td>FlowChef</td><td>26.87</td><td>.243</td><td>43.29</td><td>26.75</td><td>.250</td><td>38.58</td><td>24.12</td><td>.160</td><td>35.10</td></tr>
-                <tr><td>FlowDPS</td><td>27.02</td><td>.250</td><td>34.58</td><td>26.07</td><td>.279</td><td>36.77</td><td>26.11</td><td>.239</td><td>44.10</td></tr>
-                <tr class="ours"><td>FMTG-E (ours)</td><td><u>27.12</u></td><td class="best">.180</td><td class="best">25.48</td><td><u>27.26</u></td><td class="best">.177</td><td class="best">23.12</td><td><u>26.12</u></td><td class="best">.126</td><td class="best">24.73</td></tr>
-                <tr class="ours"><td>FMTG-J (ours)</td><td class="best">27.39</td><td><u>.193</u></td><td><u>29.51</u></td><td class="best">27.36</td><td><u>.204</u></td><td><u>24.43</u></td><td class="best">26.71</td><td><u>.158</u></td><td><u>31.20</u></td></tr>
-                <tr class="group-header"><td colspan="10">FFHQ</td></tr>
-                <tr><td>DPS</td><td>18.74</td><td>.530</td><td>119.30</td><td>20.20</td><td>.483</td><td>127.91</td><td>18.93</td><td>.486</td><td>137.36</td></tr>
-                <tr><td>FlowChef</td><td>26.71</td><td>.237</td><td>117.04</td><td>24.53</td><td>.296</td><td>109.30</td><td>25.41</td><td>.164</td><td>76.52</td></tr>
-                <tr><td>FlowDPS</td><td><u>27.70</u></td><td>.205</td><td><u>61.85</u></td><td>26.85</td><td>.233</td><td>64.55</td><td>27.90</td><td>.195</td><td>73.30</td></tr>
-                <tr class="ours"><td>FMTG-E (ours)</td><td>27.53</td><td><u>.171</u></td><td>62.63</td><td><u>28.10</u></td><td class="best">.153</td><td class="best">38.52</td><td><u>28.66</u></td><td class="best">.103</td><td class="best">35.15</td></tr>
-                <tr class="ours"><td>FMTG-J (ours)</td><td class="best">28.23</td><td class="best">.154</td><td class="best">55.99</td><td class="best">28.62</td><td><u>.155</u></td><td><u>41.33</u></td><td class="best">29.48</td><td><u>.112</u></td><td><u>43.99</u></td></tr>
-            </tbody>
-        </table>
-    </div>
+<div class="qslideQ">
+<div class="qfig"><img loading="lazy" src="paper_assets/figures/fig09_pareto_geneval.png" alt="GenEval accuracy vs NFE Pareto frontier"></div>
+<div class="qcapQ"><span class="lbl">GenEval accuracy vs. NFE</span><strong>FMRG-J dominates the Pareto frontier</strong> across all NFE budgets &mdash; matching FMTT's quality (0.77) at NFE 20, a <strong>70&times; reduction in compute</strong>.</div>
+</div>
 
-    <!-- NFE trade-off plots -->
-    <div class="figure-block bordered">
-        <img src="static/images/afhq_lpips_fid_grid.png" alt="LPIPS vs FID trade-off on AFHQ">
-        <p class="figure-caption"><strong>LPIPS vs. FID trade-off on AFHQ.</strong> FMTG-E achieves notably better performance on distortion and perception metrics in the low NFE regime, matching or outperforming baselines using 2&ndash;10&times; more NFEs.</p>
-    </div>
-
-    <!-- Style Guidance -->
-    <h3>Style Guidance: Hierarchy of Methods</h3>
-    <p>
-        FMTG steers generation toward a target visual style while preserving semantic content, using the Frobenius norm between Gram matrices of VGG features as a style reward. The Jacobian gradient (FMTG-J) captures the target style most faithfully while preserving semantic content.
-    </p>
-
-    <div class="figure-block">
-        <img src="static/images/hierarchy_variant1_4rows.png" alt="Style guidance hierarchy of methods">
-        <p class="figure-caption"><strong>Style guidance: hierarchy of methods.</strong> Given a style reference (left), we compare unguided FLUX, Jacobian-based methods (FMTG-J, DPS), and Euclidean-based methods (FMTG-E, FlowChef). FMTG-J captures the target style most faithfully while preserving semantic content.</p>
-    </div>
-
-    <!-- GenEval -->
-    <h3>Text-to-Image Alignment (GenEval)</h3>
-    <p>
-        Using a linear combination of human preference reward models (ImageReward, HPSv2, PickScore, CLIP), FMTG achieves a GenEval score of <strong>0.80</strong> at NFE 100&mdash;matching the state of the art with a 70&times; reduction in NFEs.
-    </p>
-
-    <div class="figure-row">
-        <div class="figure-cell">
-            <img src="static/images/geneval_wide_v2.png" alt="GenEval qualitative results">
-            <p class="figure-caption"><strong>GenEval qualitative results.</strong> FLUX.1-dev (top) vs. FMTG (bottom). FMTG corrects color attribution, missing objects, and spatial relationship errors.</p>
-        </div>
-        <div class="figure-cell">
-            <img src="static/images/pareto_geneval.png" alt="GenEval Pareto frontier">
-            <p class="figure-caption"><strong>GenEval Pareto frontier.</strong> FMTG-J achieves 0.80 GenEval at NFE 100, matching FMTT (NFE 1400) and outperforming ReNO (NFE 58) and Best-of-N (NFE 400).</p>
-        </div>
-    </div>
-
-    <!-- GenEval table -->
-    <div class="table-wrapper">
-        <table>
-            <caption><strong>GenEval accuracy for reward-guided generation.</strong> All methods use the same FLUX.1-dev flow map backbone.</caption>
-            <thead>
-                <tr>
-                    <th>Method</th>
-                    <th>NFE &darr;</th>
-                    <th>GenEval &uarr;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>FLUX.1-dev (unguided)</td><td>50</td><td>0.662</td></tr>
-                <tr><td>Best-of-N (reward-selected)</td><td>400</td><td>0.751</td></tr>
-                <tr><td>ReNO (seed optimization)</td><td>58</td><td>0.716</td></tr>
-                <tr><td>FMTT</td><td>1400</td><td>0.771</td></tr>
-                <tr class="ours"><td>FMTG-E (ours)</td><td>30</td><td>0.751</td></tr>
-                <tr class="ours"><td>FMTG-E (ours)</td><td>60</td><td>0.766</td></tr>
-                <tr class="ours"><td>FMTG-J (ours)</td><td>20</td><td>0.770</td></tr>
-                <tr class="ours"><td>FMTG-J (ours)</td><td class="best">100</td><td class="best">0.800</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- VLM Guidance -->
-    <h3>VLM Reward Guidance</h3>
-    <p>
-        Beyond standard rewards, FMTG leverages complex vision-language model (VLM) rewards to steer generation toward detailed, compositional prompts that base models struggle with.
-    </p>
-
-    <div class="figure-block">
-        <img src="static/images/vlm3.png" alt="VLM reward guidance results">
-        <p class="figure-caption"><strong>VLM reward guidance.</strong> Unguided FLUX generations across four seeds (left) fail to capture fine-grained details in complex compositional prompts. FMTG (right, green border) steers generation toward prompt-faithful outputs using a VLM-based reward.</p>
-    </div>
-
-    <!-- Early Stopping Analysis -->
-    <h3>Analysis: Early Stopping</h3>
-    <p>
-        Early stopping&mdash;applying guidance only for t &in; [0, t<sub>stop</sub>] then running the uncontrolled flow to completion&mdash;is a key design choice. It controls mode collapse and recovers the polynomial variance scaling of exact optimal control or reward tilting.
-    </p>
-
-    <div class="figure-block bordered">
-        <img src="static/images/es_progression.png" alt="Early stopping progression">
-        <p class="figure-caption"><strong>Effect of early stopping.</strong> Progressive effect of early stopping on guided generation. Without early stopping, aggressive guidance can lead to mode collapse; with it, FMTG produces diverse, high-quality outputs.</p>
-    </div>
-
-    <!-- Reward complexity -->
-    <h3>Jacobian vs. Euclidean: When to Use Which</h3>
-
-    <div class="table-wrapper">
-        <table>
-            <caption><strong>Reward complexity and gradient choice.</strong> As reward model complexity increases, FMTG-J becomes increasingly preferred over FMTG-E, consistent with the tangent-space projection (Proposition 3.1).</caption>
-            <thead>
-                <tr>
-                    <th>Reward</th>
-                    <th>Model Size</th>
-                    <th>Best Variant</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>L<sub>2</sub> reconstruction</td><td>&mdash;</td><td>FMTG-E</td></tr>
-                <tr><td>VGG Gram style</td><td>144M</td><td>Comparable</td></tr>
-                <tr><td>Reward ensemble</td><td>3.4B</td><td>FMTG-J</td></tr>
-                <tr><td>Skywork VLM</td><td>7B</td><td>FMTG-J</td></tr>
-            </tbody>
-        </table>
-    </div>
+</div>
+<div class="quant-counter" id="quantCnt">1 / 4</div>
+</div>
+<div class="quant-dots" id="quantDots"></div>
+</div>
 </section>
 
-<!-- Citation -->
-<section id="citation">
-    <h2>Citation</h2>
-    <p>If you find this work useful, please cite our paper:</p>
-    <div class="bibtex-block">
-        <button class="copy-btn" onclick="copyBibtex()"><i class="fas fa-copy"></i> Copy</button>
-        <pre><code>@article{huang2026fmtg,
-  title={How to Guide Your Flow: Steering Flow Maps for Rapid Test-Time Alignment},
-  author={Huang, Jerry and Lin, Justin and Shah, Sheel and Nair, Kartik and Boffi, Nicholas M.},
+<section id="bibtex">
+<h2>BibTeX</h2>
+<div class="bibbox"><button class="copy" onclick="copyBib()"><i class="fas fa-copy"></i> Copy</button>
+<pre><code>@article{huang2026fmrg,
+  title={How to Guide Your Flow: Few-Step Alignment via Flow Map Reward Guidance},
+  author={Huang, Jerry Y. and Lin, Justin and Shah, Sheel and Nair, Kartik and Boffi, Nicholas M.},
   journal={arXiv preprint},
   year={2026}
-}</code></pre>
-    </div>
+}</code></pre></div>
 </section>
 
-<!-- Footer -->
-<footer>
-    <p>
-        Flow Map Trajectory Guidance (FMTG) &middot;
-        <a href="https://arxiv.org/abs/">arXiv</a> &middot;
-        <a href="https://github.com/">GitHub</a>
-    </p>
-    <p style="margin-top: 0.5rem;">Website template by the authors. &copy; 2026.</p>
-</footer>
+<footer><p>How to Guide Your Flow &middot; Flow Map Reward Guidance (FMRG) &middot; <a href="https://arxiv.org/abs/">arXiv</a> &middot; <a href="https://github.com/">Code</a></p>
+<p style="margin-top:.35rem">&copy; 2026 &middot; Carnegie Mellon University</p></footer>
 
 <script>
-// ── Dark Mode Toggle ──
-const toggle = document.getElementById('darkModeToggle');
-const iconEl = toggle.querySelector('i');
-function isDark() { return document.body.classList.contains('dark-mode'); }
-function setDarkMode(v) {
-    document.body.classList.toggle('dark-mode', v);
-    iconEl.className = v ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-    localStorage.setItem('blog-dark-mode', v);
+// Top bar tint: tracks the hero wash -- lavender at top, fades to white on scroll
+(function(){
+ var bar=document.querySelector('.bar'); if(!bar) return;
+ var FADE=600, tick=false;
+ function paint(){
+   tick=false;
+   var p=Math.min((window.scrollY||0)/FADE,1);
+   var r=Math.round(239+16*p), g=Math.round(238+17*p), b=Math.round(248+7*p);
+   bar.style.background='rgba('+r+','+g+','+b+',.9)';
+ }
+ window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(paint);}},{passive:true});
+ paint();
+})();
+// Steps widget: scrub the FMRG trajectory from unguided (t=0) to guided (t=1)
+(function(){var w=document.getElementById('nfeWidget');if(!w)return;
+var BASE='static/images/abstract_human_form/traj/';
+function paths(s,n){var a=[];for(var i=0;i<n;i++)a.push(BASE+'s'+s+'/'+(i<10?'0'+i:i)+'.png');return a}
+var TRAJ={4:paths(4,5),8:paths(8,9),12:paths(12,12)};
+// preload
+var pre=document.createElement('div');pre.style.cssText='position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden';
+Object.keys(TRAJ).forEach(function(k){TRAJ[k].forEach(function(p){var im=new Image();im.src=p;pre.appendChild(im)})});
+document.body.appendChild(pre);
+var img=document.getElementById('trajImg'),fade=document.getElementById('trajFade'),tag=document.getElementById('nfeTag'),tnow=document.getElementById('tNow'),range=document.getElementById('trajRange'),play=document.getElementById('playBtn'),btns=w.querySelectorAll('.nfe-toggle button');
+var steps=8,tNorm=1,playing=false,playTimer=null;
+function render(){var arr=TRAJ[steps],n=arr.length,idx=Math.round(tNorm*(n-1));img.src=arr[idx];tag.textContent=steps+' steps';tnow.textContent='t = '+tNorm.toFixed(2);range.style.setProperty('--vp',(tNorm*100)+'%');range.value=tNorm;btns.forEach(function(b){b.classList.toggle('active',+b.dataset.nfe===steps)})}
+function clearFade(){fade.style.transition='none';fade.style.opacity=0;}
+function setSteps(n){
+  if(n===steps){return;}
+  // cross-fade only on step change: cover with old frame, swap underneath, fade out
+  fade.style.transition='none';fade.src=img.src;fade.style.opacity=1;
+  void fade.offsetWidth;                 // reflow so the next change transitions
+  steps=n;render();                       // img now shows the new step at current t
+  fade.style.transition='opacity .3s ease';fade.style.opacity=0;
 }
-toggle.addEventListener('click', () => setDarkMode(!isDark()));
-if (localStorage.getItem('blog-dark-mode') === 'true') setDarkMode(true);
-
-// Sticky hero links on scroll
-const sentinel = document.getElementById('hero-links-sentinel');
-const heroLinks = document.querySelector('.hero-links');
-const placeholder = document.createElement('div');
-placeholder.style.display = 'none';
-heroLinks.parentNode.insertBefore(placeholder, heroLinks.nextSibling);
-
-new IntersectionObserver(([entry]) => {
-    const stick = !entry.isIntersecting;
-    heroLinks.classList.toggle('sticky', stick);
-    if (stick) {
-        placeholder.style.display = 'block';
-        placeholder.style.height = heroLinks.offsetHeight + 'px';
-    } else {
-        placeholder.style.display = 'none';
-    }
-}, { threshold: 0, rootMargin: '-40px 0px 0px 0px' }).observe(sentinel);
-
-// ── Algorithm tab switching ──
-document.querySelectorAll('.algo-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        document.querySelectorAll('.algo-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        const isJ = tab.dataset.variant === 'j';
-        document.getElementById('algo-line-j').style.display = isJ ? '' : 'none';
-        document.getElementById('algo-line-e').style.display = isJ ? 'none' : '';
-    });
+function stopPlay(){playing=false;clearInterval(playTimer);play.innerHTML='<i class="fas fa-play"></i>'}
+function startPlay(){playing=true;play.innerHTML='<i class="fas fa-pause"></i>';if(tNorm>=1)tNorm=0;
+  var fps=8,n=TRAJ[steps].length,dt=1/((n-1)*fps);
+  playTimer=setInterval(function(){tNorm+=dt;if(tNorm>=1){tNorm=1;render();stopPlay();return}render()},1000/fps)}
+btns.forEach(function(b){b.addEventListener('click',function(){stopPlay();setSteps(+b.dataset.nfe)})});
+range.addEventListener('input',function(){stopPlay();clearFade();tNorm=+range.value;render()});
+play.addEventListener('click',function(){playing?stopPlay():startPlay()});
+render();
+})();
+document.querySelectorAll('.algo .tab').forEach(function(tb){tb.onclick=function(){document.querySelectorAll('.algo .tab').forEach(function(x){x.classList.remove('active')});tb.classList.add('active');var j=tb.dataset.v==='j';document.getElementById('al-j').style.display=j?'':'none';document.getElementById('al-e').style.display=j?'none':''}});
+document.querySelectorAll('.carousel').forEach(function(c){
+ var slides=[].slice.call(c.querySelectorAll('.cslide'));if(!slides.length)return;
+ var track=document.createElement('div');track.className='ctrack';slides.forEach(function(s){track.appendChild(s)});
+ var dots=c.querySelector('.cdots');c.insertBefore(track,dots);
+ var i=0,n=slides.length;
+ var prev=document.createElement('button');prev.className='cbtn prev';prev.innerHTML='<i class="fas fa-chevron-left"></i>';
+ var next=document.createElement('button');next.className='cbtn next';next.innerHTML='<i class="fas fa-chevron-right"></i>';
+ var cnt=document.createElement('div');cnt.className='ccount';c.appendChild(prev);c.appendChild(next);c.appendChild(cnt);
+ for(var k=0;k<n;k++){(function(k){var d=document.createElement('button');d.className='cdot'+(k?'':' active');d.onclick=function(){go(k)};dots.appendChild(d)})(k)}
+ function go(x){i=(x+n)%n;track.style.transform='translateX(-'+(i*100)+'%)';cnt.textContent=(i+1)+' / '+n;dots.querySelectorAll('.cdot').forEach(function(d,j){d.classList.toggle('active',j===i)})}
+ prev.onclick=function(){go(i-1)};next.onclick=function(){go(i+1)};go(0);
+ var sx=0;c.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+ c.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx;if(dx>40)go(i-1);else if(dx<-40)go(i+1)},{passive:true});
 });
-
-// ── Aesthetic Carousel ──
-let carouselIdx = 0;
-const track = document.getElementById('carouselTrack');
-const slides = track.querySelectorAll('.carousel-slide');
-const dotsContainer = document.getElementById('carouselDots');
-
-slides.forEach((_, i) => {
-    const dot = document.createElement('button');
-    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    dot.addEventListener('click', () => goToSlide(i));
-    dotsContainer.appendChild(dot);
-});
-
-function goToSlide(i) {
-    carouselIdx = (i + slides.length) % slides.length;
-    track.style.transform = `translateX(-${carouselIdx * 100}%)`;
-    dotsContainer.querySelectorAll('.carousel-dot').forEach((d, j) => d.classList.toggle('active', j === carouselIdx));
-}
-function carouselPrev() { goToSlide(carouselIdx - 1); }
-function carouselNext() { goToSlide(carouselIdx + 1); }
-
-function copyBibtex() {
-    const bibtex = document.querySelector('.bibtex-block code').textContent;
-    navigator.clipboard.writeText(bibtex).then(() => {
-        const btn = document.querySelector('.copy-btn');
-        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-        }, 2000);
-    });
-}
-</script>
-
-</body>
-</html>
+// Multi-reward qualitative carousel: tabs + per-track scroll
+(function(){
+ var REW=['human','style','inverse','vlm'];
+ var root=document.getElementById('qual');if(!root)return;
+ var tabs=document.querySelectorAll('#rewardPicker .reward-tab');
+ var dots=document.getElementById('qualDots');
+ var idxEl=document.getElementById('qIdx'),totEl=document.getElementById('qTot');
+ var prev=root.querySelector('.qual-nav.prev'),next=root.querySelector('.qual-nav.next');
+ var tracks={};REW.forEach(function(r){tracks[r]=document.getElementById('qualTrack-'+r)});
+ var idx={};REW.forEach(function(r){idx[r]=0});
+ var active='human';
+ function slides(){return tracks[active].querySelectorAll('.qslide')}
+ function carousel(){return tracks[active].querySelector('.qcarousel')}
+ function renderDots(){dots.innerHTML='';var n=slides().length;for(var k=0;k<n;k++){(function(k){var b=document.createElement('button');b.className='qual-dot'+(k===idx[active]?' on':'');b.onclick=function(){go(k)};dots.appendChild(b)})(k)}}
+ function apply(){carousel().style.transform='translateX('+(-idx[active]*100)+'%)';dots.querySelectorAll('.qual-dot').forEach(function(d,j){d.classList.toggle('on',j===idx[active])});if(idxEl)idxEl.textContent=idx[active]+1;if(totEl)totEl.textContent=slides().length}
+ function go(k){var n=slides().length;idx[active]=(k+n)%n;apply()}
+ prev.onclick=function(){go(idx[active]-1)};next.onclick=function(){go(idx[active]+1)};
+ tabs.forEach(function(t){t.onclick=function(){var r=t.dataset.reward;active=r;tabs.forEach(function(x){x.classList.toggle('active',x===t)});REW.forEach(function(rr){tracks[rr].classList.toggle('on',rr===r)});renderDots();apply()}});
+ var sx=0;root.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+ root.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx;if(dx>40)go(idx[active]-1);else if(dx<-40)go(idx[active]+1)},{passive:true});
+ renderDots();apply();
+})();
+// Decision 1: SVG draw-on animation on the exact paper figure
+(function(){
+ var svg=document.getElementById('maniSvg'); if(!svg) return;
+ var solid=['a-grad','a-euc','a-vpar','a-jac'];
+ var TL={'a-grad':[0.4,1.1],'a-euc':[2.1,1.2],'a-vpar':[3.9,0.75],'a-jac':[5.3,1.5]};
+ var DASH=[4.7,0.5], CYC=9000;
+ var shaft={}, extra={}, lbl={};
+ solid.forEach(function(c){
+   var g=svg.querySelector('.'+c); if(!g)return;
+   var sh=g.querySelector("path[fill='none']"); shaft[c]=sh;
+   if(sh){var L=sh.getTotalLength();sh.style.strokeDasharray=L;sh.dataset.len=L;}
+   extra[c]=[].slice.call(g.querySelectorAll('path')).filter(function(p){return p!==sh;});
+   lbl[c]=g.querySelector('g[transform^="translate"]');
+ });
+ var dashG=svg.querySelector('.a-dash');
+ function ease(t){t=t<0?0:t>1?1:t;return t*t*(3-2*t);}
+ function render(e){
+   solid.forEach(function(c){
+     var sh=shaft[c]; if(!sh)return; var w=TL[c],L=+sh.dataset.len;
+     sh.style.strokeDashoffset=L*(1-ease((e-w[0])/w[1]));
+     var ex=ease((e-(w[0]+w[1]*0.82))/0.3);
+     extra[c].forEach(function(p){p.style.opacity=ex;});
+     if(lbl[c])lbl[c].style.opacity=ease((e-(w[0]+w[1]+0.12))/0.3);
+   });
+   if(dashG)dashG.style.opacity=ease((e-DASH[0])/DASH[1]);
+ }
+ var t0=null,raf=null;
+ function frame(now){if(t0===null)t0=now;render(((now-t0)%CYC)/1000);raf=requestAnimationFrame(frame);}
+ render(0);
+ new IntersectionObserver(function(es){
+   if(es[0].isIntersecting){if(!raf){t0=null;raf=requestAnimationFrame(frame);}}
+   else if(raf){cancelAnimationFrame(raf);raf=null;}
+ },{threshold:.2}).observe(svg);
+})();
+// Animated Gaussian terminal-distribution figure (Decision 2): lambda fixed, sweep early stopping
+(function(){
+ var cv=document.getElementById('gwCanvas'); if(!cv) return;
+ var ctx=cv.getContext('2d');
+ var S1=0.47, MU1=0.0, A=1.5, LAM=0.49;           // tuned to reproduce the paper figure
+ var q=S1*S1, k=Math.PI*LAM*S1;                   // greedy contraction rate
+ var sT=S1/Math.sqrt(1+2*LAM*q), mT=A+(MU1-A)/(1+2*LAM*q);          // reward tilt
+ var sG=S1*Math.exp(-k),         mG=A+(MU1-A)*Math.exp(-k);         // full greedy
+ function gauss(x,m,s){return Math.exp(-(x-m)*(x-m)/(2*s*s))/(s*Math.sqrt(2*Math.PI));}
+ var x0=-2.2,x1=3.6,yMax=2.2;
+ function draw(ts){
+   var dpr=window.devicePixelRatio||1,W=cv.clientWidth||520,H=232;
+   cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+   var pl=24,pr=8,pt=12,base=H-20;
+   function PX(x){return pl+(x-x0)/(x1-x0)*(W-pl-pr);}
+   function PY(y){return base-y/yMax*(base-pt);}
+   ctx.font='10px Inter,sans-serif';ctx.textAlign='right';
+   [0,1,2].forEach(function(g){var py=PY(g);ctx.strokeStyle=g?'#eeedf3':'#e6e5ee';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pl,py);ctx.lineTo(W-pr,py);ctx.stroke();ctx.fillStyle='#9a9aac';ctx.fillText(g,pl-5,py+3);});
+   ctx.strokeStyle='#9fcace';ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(PX(A),pt);ctx.lineTo(PX(A),base);ctx.stroke();ctx.setLineDash([]);
+   function curve(m,s,stroke,w,fill){
+     ctx.beginPath();
+     for(var i=0;i<=280;i++){var x=x0+(x1-x0)*i/280;var px=PX(x),py=PY(gauss(x,m,s));i?ctx.lineTo(px,py):ctx.moveTo(px,py);}
+     if(fill){ctx.lineTo(PX(x1),base);ctx.lineTo(PX(x0),base);ctx.closePath();ctx.fillStyle=fill;ctx.fill();}
+     else{ctx.strokeStyle=stroke;ctx.lineWidth=w;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();}
+   }
+   // reward r(x): broad hump centred at the optimum
+   ctx.beginPath();
+   for(var i=0;i<=280;i++){var x=x0+(x1-x0)*i/280;var px=PX(x),py=PY(0.6*Math.exp(-(x-A)*(x-A)/(2*1.45*1.45)));i?ctx.lineTo(px,py):ctx.moveTo(px,py);}
+   ctx.lineTo(PX(x1),base);ctx.lineTo(PX(x0),base);ctx.closePath();ctx.fillStyle='rgba(143,196,201,.34)';ctx.fill();
+   ctx.strokeStyle='#8fc4c9';ctx.lineWidth=1.4;ctx.stroke();
+   curve(MU1,S1,'#cdbfe6',2);                                       // base
+   curve(mT,sT,'#a78fce',2.4);                                      // reward tilt
+   curve(mG,sG,'#534a7d',2.6);                                      // greedy (full)
+   curve(A+(MU1-A)*Math.exp(-k*ts), S1*Math.exp(-k*ts),'#2c2647',3);// greedy + early stopping
+   ctx.textAlign='left';ctx.fillStyle='#2c2647';ctx.font='600 11px Inter,sans-serif';
+   ctx.fillText('t_stop = '+ts.toFixed(2), W-pr-92, pt+11);
+ }
+ var t0=null,raf=null;
+ function frame(now){
+   if(t0===null)t0=now;
+   var ph=((now-t0)/6000)%1;                       // 6s loop
+   var tri=ph<0.5?ph*2:2-ph*2;                      // triangle 0..1..0
+   var e=tri*tri*(3-2*tri);                         // smoothstep
+   draw(1.0-e*0.78);                                // t_stop sweeps 1.00 -> 0.22
+   raf=requestAnimationFrame(frame);
+ }
+ draw(1.0);
+ new IntersectionObserver(function(es){
+   if(es[0].isIntersecting){ if(!raf){t0=null;raf=requestAnimationFrame(frame);} }
+   else if(raf){cancelAnimationFrame(raf);raf=null;}
+ },{threshold:.15}).observe(cv);
+ window.addEventListener('resize',function(){if(!raf)draw(1.0);});
+})();
+// Quantitative results carousel
+(function(){
+  var root=document.getElementById('quant');if(!root)return;
+  var track=document.getElementById('quantTrack');
+  var slides=track.querySelectorAll('.qslideQ');
+  var n=slides.length,i=0;
+  var dots=document.getElementById('quantDots'),cnt=document.getElementById('quantCnt');
+  var prev=root.querySelector('.quant-nav.prev'),next=root.querySelector('.quant-nav.next');
+  for(var k=0;k<n;k++){(function(k){var d=document.createElement('button');d.className='quant-dot'+(k?'':' on');d.setAttribute('aria-label','Slide '+(k+1));d.onclick=function(){go(k)};dots.appendChild(d)})(k)}
+  function go(x){i=(x+n)%n;track.style.transform='translateX('+(-i*100)+'%)';cnt.textContent=(i+1)+' / '+n;dots.querySelectorAll('.quant-dot').forEach(function(d,j){d.classList.toggle('on',j===i)})}
+  prev.onclick=function(){go(i-1)};next.onclick=function(){go(i+1)};
+  var sx=0;root.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+  root.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx;if(dx>40)go(i-1);else if(dx<-40)go(i+1)},{passive:true});
+  go(0);
+})();
+function copyBib(){navigator.clipboard.writeText(document.querySelector('.bibbox code').textContent).then(function(){var b=document.querySelector('.bibbox .copy');b.innerHTML='<i class="fas fa-check"></i> Copied!';setTimeout(function(){b.innerHTML='<i class="fas fa-copy"></i> Copy'},2000)})}
+</script></body></html>

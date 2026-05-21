@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# local Python virtualenv (large, machine-specific)
+.venv_anim/
+
+# editor / build backups
+*.backup_*
+
+# superseded scratch drafts
+index_styleA.html
+index_styleB.html
+index_styleC.html
+index_styleD.html
+index_styleE.html
+index_styleF.html
+index_styleG.html
+index_v4.html
+index_gallery.html
+index_scratch.html
+index_edit.html
