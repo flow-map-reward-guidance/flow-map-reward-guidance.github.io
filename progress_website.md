@@ -145,7 +145,7 @@ contentful headline (claim / question), so the two lines never echo.
 All animations run only while on-screen (IntersectionObserver) and loop.
 
 - **Method overview video** (`#methodVid`): `static/videos/fmrg_overview.mp4`
-  (H.264, 1320×760, ~15 s) — the animated FMRG-vs-SMC schematic, replaces the
+  (H.264, 2640×1520, ~15.7 s, CRF 14) — the animated FMRG-vs-SMC schematic, replaces the
   old static `fig02_overview.png`. Muted, `playsinline`, no `loop`/`autoplay`;
   a small IIFE autoplays it once on the FIRST scroll into view; if scrolled
   away and back it resumes where it left off (never auto-restarts from 0), and
@@ -225,7 +225,13 @@ All animations run only while on-screen (IntersectionObserver) and loop.
   - `abstract_human_form/traj/s{4,8,12}/` — hero-widget trajectory frames.
   - `manifold_blue.png` — manifold background for the Decision-1 SVG.
 - `static/videos/` — `fmrg_overview.mp4` (§04 method overview animation) +
-  `fmrg_overview_poster.jpg`. Source: `video_assets/FMRG_v6_asset.mp4`.
+  `fmrg_overview_poster.jpg` (its final frame). The mp4 is a recording of the
+  HTML animation `animation/mid/FMRG_v6_asset/index.html`: capture it with a
+  Playwright context at a **2640×1520 viewport** (do NOT use device_scale_factor
+  — Playwright's video ignores it and grey-pads instead), then trim the
+  load-in / tail and `ffmpeg -c:v libx264 -crf 14 -pix_fmt yuv420p -r 30
+  -movflags +faststart`. Keep full 2640×1520 res — it must stay crisp on
+  Retina where the panel renders at ~1800 device px.
 
 ---
 
