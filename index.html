@@ -30,8 +30,11 @@ em{color:inherit}strong{color:var(--text)}
 .head sup{color:var(--link)}
 .head .affil{color:var(--muted);font-size:.98rem;margin-bottom:1.4rem}
 .head .btns{display:flex;justify-content:center;flex-wrap:wrap;gap:.6rem}
-.head .btns a{display:inline-flex;align-items:center;gap:.45rem;background:#1a1a1a;color:#fff;padding:.5rem 1.05rem;border-radius:6px;font-size:.9rem;font-weight:600}
+.head .btns a,.head .btns .soon{display:inline-flex;align-items:center;gap:.45rem;padding:.5rem 1.05rem;border-radius:6px;font-size:.9rem;font-weight:600}
+.head .btns a{background:#1a1a1a;color:#fff}
 .head .btns a:hover{background:var(--accent);text-decoration:none}
+.head .btns .soon{background:var(--soft);color:var(--muted);cursor:default}
+.head .venue{display:inline-block;background:#fff;color:var(--accent);border:1px solid var(--accent);font-weight:700;font-size:.78rem;letter-spacing:.08em;padding:.3rem .9rem;border-radius:999px;margin-bottom:1rem}
 section{max-width:var(--max);margin:0 auto;padding:2.5rem 1.5rem;border-top:1px solid var(--rule)}
 section:first-of-type{border-top:none}
 h2{font-family:var(--serif);font-size:1.78rem;font-weight:600;letter-spacing:-.018em;margin-bottom:1rem}
@@ -254,10 +257,11 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </style></head><body>
 
 <div class="bar"><div class="in"><span class="brand">How to Guide Your Flow</span><nav>
-<a href="#abstract">TL;DR</a><a href="#motivation">Motivation</a><a href="#contributions">Contributions</a><a href="#idea">Key idea</a><a href="#method">Method</a><a href="#results">Results</a><a href="blog/">Blog &rarr;</a><a href="#bibtex">BibTeX</a>
+<a href="#abstract">TL;DR</a><a href="#motivation">Motivation</a><a href="#contributions">Contributions</a><a href="#idea">Key idea</a><a href="#method">Method</a><a href="#results">Results</a><a href="#bibtex">BibTeX</a>
 </nav></div></div>
 
 <header class="head">
+<div class="venue">ICML 2026</div>
 <h1>How to <em>Guide</em> Your Flow</h1>
 <p class="subtitle">Few-Step Alignment via Flow Map Reward Guidance</p>
 <div class="authors">
@@ -265,8 +269,8 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </div>
 <div class="affil">Carnegie Mellon University &nbsp;&middot;&nbsp; <sup>*</sup>Equal contribution</div>
 <div class="btns">
-<a href="https://arxiv.org/abs/"><i class="fas fa-file-lines"></i> Paper</a>
-<a href="https://github.com/"><i class="fab fa-github"></i> Code</a>
+<a href="https://arxiv.org/abs/"><i class="fas fa-file-lines"></i> arXiv</a>
+<span class="soon"><i class="fab fa-github"></i> Code &mdash; coming soon</span>
 <a href="#bibtex"><i class="fas fa-quote-right"></i> BibTeX</a>
 </div>
 </header>
