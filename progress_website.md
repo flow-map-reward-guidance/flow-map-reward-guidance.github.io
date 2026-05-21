@@ -147,8 +147,10 @@ All animations run only while on-screen (IntersectionObserver) and loop.
 - **Method overview video** (`#methodVid`): `static/videos/fmrg_overview.mp4`
   (H.264, 1320×760, 13.6 s) — the animated FMRG-vs-SMC schematic, replaces the
   old static `fig02_overview.png`. Muted, `playsinline`, no `loop`/`autoplay`;
-  a small IIFE plays it once from `currentTime=0` when scrolled into view and
-  replays on re-entry, so it rests on the finished diagram. `poster` =
+  a small IIFE plays it once from `currentTime=0` when scrolled into view, and
+  a **Replay** button overlaid bottom-right (`#methodReplay`, `.vid-replay`)
+  re-runs it on demand — it does NOT loop (a build-up animation looping back
+  to blank looks jarring), it rests on the finished diagram. `poster` =
   `fmrg_overview_poster.jpg` (final frame) — shown before play and for
   `prefers-reduced-motion` users (IIFE skips autoplay for them).
   NOTE: Playwright's headless Chromium can't decode H.264, so verify playback
