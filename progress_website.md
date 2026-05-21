@@ -226,12 +226,16 @@ All animations run only while on-screen (IntersectionObserver) and loop.
   - `manifold_blue.png` — manifold background for the Decision-1 SVG.
 - `static/videos/` — `fmrg_overview.mp4` (§04 method overview animation) +
   `fmrg_overview_poster.jpg` (its final frame). The mp4 is a recording of the
-  HTML animation `animation/mid/FMRG_v6_asset/index.html`: capture it with a
-  Playwright context at a **2640×1520 viewport** (do NOT use device_scale_factor
-  — Playwright's video ignores it and grey-pads instead), then trim the
-  load-in / tail and `ffmpeg -c:v libx264 -crf 14 -pix_fmt yuv420p -r 30
-  -movflags +faststart`. Keep full 2640×1520 res — it must stay crisp on
-  Retina where the panel renders at ~1800 device px.
+  HTML animation `animation/mid/FMRG_v6_asset/index.html`. Capture recipe
+  (`/tmp/render_zoom.py`): Playwright `record_video` at a 2640×1520 viewport,
+  but inject `html{zoom:2}` via `add_init_script` so the page still LAYS OUT
+  at its native 1320×760 and only paints 2× — recording at a bare 2640
+  viewport reflows the fixed-px panels/rem text and breaks the layout;
+  `device_scale_factor` is ignored by Playwright's video entirely. The page's
+  `body{min-height:100vh}` must also be pinned (`height:760px!important`)
+  since `zoom` doesn't halve `vh`. Then trim the load-in/tail and
+  `ffmpeg -c:v libx264 -crf 14 -pix_fmt yuv420p -r 30 -movflags +faststart`.
+  Keep full 2640×1520 — it must stay crisp on Retina (~1800 device px panel).
 
 ---
 
