@@ -312,7 +312,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 <section id="abstract">
 <div class="tldrbox">
 <div class="tldr-tag">TL;DR</div>
-<p>Guidance is usually framed as sampling a reward-tilted distribution $\tilde\rho(x)\propto e^{r(x)}\rho(x)$, which requires stochastic, multi-particle dynamics that are expensive even for simple rewards. We instead pose guidance as a <strong>deterministic optimal control problem</strong>, yielding a hierarchy of algorithms in which the flow map emerges naturally and popular single-trajectory methods like DPS are recovered as the coarsest approximation. The result is <strong>Flow Map Reward Guidance (FMRG)</strong>: highly efficient, training-free alignment that uses the flow map to both integrate and guide the flow along a single trajectory &mdash; matching or beating baselines with <strong>as few as 3 NFEs</strong>, up to a 70&times; speedup.</p>
+<p>Guidance is usually framed as sampling a reward-tilted distribution $\tilde\rho(x)\propto e^{r(x)}\rho(x)$, which requires stochastic, multi-particle dynamics that are expensive even for simple rewards. We instead pose guidance as a <strong>deterministic optimal control problem</strong>, yielding a hierarchy of algorithms in which the flow map emerges naturally and popular denoiser-based methods like DPS are recovered as the coarsest approximation. The result is <strong>Flow Map Reward Guidance (FMRG)</strong>: highly efficient, training-free alignment that uses the flow map to both integrate and guide the flow along a single trajectory &mdash; matching or beating baselines with <strong>as few as 3 NFEs</strong>, up to a 70&times; speedup.</p>
 </div>
 </section>
 
