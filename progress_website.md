@@ -145,7 +145,7 @@ contentful headline (claim / question), so the two lines never echo.
 All animations run only while on-screen (IntersectionObserver) and loop.
 
 - **Method overview video** (`#methodVid`): `static/videos/fmrg_overview.mp4`
-  (H.264, 2640×1520, ~15.7 s, CRF 14) — the animated FMRG-vs-SMC schematic, replaces the
+  (H.264, 1320×760, ~15.3 s, CRF 12, 25 fps) — the animated FMRG-vs-SMC schematic, replaces the
   old static `fig02_overview.png`. Muted, `playsinline`, no `loop`/`autoplay`;
   a small IIFE autoplays it once on the FIRST scroll into view; if scrolled
   away and back it resumes where it left off (never auto-restarts from 0), and
@@ -227,15 +227,17 @@ All animations run only while on-screen (IntersectionObserver) and loop.
 - `static/videos/` — `fmrg_overview.mp4` (§04 method overview animation) +
   `fmrg_overview_poster.jpg` (its final frame). The mp4 is a recording of the
   HTML animation `animation/mid/FMRG_v6_asset/index.html`. Capture recipe
-  (`/tmp/render_zoom.py`): Playwright `record_video` at a 2640×1520 viewport,
-  but inject `html{zoom:2}` via `add_init_script` so the page still LAYS OUT
-  at its native 1320×760 and only paints 2× — recording at a bare 2640
-  viewport reflows the fixed-px panels/rem text and breaks the layout;
-  `device_scale_factor` is ignored by Playwright's video entirely. The page's
-  `body{min-height:100vh}` must also be pinned (`height:760px!important`)
-  since `zoom` doesn't halve `vh`. Then trim the load-in/tail and
-  `ffmpeg -c:v libx264 -crf 14 -pix_fmt yuv420p -r 30 -movflags +faststart`.
-  Keep full 2640×1520 — it must stay crisp on Retina (~1800 device px panel).
+  (`/tmp/render_plain.py`): Playwright `record_video` at the **native
+  1320×760 viewport** — do NOT enlarge the viewport (reflows the fixed-px
+  panels) and do NOT use CSS `zoom` to fake 2×: the animation's final step
+  `doFigure2()` draws the result-card "beams" from `getBoundingClientRect()`,
+  and `zoom` skews those rects so the beams silently fail to draw.
+  `device_scale_factor` is ignored by Playwright's video, so a true 2× capture
+  isn't available — 1320×760 is the ceiling. Record long (~30 s) so the full
+  timeline (build → SMC → `doFigure2` beams → ~4 s hold) is captured; the
+  Playwright webm is 25 fps CFR, so encode `-r 25` (forcing 30 duplicates
+  every 5th frame → judder). Trim load-in/tail, `ffmpeg -c:v libx264 -crf 12
+  -pix_fmt yuv420p -r 25 -movflags +faststart`.
 
 ---
 
