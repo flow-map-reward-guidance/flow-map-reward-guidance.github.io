@@ -937,14 +937,20 @@ range.addEventListener('input',function(){stopPlay();clearFade();tNorm=+range.va
 play.addEventListener('click',function(){playing?stopPlay():startPlay()});
 render();
 })();
-// Method overview video: play once when scrolled into view; Replay button re-runs it
+// Method overview video: autoplay once on FIRST view only; on later returns
+// resume where it left off (never restart). Replay button restarts on demand.
 (function(){var v=document.getElementById('methodVid');if(!v)return;
- function run(){try{v.currentTime=0;var p=v.play();if(p&&p.catch)p.catch(function(){})}catch(_){}}
+ function safePlay(){var p;try{p=v.play()}catch(_){}if(p&&p.catch)p.catch(function(){})}
+ function replay(){try{v.currentTime=0}catch(_){}safePlay()}
  var rb=document.getElementById('methodReplay');
- if(rb)rb.addEventListener('click',run);
+ if(rb)rb.addEventListener('click',replay);
  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ var started=false;
  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-  if(e.isIntersecting){run()}else{v.pause()}
+  if(e.isIntersecting){
+   if(!started){started=true;replay();}        // first time in view: play from start
+   else if(!v.ended){safePlay();}               // returned mid-clip: resume, don't restart
+  }else{v.pause();}
  })},{threshold:.35});
  io.observe(v);})();
 document.querySelectorAll('.algo .tab').forEach(function(tb){tb.onclick=function(){document.querySelectorAll('.algo .tab').forEach(function(x){x.classList.remove('active')});tb.classList.add('active');var j=tb.dataset.v==='j';document.getElementById('al-j').style.display=j?'':'none';document.getElementById('al-e').style.display=j?'none':''}});
