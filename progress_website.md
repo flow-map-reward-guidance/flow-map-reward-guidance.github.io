@@ -116,7 +116,8 @@ contentful headline (claim / question), so the two lines never echo.
    `.keyline` (DPS & its derivatives are coarse approximations of optimal
    control, not of the reward tilt).
 8. `#method` — kicker "04 — Method", h2 *"Flow Map Reward Guidance"*. Lede on
-   operator splitting; **Fig 2** overview figpanel; **operator-splitting
+   operator splitting; **method overview video** (the animated FMRG-vs-SMC
+   schematic, in a figpanel); **operator-splitting
    panel** (flow-map step + guidance step); minihead "We arrive at two design
    decisions"; **Decision 1** (animated manifold SVG) + text; **Decision 2**
    (animated Gaussian canvas) + text. Both decision figures: the
@@ -143,6 +144,15 @@ contentful headline (claim / question), so the two lines never echo.
 
 All animations run only while on-screen (IntersectionObserver) and loop.
 
+- **Method overview video** (`#methodVid`): `static/videos/fmrg_overview.mp4`
+  (H.264, 1320×760, 13.6 s) — the animated FMRG-vs-SMC schematic, replaces the
+  old static `fig02_overview.png`. Muted, `playsinline`, no `loop`/`autoplay`;
+  a small IIFE plays it once from `currentTime=0` when scrolled into view and
+  replays on re-entry, so it rests on the finished diagram. `poster` =
+  `fmrg_overview_poster.jpg` (final frame) — shown before play and for
+  `prefers-reduced-motion` users (IIFE skips autoplay for them).
+  NOTE: Playwright's headless Chromium can't decode H.264, so verify playback
+  with a temporary VP9 webm; the shipped file stays mp4.
 - **Hero step widget** (`#nfeWidget`, JS IIFE "Steps widget"): `trajImg` =
   current FMRG trajectory frame; frames preloaded from
   `static/images/abstract_human_form/traj/s{4,8,12}/NN.png` (5/9/12 frames).
@@ -211,6 +221,8 @@ All animations run only while on-screen (IntersectionObserver) and loop.
     brass holders — the filename is misleading, the prompt is the candles one.
   - `abstract_human_form/traj/s{4,8,12}/` — hero-widget trajectory frames.
   - `manifold_blue.png` — manifold background for the Decision-1 SVG.
+- `static/videos/` — `fmrg_overview.mp4` (§04 method overview animation) +
+  `fmrg_overview_poster.jpg`. Source: `video_assets/FMRG_v6_asset.mp4`.
 
 ---
 

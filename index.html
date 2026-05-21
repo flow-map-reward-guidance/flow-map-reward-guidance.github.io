@@ -55,7 +55,7 @@ p{margin-bottom:1rem}
 .split .question-box,.split .panel,.split .takeaway{max-width:none;margin:0;display:flex;flex-direction:column;justify-content:center}
 .figpanel{margin:1.4rem 0}
 .figpanel-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:var(--accent);padding:0 0 .5rem}
-.figpanel img{width:100%;display:block;background:#fff;border:1px solid var(--rule);border-radius:8px}
+.figpanel img,.figpanel video{width:100%;display:block;background:#fff;border:1px solid var(--rule);border-radius:8px}
 .figpanel .figcap{font-size:.85rem;color:var(--muted);font-style:italic;padding:.6rem 0 .1rem;line-height:1.5}
 .figpanel.narrow{max-width:560px;margin-left:auto;margin-right:auto}
 .manifig canvas{width:100%;display:block;background:#fff;border:1px solid var(--rule);border-radius:8px}
@@ -387,7 +387,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 <p class="lede">FMRG integrates the greedy controlled dynamics with <strong>operator splitting</strong>: each step alternates an exact flow-map step with a guidance step.</p>
 <div class="figpanel">
 <div class="figpanel-label">FMRG &mdash; one trajectory, vs. multi-particle reward tilt</div>
-<img src="paper_assets/figures/fig02_overview.png" alt="FMRG overview &mdash; single deterministic trajectory vs SMC multi-particle reward tilt">
+<video id="methodVid" muted playsinline preload="auto" poster="static/videos/fmrg_overview_poster.jpg" aria-label="FMRG overview &mdash; single deterministic trajectory vs SMC multi-particle reward tilt"><source src="static/videos/fmrg_overview.mp4" type="video/mp4"></video>
 <div class="figcap">FMRG alternates exact flow-map steps with reward-gradient steps along a single trajectory (top), in contrast to reward-tilt sampling (e.g. SMC), which needs many particles, resampling, and many steps (bottom).</div>
 </div>
 <div class="panel">
@@ -931,6 +931,14 @@ range.addEventListener('input',function(){stopPlay();clearFade();tNorm=+range.va
 play.addEventListener('click',function(){playing?stopPlay():startPlay()});
 render();
 })();
+// Method overview video: play once when scrolled into view, replay on re-entry
+(function(){var v=document.getElementById('methodVid');if(!v)return;
+ if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){
+  if(e.isIntersecting){try{v.currentTime=0;var p=v.play();if(p&&p.catch)p.catch(function(){})}catch(_){}}
+  else{v.pause()}
+ })},{threshold:.35});
+ io.observe(v);})();
 document.querySelectorAll('.algo .tab').forEach(function(tb){tb.onclick=function(){document.querySelectorAll('.algo .tab').forEach(function(x){x.classList.remove('active')});tb.classList.add('active');var j=tb.dataset.v==='j';document.getElementById('al-j').style.display=j?'':'none';document.getElementById('al-e').style.display=j?'none':''}});
 document.querySelectorAll('.carousel').forEach(function(c){
  var slides=[].slice.call(c.querySelectorAll('.cslide'));if(!slides.length)return;
