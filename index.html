@@ -370,10 +370,10 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 <div class="keypoint">
 <div class="kp-tag">Exact optimal control</div>
 <div class="kp-eq">$u_t^* = \lambda\,\nabla X_{t,1}^{u^*}(x_t^*)^\top \nabla r\!\big(X_{t,1}^{u^*}(x_t^*)\big)$</div>
-<p>The optimal control is characterized in closed form, and the <span class="fm">flow map</span> appears explicitly &mdash; the same flow map that integrates the flow also guides it.</p>
+<p>The optimal control is characterized in closed form, and the <span class="fm">flow map</span> $X_{t,1}^{u^*}$ appears explicitly &mdash; the same flow map that integrates the flow also guides it.</p>
 </div>
 <h3>A hierarchy of approximations</h3>
-<p>The exact optimum is circular &mdash; computing it needs the optimally-controlled flow map it is trying to produce. <strong>FMRG</strong> breaks the loop by swapping in the uncontrolled flow map &mdash; the solution in the small-$\lambda$ limit, equivalently the greedy optimal control. <strong>DPS</strong>, in turn, arises from approximating this solution with the denoiser estimate.</p>
+<p>The exact optimum is intractable &mdash; computing it needs the optimally-controlled flow map it is trying to produce. <strong>FMRG</strong> breaks the loop by swapping in the uncontrolled flow map &mdash; the solution in the small-$\lambda$ limit, equivalently the greedy optimal control. <strong>DPS</strong>, in turn, arises from approximating this solution with the denoiser estimate.</p>
 <div class="hierarchy-box">
 <div class="hierarchy-level exact"><div class="hl-tag">Exact-optimal<span class="sub">intractable</span></div><div class="hl-eq">$u_t^* = \lambda\,\nabla X_{t,1}^{u^*}(x_t^*)^\top \nabla r\!\big(X_{t,1}^{u^*}(x_t^*)\big)$</div></div>
 <div class="hierarchy-arrow"><span class="arr-icon">&darr;</span>uncontrolled flow map &nbsp;<span style="font-style:normal">(small-$\lambda$ / greedy)</span></div>

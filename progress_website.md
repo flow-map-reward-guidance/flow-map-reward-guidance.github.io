@@ -277,6 +277,49 @@ Verify visually: `python3 -m http.server PORT` + Playwright screenshots.
 
 ## 8. Open items / next steps
 
+- **§03–§05 prose expansion (in progress, manual).** Across §03 (Key idea),
+  §04 (Method), §01 (Motivation problem cards), and §05 (Results cards), the
+  body text inside many boxes/cards is too compressed: each block carries a
+  single sentence and the visual structure does most of the work. Direction
+  (set after comparing to https://apga.github.io/RAO/): expand the prose
+  around each formatted element with paper-faithful academic writing that
+  explains the *why/how*, while keeping all visual elements (TL;DR callout,
+  math panels, hierarchy figure, decision figpanels, results cards,
+  carousels). The user is making these edits manually; the assistant's role
+  is drafting/reviewing. Drafted text for §03 lives in the conversation; see
+  it for the proposed paragraphs around the eqpair, keypoint, and hierarchy.
+- **Wording / register guardrails for this expansion** (from iterated user
+  feedback during the §03 draft):
+  - Stay close to the paper's own phrasing — *"depart from reward tilting
+    entirely and formulate guidance as a deterministic optimal control
+    problem"*, *"inverse temperature"*, *"Pontryagin Maximum Principle"*,
+    *"globally optimal control in the small-λ limit ... optimal greedy
+    correction for any λ"*, *"single-step approximation of greedy guidance,
+    rather than ... reward-tilt gradient"*, *"posterior mean coincides with
+    a single Euler step ... limit of an infinite number of Euler steps ...
+    coarsest level of the hierarchy"*. Cross-reference `arxiv/methods.tex`.
+  - Not overly specific: the math boxes carry the formulas (quadratic L²
+    control penalty, explicit Euler step $\hat x_1 = x + (1{-}t)\,b_t(x)$,
+    O(λ²) bound). Prose says *"a cost"* / *"exact in the small-λ limit"*,
+    not the specific quadratic form or the O(λ²) bound.
+  - Avoid press-release format (*"Introducing X: Y. Matches Z."*), isolated
+    sentence-fragments as cadence (*"An elegant target."*), and the
+    label-colon-result pattern (*"Inverse problems: FMRG outperforms…"*).
+  - Don't overuse em-dashes or semicolons; use parentheses, periods, or
+    *"while"* as connectors instead. Elaboration colons (*"This is
+    intractable: …"*) are fine.
+  - **User word swaps**: *"circular" → "intractable"* throughout. The
+    follow-up *"To break the circularity"* becomes *"To address this"*.
+- **Twitter launch thread** (`x_thread.md`) is in parallel iteration with
+  same register rules. The thread's Post 1 currently uses the *"Few-step
+  generation is here. Few-step guidance is not."* hook, followed by the
+  characterization *"…still many-step, stochastic, or heuristic"* (kept
+  because it adds the failure-mode categorization, not because it repeats
+  the hook), then *"We introduce FMRG"* with the headline 3 NFEs / 70×
+  numbers. FMRG name lands within the X feed's ~280-char truncation. See
+  `x_thread.md` for the full draft and `x_launch_notes.md` for the
+  algorithm-tuned playbook.
+
 - **Blog** (`blog/index.html`) still uses the old design — restyle to the
   current system (Fraunces/Inter, lavender, white-hairline boxes) if desired.
 - `fig01_front_page.png` (paper Fig 1 composite) is not shown on the site
