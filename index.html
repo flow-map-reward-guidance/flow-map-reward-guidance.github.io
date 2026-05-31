@@ -172,7 +172,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 .qslide .qtag{position:absolute;bottom:.5rem;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.62);color:#fff;font-size:.7rem;font-weight:600;padding:.16rem .6rem;border-radius:4px;white-space:nowrap}
 .qslide .qtag.ours{background:rgba(58,110,165,.92)}
 .qslide .qprompt{grid-column:1/-1;text-align:center;padding:.55rem 1rem;font-size:.82rem;color:var(--muted);font-style:italic;background:#fff;border-top:1px solid var(--rule)}
-.qual-nav{position:absolute;top:38%;transform:translateY(-50%);background:rgba(0,0,0,.42);color:#fff;border:none;border-radius:50%;width:2.1rem;height:2.1rem;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center}
+.qual-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.42);color:#fff;border:none;border-radius:50%;width:2.1rem;height:2.1rem;cursor:pointer;z-index:10;display:flex;align-items:center;justify-content:center}
 .qual-nav:hover{background:rgba(0,0,0,.72)}
 .qual-nav.prev{left:.5rem}.qual-nav.next{right:.5rem}
 .qual-nav svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;fill:none}
@@ -341,6 +341,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 <div class="panel-eq">$\tilde\rho(x) \;\propto\; e^{r(x)}\,\rho(x)$</div>
 <div class="panel-note">easy to write down &mdash; but a hard problem to solve</div>
 </div>
+<p>However, this target proves remarkably difficult to sample from efficiently. Practical methods often rely on many integration steps, stochastic dynamics, and costly test-time search. The framework also sits poorly with modern flow-based generative models, which increasingly favor deterministic samplers requiring few function evaluations, enabled by recent work on flow maps.</p>
 <div class="problemgrid">
 <div class="problem"><div class="plabel">Problem 01</div><div class="ptitle">Hard to solve</div><div class="pdesc">Sampling $\tilde\rho$ is computationally expensive even for simple rewards. Multi-particle schemes like SMC need a high number of particles and integration steps; single-particle shortcuts like DPS rely on heuristic approximations, leaving their output poorly characterized.</div></div>
 <div class="problem"><div class="plabel">Problem 02</div><div class="ptitle">A poor fit for modern samplers</div><div class="pdesc">Reward tilting is rooted in <strong>stochastic processes</strong>. But modern flow models &mdash; FLUX, Stable Diffusion&nbsp;3 &mdash; are fundamentally <strong>deterministic</strong>, and flow maps push them to just a <strong>few steps</strong>. Porting tilt-based alignment here requires simulating stochasticity inside an ODE sampler &mdash; fundamentally misaligned with how these samplers run.</div></div>
@@ -454,9 +455,9 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 <div class="figcap">Left: the Jacobian projects $\nabla r$ onto the manifold tangent space, keeping FMRG-J on-manifold; FMRG-E follows $\nabla r$ off-manifold. Right: FMRG-J preserves data features; FMRG-E achieves higher reward but introduces off-manifold artifacts.</div>
 </div>
 
-<p>The flow map Jacobian $\nabla X_{t,1}(x)^\top$ that appears in the optimal control has a striking second role: <strong>we prove it automatically projects the reward gradient onto the data-manifold tangent space</strong>, so each guided step stays on-manifold by construction.</p>
-<p>This is the geometric content of <strong>FMRG-J</strong>. For complex reward landscapes &mdash; where neural-network gradients often point far off the data manifold &mdash; the projection annihilates the off-manifold component, keeping samples on the manifold.</p>
-<p><strong>FMRG-E</strong> drops the Jacobian: it avoids backpropagation through the flow map, saving memory and optimizing the reward directly, but the trajectory can drift off-manifold. Prior single-trajectory methods (FlowDPS, FlowChef, MPGD) similarly drop the Jacobian &mdash; this effectively amounts to a rescaling of the guidance weight.</p>
+<p>Geometrically, the flow map Jacobian $\nabla X_{t,1}(x)^\top$ acts as a projection. <strong>We prove that it maps the reward gradient onto the data-manifold tangent space</strong>, so each guided step stays on-manifold by construction.</p>
+<p>For complex reward landscapes, where neural-network gradients often point far off the data manifold, this projection annihilates the off-manifold component and keeps <strong>FMRG-J</strong> on-manifold.</p>
+<p><strong>FMRG-E</strong> drops the Jacobian. It avoids backpropagation through the flow map, saving memory and optimizing the reward directly, but the trajectory can drift off-manifold. Prior single-trajectory methods (FlowDPS, FlowChef, MPGD) similarly drop the Jacobian, which effectively amounts to a rescaling of the guidance weight.</p>
 </section>
 
 <section id="results">
@@ -493,7 +494,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 <div class="qslide single"><img loading="lazy" src="static/images/aesthetic_rows/jazz_musician.webp" alt="Jazz musician with saxophone"><div class="qprompt">&ldquo;A jazz musician playing saxophone, smoky bar, low key lighting, warm amber tones, candid moment.&rdquo;</div></div>
 </div></div>
 <div class="qual-track" data-reward="style" id="qualTrack-style"><div class="qcarousel">
-<div class="qslide single"><img loading="lazy" src="static/images/style/candidate_hierarchy_of_approximations.webp" alt="Style hierarchy"><div class="qprompt">Reference &rarr; FLUX &rarr; DPS &rarr; FlowChef &rarr; FMRG-E &rarr; FMRG-J. FMRG-J captures the target style most faithfully.</div></div>
+<div class="qslide single"><img loading="lazy" src="static/images/style/candidate_hierarchy_of_approximations.webp" alt="Style hierarchy"><div class="qprompt">Reference &rarr; FLUX &rarr; DPS &rarr; FlowChef &rarr; FMRG-E &rarr; FMRG-J. FMRG captures the target style most faithfully.</div></div>
 <div class="qslide single"><img loading="lazy" src="static/images/style/hierarchy_variant3.webp" alt="Style hierarchy variant 3"><div class="qprompt">Style hierarchy &mdash; second reference.</div></div>
 <div class="qslide single"><img loading="lazy" src="static/images/style/hierarchy_variant4.webp" alt="Style hierarchy variant 4"><div class="qprompt">Style hierarchy &mdash; third reference.</div></div>
 <div class="qslide single"><img loading="lazy" src="static/images/style/hierarchy_variant5.webp" alt="Style hierarchy variant 5"><div class="qprompt">Style hierarchy &mdash; fourth reference.</div></div>
@@ -522,6 +523,16 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 <div class="quant-track" id="quantTrack">
 
 <div class="qslideQ">
+<div class="qfig"><img loading="lazy" src="paper_assets/figures/fig06b_inverse_lpips_fid.webp" alt="LPIPS and FID vs NFE on AFHQ inverse problems"></div>
+<div class="qcapQ"><span class="lbl">NFE&ndash;performance trade-off (AFHQ)</span><strong>FMRG-E achieves notably better performance in the low NFE regime</strong> (up to 10&times; reduction in NFE).</div>
+</div>
+
+<div class="qslideQ">
+<div class="qfig"><img loading="lazy" src="paper_assets/figures/fig06c_inverse_lpips_fid_ffhq.webp" alt="LPIPS and FID vs NFE on FFHQ inverse problems"></div>
+<div class="qcapQ"><span class="lbl">NFE&ndash;performance trade-off (FFHQ)</span><strong>FMRG-E achieves notably better performance in the low NFE regime</strong> (up to 10&times; reduction in NFE).</div>
+</div>
+
+<div class="qslideQ">
 <div class="qtbl wide"><table>
 <thead>
 <tr><th rowspan="2"></th><th rowspan="2">Method</th><th colspan="4">Super-Resolution</th><th colspan="4">Motion Deblur</th><th colspan="4">Inpainting</th></tr>
@@ -542,8 +553,8 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </div>
 
 <div class="qslideQ">
-<div class="qfig"><img loading="lazy" src="paper_assets/figures/fig06b_inverse_lpips_fid.webp" alt="LPIPS and FID vs NFE on AFHQ inverse problems"></div>
-<div class="qcapQ"><span class="lbl">NFE&ndash;performance trade-off (AFHQ)</span>Among Euclidean-gradient methods, <strong>FMRG-E matches or beats baselines that use 2&ndash;10&times; more NFEs</strong>, with the largest margin in the very-low-NFE regime.</div>
+<div class="qfig"><img loading="lazy" src="paper_assets/figures/fig09_pareto_geneval.webp" alt="GenEval accuracy vs NFE Pareto frontier"></div>
+<div class="qcapQ"><span class="lbl">GenEval accuracy vs. NFE</span><strong>FMRG-J dominates the Pareto frontier</strong> across all NFE budgets &mdash; matching FMTT's quality (0.77) at NFE 20, a <strong>70&times; reduction in compute</strong>.</div>
 </div>
 
 <div class="qslideQ">
@@ -561,13 +572,8 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 <div class="qcapQ"><span class="lbl">GenEval accuracy</span>On a shared FLUX flow-map backbone, <strong>FMRG attains the best GenEval score overall (0.80)</strong> &mdash; and the best score at every fixed NFE budget.</div>
 </div>
 
-<div class="qslideQ">
-<div class="qfig"><img loading="lazy" src="paper_assets/figures/fig09_pareto_geneval.webp" alt="GenEval accuracy vs NFE Pareto frontier"></div>
-<div class="qcapQ"><span class="lbl">GenEval accuracy vs. NFE</span><strong>FMRG-J dominates the Pareto frontier</strong> across all NFE budgets &mdash; matching FMTT's quality (0.77) at NFE 20, a <strong>70&times; reduction in compute</strong>.</div>
 </div>
-
-</div>
-<div class="quant-counter" id="quantCnt">1 / 4</div>
+<div class="quant-counter" id="quantCnt">1 / 5</div>
 </div>
 <div class="quant-dots" id="quantDots"></div>
 </div>
