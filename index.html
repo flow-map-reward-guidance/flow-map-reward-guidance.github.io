@@ -9,7 +9,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
 <style>
-:root{--text:#1c2030;--muted:#5a6076;--link:#5d52bd;--rule:#e6e5ee;--soft:#f5f5f8;--accent:#6e63cc;--tint:#f2f1fb;--max:920px;
+:root{--text:#1c2030;--muted:#5a6076;--link:#5d52bd;--rule:#e6e5ee;--soft:#f5f5f8;--accent:#6e63cc;--tint:#faf9fd;--max:920px;
 --serif:'Fraunces',Georgia,serif;--sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;--mono:'SF Mono',ui-monospace,Menlo,Consolas,monospace;}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
 body{font-family:var(--sans);color:var(--text);background:#fff;background-image:linear-gradient(180deg,#efeef8 0,rgba(239,238,248,0) 640px);background-repeat:no-repeat;line-height:1.72;font-size:1rem;-webkit-font-smoothing:antialiased}
@@ -37,7 +37,7 @@ em{color:inherit}strong{color:var(--text)}
 .head .venue{display:inline-block;background:#fff;color:var(--accent);border:1px solid var(--accent);font-weight:700;font-size:.78rem;letter-spacing:.08em;padding:.3rem .9rem;border-radius:999px;margin-bottom:.8rem}
 section{max-width:var(--max);margin:0 auto;padding:2.5rem 1.5rem;border-top:1px solid var(--rule)}
 section:first-of-type{border-top:none}
-h2{font-family:var(--serif);font-size:1.78rem;font-weight:600;letter-spacing:-.018em;margin-bottom:1rem}
+h2{font-family:var(--serif);font-size:1.78rem;font-weight:600;letter-spacing:-.018em;margin-bottom:1rem;color:#000}
 h3,.minihead{font-family:var(--serif);font-size:1.42rem;font-weight:600;letter-spacing:-.014em;margin:2rem 0 .55rem;color:var(--text)}
 p{margin-bottom:1rem}
 .lead{font-size:1.05rem}
@@ -146,7 +146,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 .eqpair .eqbox .sub{font-size:.78rem;color:var(--muted);font-style:italic;margin-top:.3rem}
 .eqpair .arrow{color:var(--muted);text-align:center;display:flex;flex-direction:column;align-items:center;gap:.25rem;font-size:1.3rem}
 .eqpair .arrow .alabel{font-size:.7rem;font-style:italic;font-weight:500;line-height:1.2;max-width:7rem;color:var(--muted)}
-.eqpair .eqbox.ours{background:var(--tint);border-color:#d8d5ef}
+.eqpair .eqbox.ours{background:#fff;border:2px solid var(--accent)}
 @media(max-width:760px){.eqpair{grid-template-columns:1fr;gap:.5rem}.eqpair .arrow{transform:rotate(90deg)}}
 .figpair{display:grid;grid-template-columns:1.6fr 1fr;gap:1rem;align-items:center;margin:1.3rem 0}
 .figpair img{width:100%;display:block;background:#fff;border:none}
@@ -195,18 +195,18 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 .hierarchy-arrow{display:flex;align-items:center;justify-content:center;gap:.7rem;color:var(--text);font-size:.98rem;font-style:italic;padding:.1rem 0;font-weight:500}
 .hierarchy-arrow .arr-icon{font-size:1.55rem;line-height:1;font-style:normal;color:var(--muted);font-weight:400}
 @media(max-width:560px){.hierarchy-level{grid-template-columns:1fr;gap:.4rem;padding:.7rem .9rem}.hierarchy-level .hl-tag{font-size:.95rem}}
-.question-box{max-width:720px;margin:1.6rem auto .4rem;border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:1.1rem 1.5rem;background:#fff;text-align:center}
+.question-box{max-width:720px;margin:1.6rem auto .4rem;border:1px solid #d8d5ef;border-radius:8px;padding:1.1rem 1.5rem;background:var(--tint);text-align:center}
 .qb-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:.45rem}
-.qb-text{font-family:var(--serif);font-size:1.16rem;line-height:1.45;color:var(--text);margin:0;font-style:italic}
+.qb-text{font-family:var(--serif);font-size:1.16rem;line-height:1.45;color:var(--text);margin:1.4rem auto .4rem;font-style:italic;text-align:center;max-width:680px}
 .lede{font-size:1rem;line-height:1.72;color:var(--text);font-weight:500;margin:.1rem 0 1.15rem}
 .pillrow{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.2rem}
 .pill{font-size:.82rem;font-weight:600;color:var(--accent);background:#fff;border:1px solid var(--rule);border-radius:99px;padding:.34rem .85rem}
-.panel{background:var(--soft);border:1px solid var(--rule);border-radius:8px;padding:1.15rem 1.3rem;margin:1.15rem 0;text-align:center}
+.panel{background:var(--tint);border:1px solid var(--rule);border-radius:8px;padding:1.15rem 1.3rem;margin:1.15rem 0;text-align:center}
 .panel-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:.45rem}
 .panel-eq{font-size:1.2rem;margin:.3rem 0}
 .eqlbl{font-family:var(--sans);font-size:.74rem;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;margin-left:.7rem;vertical-align:middle}
 .panel-note{font-size:.85rem;color:var(--muted);font-style:italic;margin-top:.5rem}
-.algobox{background:var(--soft);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.3rem 1rem;margin:1.15rem auto;text-align:left;max-width:560px}
+.algobox{background:var(--tint);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.3rem 1rem;margin:1.15rem auto;text-align:left;max-width:560px}
 .algobox .algo-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:.55rem;text-align:center}
 .algobox .algo-line{font-family:var(--mono);font-size:.95rem;padding:.18rem 0;color:var(--text)}
 .algobox .algo-eq{font-size:1.12rem;margin:.25rem 0;padding-left:1.6rem;text-align:left}
@@ -226,7 +226,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 /* .minihead: unified with h3 (subsection header) */
 .es-note{font-size:1rem;color:var(--muted);margin:.2rem 0 0}
 /* keypoint = top-tier callout: white + accent bar = "this is the result" */
-.keypoint{background:#fff;border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:8px;padding:1.1rem 1.4rem;margin:1.5rem 0}
+.keypoint{background:var(--tint);border:1px solid var(--rule);border-radius:8px;padding:1.1rem 1.4rem;margin:1.5rem 0}
 .keypoint .kp-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:.4rem}
 .keypoint .kp-eq{text-align:center;font-size:1.16rem;margin:.5rem 0 .6rem}
 .keypoint p{margin:0;font-size:1rem;line-height:1.62}
@@ -331,31 +331,25 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </section>
 
 <section id="motivation">
-<span class="kicker">01 &mdash; Motivation</span>
-<h2>Samplers got fast. Guidance didn't.</h2>
+<h2>Motivation</h2>
 <p>In generative modeling, we rarely want just any sample &mdash; we want to tailor it to a user-specified reward $r$ that captures what we actually care about.</p>
 <p>That reward might score, for example, <em>aesthetic quality</em>, agreement with a <em>measurement</em>, <em>physical plausibility</em>, or alignment with <em>human intent</em>. <strong>Guidance</strong> steers a pre-trained model toward high reward at inference time, with no extra training.</p>
 <p>How do we formalize this? The dominant theoretical framework casts guidance as sampling from a <strong>reward-tilted</strong> distribution:</p>
 <div class="panel">
 <div class="panel-tag">The standard framing &mdash; reward tilting</div>
 <div class="panel-eq">$\tilde\rho(x) \;\propto\; e^{r(x)}\,\rho(x)$</div>
-<div class="panel-note">easy to write down &mdash; but a hard problem to solve</div>
 </div>
 <p>However, this target proves remarkably difficult to sample from efficiently. Practical methods often rely on many integration steps, stochastic dynamics, and costly test-time search. The framework also sits poorly with modern flow-based generative models, which increasingly favor deterministic samplers requiring few function evaluations, enabled by recent work on flow maps.</p>
 <div class="problemgrid">
 <div class="problem"><div class="plabel">Problem 01</div><div class="ptitle">Hard to solve</div><div class="pdesc">Sampling $\tilde\rho$ is computationally expensive even for simple rewards. Multi-particle schemes like SMC need a high number of particles and integration steps; single-particle shortcuts like DPS rely on heuristic approximations, leaving their output poorly characterized.</div></div>
 <div class="problem"><div class="plabel">Problem 02</div><div class="ptitle">A poor fit for modern samplers</div><div class="pdesc">Reward tilting is rooted in <strong>stochastic processes</strong>. But modern flow models &mdash; FLUX, Stable Diffusion&nbsp;3 &mdash; are fundamentally <strong>deterministic</strong>, and flow maps push them to just a <strong>few steps</strong>. Porting tilt-based alignment here requires simulating stochasticity inside an ODE sampler &mdash; fundamentally misaligned with how these samplers run.</div></div>
 </div>
-<p>What we want is guidance <strong>native to modern flows</strong>: few-step, deterministic, single-trajectory.</p>
-<div class="question-box">
-<div class="qb-tag">The central question</div>
+<p>We would like guidance <strong>native to modern flows</strong>: few-step, deterministic, single-trajectory.</p>
 <p class="qb-text">Is there a principled framework for guiding flow-based generative models with very few function evaluations?</p>
-</div>
 </section>
 
 <section id="contributions">
-<span class="kicker">02 &mdash; Contributions</span>
-<h2>From a new perspective to few-step alignment</h2>
+<h2>Contributions</h2>
 <div class="cards three">
 <div class="card"><span class="cnum">01</span><div class="ctitle">Guidance as optimal control</div><div class="cdesc">We reframe guidance from reward-tilt sampling to a deterministic optimal control problem &mdash; and the flow map emerges in its closed-form solution.</div></div>
 <div class="card"><span class="cnum">02</span><div class="ctitle">A unifying theory</div><div class="cdesc">We characterize FMRG analytically and elucidate the role of design choices like early stopping and the Jacobian &mdash; yielding a framework that subsumes DPS and prior single-trajectory methods as special cases.</div></div>
@@ -364,9 +358,8 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </section>
 
 <section id="idea">
-<span class="kicker">03 &mdash; Key idea</span>
-<h2>So do we need the reward tilt?</h2>
-<p class="lede"><strong>Not necessarily.</strong> Rather than sample the reward tilt, we pose guidance directly as <strong>deterministic optimal control</strong>: steer a single trajectory to maximize reward while staying close to the base flow.</p>
+<h2>Key idea</h2>
+<p class="lede">Rather than sample the reward tilt, we pose guidance directly as <strong>deterministic optimal control</strong>: steer a single trajectory to maximize reward while staying close to the base flow.</p>
 <div class="eqpair">
 <div class="eqbox">
 <div class="lbl">Standard framing</div>
@@ -389,8 +382,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </section>
 
 <section id="tractable">
-<span class="kicker">04 &mdash; A tractable approximation</span>
-<h2>Replacing the controlled flow map</h2>
+<h2>A tractable approximation</h2>
 <p class="lede">To break this circularity, we study the optimal control in the <strong>small-$\lambda$ limit</strong> &mdash; analytically tractable, and practically meaningful since aggressive guidance tends to promote reward hacking and mode collapse.</p>
 <p>In this limit, the HJB equation reduces to a transport equation that we solve exactly. The result depends only on the <strong>uncontrolled</strong> flow map $X_{t,1}$:</p>
 <div class="panel">
@@ -411,8 +403,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </section>
 
 <section id="output">
-<span class="kicker">05 &mdash; Characterizing the output</span>
-<h2>What happens to the output distribution?</h2>
+<h2>Characterizing the output</h2>
 <p class="lede">In an analytically tractable Gaussian setting, we can solve for FMRG's terminal distribution exactly &mdash; and quantify how its greedy guidance trades off <strong>reward</strong> against <strong>diversity</strong>.</p>
 <div class="figpanel">
 <div class="figpanel-label">Terminal distribution &mdash; sweep of $t_{\text{stop}}$</div>
@@ -423,7 +414,6 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </section>
 
 <section id="method">
-<span class="kicker">06 &mdash; Method</span>
 <h2>Flow Map Reward Guidance</h2>
 <p class="lede">For efficient inference, we apply <strong>operator splitting</strong>: at each step, we integrate the base flow exactly via the flow map, then apply a gradient correction toward reward.</p>
 <div class="figpanel">
@@ -461,8 +451,7 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </section>
 
 <section id="results">
-<span class="kicker">07 &mdash; Results</span>
-<h2>Matches or surpasses baselines with as few as 3 NFEs</h2>
+<h2>Results</h2>
 <p class="lede">A single FLUX flow map, evaluated across four reward families &mdash; from simple $\ell_2$ reconstruction to a 7B vision-language model.</p>
 <div class="cards" style="margin-bottom:1.6rem">
 <div class="card"><div class="ctitle">Inverse problems</div><div class="cdesc">FMRG outperforms DPS, FlowChef, and FlowDPS on super-resolution, deblurring, and inpainting &mdash; across both AFHQ and FFHQ. FMRG-E matches baselines that use 2&ndash;10&times; more NFEs.</div></div>
@@ -630,8 +619,11 @@ function setSteps(n){
 }
 function stopPlay(){playing=false;clearInterval(playTimer);play.innerHTML='<i class="fas fa-play"></i>'}
 function startPlay(){playing=true;play.innerHTML='<i class="fas fa-pause"></i>';if(tNorm>=1)tNorm=0;
-  var fps=8,n=TRAJ[steps].length,dt=1/((n-1)*fps);
-  playTimer=setInterval(function(){tNorm+=dt;if(tNorm>=1){tNorm=1;render();stopPlay();return}render()},1000/fps)}
+  var fps=24,n=TRAJ[steps].length,dt=1/((n-1)*fps),holdMs=400,startedAdvance=false;
+  render();
+  setTimeout(function(){if(!playing)return;startedAdvance=true;
+    playTimer=setInterval(function(){tNorm+=dt;if(tNorm>=1){tNorm=1;render();stopPlay();return}render()},1000/fps);
+  },holdMs);}
 btns.forEach(function(b){b.addEventListener('click',function(){stopPlay();setSteps(+b.dataset.nfe)})});
 range.addEventListener('input',function(){stopPlay();clearFade();tNorm=+range.value;render()});
 play.addEventListener('click',function(){playing?stopPlay():startPlay()});
