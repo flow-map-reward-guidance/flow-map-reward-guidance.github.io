@@ -267,10 +267,16 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 .quant-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:.3rem;padding:.55rem 1rem;background:#fff;border-top:1px solid var(--rule)}
 .quant-dot{width:6px;height:6px;border-radius:50%;border:none;background:var(--rule);cursor:pointer;padding:0;transition:.15s}
 .quant-dot.on{background:var(--accent);width:1.2rem;border-radius:99px}
+
+.sequel{text-align:center}
+.sequel p.sequel-title{text-align:center;font-family:var(--serif);font-size:1.6rem;font-weight:600;color:var(--text);margin:0 auto .5rem}
+section.sequel p{text-align:center;max-width:620px;margin:0 auto 1.1rem;color:var(--muted)}
+.sequel-btn{display:inline-flex;align-items:center;padding:.55rem 1.2rem;border-radius:6px;background:var(--accent);color:#fff;font-weight:600;font-size:.92rem}
+.sequel-btn:hover{background:#5a4fb8;color:#fff;text-decoration:none}
 </style></head><body>
 
 <div class="bar"><div class="in"><span class="brand">How to Guide Your Flow</span><nav>
-<a href="#abstract">TL;DR</a><a href="#motivation">Motivation</a><a href="#contributions">Contributions</a><a href="#idea">Key idea</a><a href="#tractable">Tractable</a><a href="#output">Output</a><a href="#method">Method</a><a href="#results">Results</a><a href="#bibtex">BibTeX</a>
+<a href="#abstract">TL;DR</a><a href="#motivation">Motivation</a><a href="#contributions">Contributions</a><a href="#idea">Key idea</a><a href="#tractable">Tractable</a><a href="#output">Output</a><a href="#method">Method</a><a href="#results">Results</a><a href="#sequel">Sequel</a><a href="#bibtex">BibTeX</a>
 </nav></div></div>
 
 <header class="head">
@@ -568,6 +574,12 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 </div>
 </section>
 
+<section id="sequel" class="sequel">
+<p class="sequel-title">👉 Check out the sequel!</p>
+<p>We extend the deterministic optimal control perspective to reward fine-tuning in WTF. Using flow maps for simulation-free reinforcement learning gives dramatic gains in training efficiency.</p>
+<a class="sequel-btn" href="https://wasserstein-tilted-flow-maps.github.io/">WTF?! Wasserstein-Tilted Flow Maps</a>
+</section>
+
 <section id="bibtex">
 <h2>BibTeX</h2>
 <div class="bibbox"><button class="copy" onclick="copyBib()"><i class="fas fa-copy"></i> Copy</button>
@@ -628,6 +640,10 @@ btns.forEach(function(b){b.addEventListener('click',function(){stopPlay();setSte
 range.addEventListener('input',function(){stopPlay();clearFade();tNorm=+range.value;render()});
 play.addEventListener('click',function(){playing?stopPlay():startPlay()});
 render();
+// autoplay once on load (skipped for prefers-reduced-motion); user input stops it as before
+if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){
+  var first=new Image();first.onload=function(){if(!playing)startPlay()};first.src=TRAJ[steps][0];
+}
 })();
 // Method overview video: autoplay once on FIRST view only; on later returns
 // resume where it left off (never restart). Replay button restarts on demand.
