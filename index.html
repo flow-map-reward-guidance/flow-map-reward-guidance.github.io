@@ -273,6 +273,10 @@ footer{border-top:1px solid var(--rule);padding:1.8rem 1.5rem;text-align:center;
 section.sequel p{text-align:center;max-width:620px;margin:0 auto 1.1rem;color:var(--muted)}
 .sequel-btn{display:inline-flex;align-items:center;padding:.55rem 1.2rem;border-radius:6px;background:var(--accent);color:#fff;font-weight:600;font-size:.92rem}
 .sequel-btn:hover{background:#5a4fb8;color:#fff;text-decoration:none}
+
+.qual-progress{width:140px;height:3px;border-radius:99px;background:var(--rule);overflow:hidden;margin:.35rem auto .2rem;transition:opacity .3s ease}
+.qual-progress i{display:block;height:100%;width:0;background:var(--accent)}
+.qual-progress.off{opacity:0}
 </style></head><body>
 
 <div class="bar"><div class="in"><span class="brand">How to Guide Your Flow</span><nav>
@@ -676,7 +680,10 @@ document.querySelectorAll('.carousel').forEach(function(c){
  var sx=0;c.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
  c.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx;if(dx>40)go(i-1);else if(dx<-40)go(i+1)},{passive:true});
 });
-// Multi-reward qualitative carousel: tabs + per-track scroll
+// Multi-reward qualitative carousel: tabs + per-track scroll.
+// Auto-advances every DWELL ms while on screen and pauses under the pointer. Any manual control (arrows, dots,
+// swipe, arrow keys) stops the auto-advance until the carousel leaves the screen and comes back. Each track has a
+// clone of its last slide before the first and of its first slide after the last, so it loops seamlessly.
 (function(){
  var REW=['human','style','inverse','vlm'];
  var root=document.getElementById('qual');if(!root)return;
@@ -687,16 +694,39 @@ document.querySelectorAll('.carousel').forEach(function(c){
  var tracks={};REW.forEach(function(r){tracks[r]=document.getElementById('qualTrack-'+r)});
  var idx={};REW.forEach(function(r){idx[r]=0});
  var active='human';
- function slides(){return tracks[active].querySelectorAll('.qslide')}
+ var DWELL=5000,still=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+ var elapsed=0,last=0,raf=0,hover=false,inView=false,user=false;
+ // progress line under the dots
+ var prog=document.createElement('div');prog.className='qual-progress';prog.innerHTML='<i></i>';
+ dots.parentNode.insertBefore(prog,dots.nextSibling);var bar=prog.firstChild;
+ // clones for the seamless loop
+ REW.forEach(function(r){var c=tracks[r].querySelector('.qcarousel');var s=c.querySelectorAll('.qslide');if(s.length<2)return;
+   var f=s[0].cloneNode(true),l=s[s.length-1].cloneNode(true);f.classList.add('clone');l.classList.add('clone');
+   c.appendChild(f);c.insertBefore(l,s[0]);});
+ function slides(){return tracks[active].querySelectorAll('.qslide:not(.clone)')}
  function carousel(){return tracks[active].querySelector('.qcarousel')}
- function renderDots(){dots.innerHTML='';var n=slides().length;for(var k=0;k<n;k++){(function(k){var b=document.createElement('button');b.className='qual-dot'+(k===idx[active]?' on':'');b.onclick=function(){go(k)};dots.appendChild(b)})(k)}}
- function apply(){carousel().style.transform='translateX('+(-idx[active]*100)+'%)';dots.querySelectorAll('.qual-dot').forEach(function(d,j){d.classList.toggle('on',j===idx[active])});if(idxEl)idxEl.textContent=idx[active]+1;if(totEl)totEl.textContent=slides().length}
- function go(k){var n=slides().length;idx[active]=(k+n)%n;apply()}
- prev.onclick=function(){go(idx[active]-1)};next.onclick=function(){go(idx[active]+1)};
- tabs.forEach(function(t){t.onclick=function(){var r=t.dataset.reward;active=r;tabs.forEach(function(x){x.classList.toggle('active',x===t)});REW.forEach(function(rr){tracks[rr].classList.toggle('on',rr===r)});renderDots();apply()}});
+ function n(){return slides().length}
+ function real(){var k=n();return ((idx[active]%k)+k)%k}
+ function renderDots(){dots.innerHTML='';var k=n();for(var j=0;j<k;j++){(function(j){var b=document.createElement('button');b.className='qual-dot'+(j===real()?' on':'');b.onclick=function(){takeControl();go(j)};dots.appendChild(b)})(j)}}
+ function apply(animate){var c=carousel();c.style.transition=animate===false?'none':'';c.style.transform='translateX('+(-(idx[active]+1)*100)+'%)';
+   if(animate===false){void c.offsetWidth;c.style.transition='';}
+   var r=real();dots.querySelectorAll('.qual-dot').forEach(function(d,j){d.classList.toggle('on',j===r)});if(idxEl)idxEl.textContent=r+1;if(totEl)totEl.textContent=n()}
+ function normalize(){var k=n();if(idx[active]<0||idx[active]>=k){idx[active]=real();apply(false)}}
+ REW.forEach(function(r){tracks[r].querySelector('.qcarousel').addEventListener('transitionend',function(e){if(e.target===this&&r===active)normalize()})});
+ function go(j){normalize();idx[active]=j;elapsed=0;apply()}
+ function step(d){normalize();idx[active]+=d;elapsed=0;apply()}
+ function takeControl(){user=true;elapsed=0;prog.classList.add('off')}
+ prev.onclick=function(){takeControl();step(-1)};next.onclick=function(){takeControl();step(1)};
+ tabs.forEach(function(t){t.onclick=function(){var r=t.dataset.reward;active=r;tabs.forEach(function(x){x.classList.toggle('active',x===t)});REW.forEach(function(rr){tracks[rr].classList.toggle('on',rr===r)});elapsed=0;renderDots();apply(false)}});
  var sx=0;root.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
- root.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx;if(dx>40)go(idx[active]-1);else if(dx<-40)go(idx[active]+1)},{passive:true});
- renderDots();apply();
+ root.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-sx;if(dx>40){takeControl();step(-1)}else if(dx<-40){takeControl();step(1)}},{passive:true});
+ document.addEventListener('keydown',function(e){if(!inView)return;if(e.key==='ArrowLeft'){takeControl();step(-1)}else if(e.key==='ArrowRight'){takeControl();step(1)}});
+ root.addEventListener('mouseenter',function(){hover=true});root.addEventListener('mouseleave',function(){hover=false});
+ function tick(now){if(last&&!hover&&!user&&!still)elapsed+=now-last;last=now;if(elapsed>=DWELL)step(1);bar.style.width=Math.min(100,100*elapsed/DWELL)+'%';raf=requestAnimationFrame(tick)}
+ new IntersectionObserver(function(es){es.forEach(function(e){inView=e.isIntersecting;
+   if(inView&&!raf){last=0;raf=requestAnimationFrame(tick)}
+   if(!inView){if(raf){cancelAnimationFrame(raf);raf=0}user=false;elapsed=0;prog.classList.remove('off')}})},{threshold:0.35}).observe(root);
+ renderDots();apply(false);
 })();
 // Decision 1: SVG draw-on animation on the exact paper figure
 (function(){
