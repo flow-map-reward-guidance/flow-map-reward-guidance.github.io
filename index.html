@@ -657,7 +657,7 @@ function setSteps(n){
 }
 function stopPlay(){playing=false;clearInterval(playTimer);play.innerHTML='<i class="fas fa-play"></i>'}
 function startPlay(onDone){playing=true;play.innerHTML='<i class="fas fa-pause"></i>';if(tNorm>=1)tNorm=0;
-  var fps=24,n=TRAJ[steps].length,dt=1/((n-1)*fps),holdMs=400,startedAdvance=false;
+  var fps=24,n=TRAJ[steps].length,dt=1.35/((n-1)*fps),holdMs=400,startedAdvance=false;
   render();
   setTimeout(function(){if(!playing)return;startedAdvance=true;
     playTimer=setInterval(function(){tNorm+=dt;if(tNorm>=1){tNorm=1;render();stopPlay();if(onDone)onDone();return}render()},1000/fps);
@@ -670,11 +670,13 @@ render();
 var ORDER=[8,12,4],HOLD=1300,user=false,cycleTimer=null;
 w.addEventListener('pointerdown',function(e){if(user)return;user=true;clearTimeout(cycleTimer);if(!play.contains(e.target))stopPlay()},true);
 // Each run starts at t = 0: the next trajectory's first frame cross-fades in over the last frame.
-function cycle(i){if(user)return;tNorm=0;if(ORDER[i]===steps){clearFade();render()}else setSteps(ORDER[i]);
+function xfadeToStart(n){fade.style.transition='none';fade.src=img.src;fade.style.opacity=1;void fade.offsetWidth;
+  steps=n;tNorm=0;render();fade.style.transition='opacity .3s ease';fade.style.opacity=0;}
+function cycle(i){if(user)return;xfadeToStart(ORDER[i]);
   cycleTimer=setTimeout(function(){if(user)return;startPlay(function(){if(user)return;
     cycleTimer=setTimeout(function(){cycle((i+1)%ORDER.length)},HOLD)})},700)}
 if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){
-  var first=new Image();first.onload=function(){if(!playing&&!user)cycle(0)};first.src=TRAJ[steps][0];
+  var first=new Image();first.onload=function(){if(playing||user)return;tNorm=1;render();cycleTimer=setTimeout(function(){cycle(0)},1200)};first.src=TRAJ[steps][0];
 }
 })();
 // Method overview video: autoplay once on FIRST view only; on later returns
