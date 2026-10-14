@@ -669,10 +669,10 @@ render();
 // Autoplay cycles 8, 12, 4 steps; any click on the widget stops it for the rest of the visit.
 var ORDER=[8,12,4],HOLD=1300,user=false,cycleTimer=null;
 w.addEventListener('pointerdown',function(e){if(user)return;user=true;clearTimeout(cycleTimer);if(!play.contains(e.target))stopPlay()},true);
-function cycle(i){if(user)return;setSteps(ORDER[i]);
+// Each run starts at t = 0: the next trajectory's first frame cross-fades in over the last frame.
+function cycle(i){if(user)return;tNorm=0;if(ORDER[i]===steps){clearFade();render()}else setSteps(ORDER[i]);
   cycleTimer=setTimeout(function(){if(user)return;startPlay(function(){if(user)return;
-    cycleTimer=setTimeout(function(){cycle((i+1)%ORDER.length)},HOLD)})},setStepsDelay(i))}
-function setStepsDelay(i){return i===0?0:350}
+    cycleTimer=setTimeout(function(){cycle((i+1)%ORDER.length)},HOLD)})},700)}
 if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){
   var first=new Image();first.onload=function(){if(!playing&&!user)cycle(0)};first.src=TRAJ[steps][0];
 }
