@@ -293,9 +293,9 @@ section.sequel p{text-align:center;max-width:620px;margin:0 auto 1.1rem;color:va
 
 .bar .swap{flex-shrink:0;white-space:nowrap;padding:.32rem .8rem;border-radius:999px;background:var(--accent);color:#fff;font-weight:600;font-size:.82rem}
 .bar .swap:hover{background:#5a4fb8;text-decoration:none}
-html.leaving body{opacity:0;transform:translateY(-6px);transition:opacity .35s ease,transform .35s ease}
+html.leaving body{opacity:0;transform:translateY(-14px);transition:opacity .55s ease,transform .55s ease}
 @media(prefers-reduced-motion:reduce){html.leaving body{transition:none}}
-</style><style>html.arriving body{animation:arrive .5s ease both}@keyframes arrive{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){html.arriving body{animation:none}}</style>
+</style><style>html.arriving body{animation:arrive .8s ease both}@keyframes arrive{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){html.arriving body{animation:none}}</style>
 <script>if(/wasserstein-tilted-flow-maps\.github\.io|localhost:8783/.test(document.referrer))document.documentElement.classList.add('arriving');</script>
 </head><body>
 
@@ -656,19 +656,25 @@ function setSteps(n){
   fade.style.transition='opacity .3s ease';fade.style.opacity=0;
 }
 function stopPlay(){playing=false;clearInterval(playTimer);play.innerHTML='<i class="fas fa-play"></i>'}
-function startPlay(){playing=true;play.innerHTML='<i class="fas fa-pause"></i>';if(tNorm>=1)tNorm=0;
+function startPlay(onDone){playing=true;play.innerHTML='<i class="fas fa-pause"></i>';if(tNorm>=1)tNorm=0;
   var fps=24,n=TRAJ[steps].length,dt=1/((n-1)*fps),holdMs=400,startedAdvance=false;
   render();
   setTimeout(function(){if(!playing)return;startedAdvance=true;
-    playTimer=setInterval(function(){tNorm+=dt;if(tNorm>=1){tNorm=1;render();stopPlay();return}render()},1000/fps);
+    playTimer=setInterval(function(){tNorm+=dt;if(tNorm>=1){tNorm=1;render();stopPlay();if(onDone)onDone();return}render()},1000/fps);
   },holdMs);}
 btns.forEach(function(b){b.addEventListener('click',function(){stopPlay();setSteps(+b.dataset.nfe)})});
 range.addEventListener('input',function(){stopPlay();clearFade();tNorm=+range.value;render()});
 play.addEventListener('click',function(){playing?stopPlay():startPlay()});
 render();
-// autoplay once on load (skipped for prefers-reduced-motion); user input stops it as before
+// Autoplay cycles 8, 12, 4 steps; any click on the widget stops it for the rest of the visit.
+var ORDER=[8,12,4],HOLD=1300,user=false,cycleTimer=null;
+w.addEventListener('pointerdown',function(e){if(user)return;user=true;clearTimeout(cycleTimer);if(!play.contains(e.target))stopPlay()},true);
+function cycle(i){if(user)return;setSteps(ORDER[i]);
+  cycleTimer=setTimeout(function(){if(user)return;startPlay(function(){if(user)return;
+    cycleTimer=setTimeout(function(){cycle((i+1)%ORDER.length)},HOLD)})},setStepsDelay(i))}
+function setStepsDelay(i){return i===0?0:350}
 if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)){
-  var first=new Image();first.onload=function(){if(!playing)startPlay()};first.src=TRAJ[steps][0];
+  var first=new Image();first.onload=function(){if(!playing&&!user)cycle(0)};first.src=TRAJ[steps][0];
 }
 })();
 // Method overview video: autoplay once on FIRST view only; on later returns
@@ -878,6 +884,6 @@ function copyBib(){navigator.clipboard.writeText(document.querySelector('.bibbox
 </script>
 <script>
 // Fade out, then open the counterpart site, which fades in.
-(function(){var L={'flow-map-reward-guidance.github.io':'http://localhost:8782/','wasserstein-tilted-flow-maps.github.io':'http://localhost:8783/'};if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))document.querySelectorAll('a[data-fade]').forEach(function(a){var u=new URL(a.href);if(L[u.hostname])a.href=L[u.hostname]+u.hash;});document.querySelectorAll('a[data-fade]').forEach(function(a){a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;e.preventDefault();document.documentElement.classList.add('leaving');setTimeout(function(){location.href=a.href},350)})});window.addEventListener('pageshow',function(){document.documentElement.classList.remove('leaving')});})();
+(function(){var L={'flow-map-reward-guidance.github.io':'http://localhost:8782/','wasserstein-tilted-flow-maps.github.io':'http://localhost:8783/'};if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))document.querySelectorAll('a[data-fade]').forEach(function(a){var u=new URL(a.href);if(L[u.hostname])a.href=L[u.hostname]+u.hash;});document.querySelectorAll('a[data-fade]').forEach(function(a){a.addEventListener('click',function(e){if(e.metaKey||e.ctrlKey||e.shiftKey||e.button!==0)return;e.preventDefault();document.documentElement.classList.add('leaving');setTimeout(function(){location.href=a.href},550)})});window.addEventListener('pageshow',function(){document.documentElement.classList.remove('leaving')});})();
 </script>
 </body></html>
